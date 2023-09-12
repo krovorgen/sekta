@@ -1,7 +1,8 @@
-import App from './App'
 import { render, screen } from '@testing-library/react'
+import React from 'react'
+import { App } from './App'
 
-const appContent = 'Вот тут будет жить ваше приложение :)'
+const appContent = 'Root'
 
 // @ts-ignore
 global.fetch = jest.fn(() =>
