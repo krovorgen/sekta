@@ -8,4 +8,8 @@ export default {
   globals: {
     __SERVER_PORT__: process.env.SERVER_PORT,
   },
+  moduleNameMapper: {
+    '^uuid$': 'uuid',
+    '^.+\\.(css|scss)$': '<rootDir>/config/CSSStub.js',
+  },
 }
