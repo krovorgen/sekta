@@ -1,13 +1,13 @@
 import React, { FC, useCallback, useState } from 'react'
-import { Input } from '@alfalab/core-components/input'
-import { Button } from '@alfalab/core-components/button'
-import { PasswordInput } from '@alfalab/core-components/password-input'
-import { AuthLayout } from '../../Layouts/AuthLayout/AuthLayout'
-import { Gap } from '@alfalab/core-components/gap'
-import { Typography } from '@alfalab/core-components/typography'
 import { Link } from 'react-router-dom'
+import { Input } from '@alfalab/core-components/input/cssm'
+import { Button } from '@alfalab/core-components/button/cssm'
+import { PasswordInput } from '@alfalab/core-components/password-input/cssm'
+import { Gap } from '@alfalab/core-components/gap/cssm'
+import { Typography } from '@alfalab/core-components/typography/cssm'
+import { Link as LinkUI } from '@alfalab/core-components/link/cssm'
+import { AuthLayout } from '../../Layouts/AuthLayout/AuthLayout'
 import { RoutePath } from '../../constants/routes'
-import { Link as LinkUI } from '@alfalab/core-components/link/Component'
 
 export const Login: FC = () => {
   const [passwordVisible, setPasswordVisible] = useState(false)

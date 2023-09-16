@@ -1,14 +1,14 @@
 import React, { FC, useCallback, useState } from 'react'
-import { AuthLayout } from '../../Layouts/AuthLayout/AuthLayout'
-import { Input } from '@alfalab/core-components/input'
-import { Gap } from '@alfalab/core-components/gap'
-import { PasswordInput } from '@alfalab/core-components/password-input'
-import { Button } from '@alfalab/core-components/button'
-import { PhoneInput } from '@alfalab/core-components/phone-input'
 import { Link } from 'react-router-dom'
-import { Link as LinkUI } from '@alfalab/core-components/link'
+import { AuthLayout } from '../../Layouts/AuthLayout/AuthLayout'
 import { RoutePath } from '../../constants/routes'
-import { Typography } from '@alfalab/core-components/typography'
+import { Input } from '@alfalab/core-components/input/cssm'
+import { Gap } from '@alfalab/core-components/gap/cssm'
+import { PasswordInput } from '@alfalab/core-components/password-input/cssm'
+import { Button } from '@alfalab/core-components/button/cssm'
+import { PhoneInput } from '@alfalab/core-components/phone-input/cssm'
+import { Link as LinkUI } from '@alfalab/core-components/link/cssm'
+import { Typography } from '@alfalab/core-components/typography/cssm'
 
 export const Registration: FC = () => {
   const [passwordVisible, setPasswordVisible] = useState(false)
