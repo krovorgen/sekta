@@ -125,3 +125,5 @@ export const Forum: FC = () => {
     </section>
   )
 }
+
+export { data }
