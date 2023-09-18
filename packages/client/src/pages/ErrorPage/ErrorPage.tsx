@@ -2,8 +2,18 @@ import { FC } from 'react'
 import { useRouteError } from 'react-router-dom'
 import { isRouteErrorResponse } from 'react-router'
 
+import { Typography } from '@alfalab/core-components/typography/cssm'
+import { Gap } from '@alfalab/core-components/gap/cssm'
+
+import st from './ErrorPage.module.scss'
+
+type ErrorResponse = {
+  status: number
+  message?: string
+}
+
 export const ErrorPage: FC = () => {
-  const error = useRouteError()
+  const error = useRouteError() as ErrorResponse
 
   let errorMessage = 'Something went wrong'
 
@@ -31,5 +41,17 @@ export const ErrorPage: FC = () => {
     errorMessage = error.message
   }
 
-  return <div>{errorMessage}</div>
+  return (
+    <div className={st.root}>
+      <div className={st.container}>
+        <Typography.Title tag="h1" color="static-secondary-dark" view="xlarge">
+          {error?.status}
+        </Typography.Title>
+        <Gap size="xs" />
+        <Typography.Title tag="h2" color="static-secondary-dark" view="small">
+          {errorMessage}
+        </Typography.Title>
+      </div>
+    </div>
+  )
 }
