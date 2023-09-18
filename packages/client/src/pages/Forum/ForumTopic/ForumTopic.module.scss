@@ -1,0 +1,27 @@
+@import '../../../scss/helpers/variables';
+@import '../../../scss/helpers/mixins';
+
+.topic {
+  margin: 40px 50px;
+  padding: 30px;
+  box-shadow: var(--shadow-xs-hard);
+}
+
+.text {
+  width: 100%;
+}
+
+.reply {
+  padding: 0 16px;
+}
+
+.info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.author {
+  padding: 0 16px;
+}

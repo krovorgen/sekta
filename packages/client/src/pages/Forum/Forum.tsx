@@ -6,44 +6,113 @@ import { RoutePath } from '../../constants/routes'
 import { Table } from '@alfalab/core-components/table'
 import { Typography } from '@alfalab/core-components/typography'
 import { Space } from '@alfalab/core-components/space'
+import { Indicator } from '@alfalab/core-components/indicator'
 import { ButtonDesktop } from '@alfalab/core-components/button/desktop'
 
-const data: {
+export interface ITopic {
   id: number
   date: string
   title: string
-  lastMessage?: string
-  qty?: number
+
+  // Для этих свойств вместо `undefined` нужно использовать `null`.
+  firstMessage?: string | null
+  lastMessage?: string | null
+  qty?: number | null
   unrd?: number
+
   remove?: string
   edit?: string
-}[] = [
+
+  comments?: {
+    [index: string]: {
+      author: string
+      date: string
+      text: string
+    }
+  }
+}
+
+const data: ITopic[] = [
   {
     id: 28,
     date: '30.06.2022',
     title: 'Мутная тема',
-    qty: 21000000,
-    unrd: 1700,
+    firstMessage: 'скинуться по пятихатке, просто так',
+    qty: 1,
+    unrd: undefined,
     remove: 'Удалить',
     edit: 'Редактировать',
+    comments: {
+      comment1: {
+        author: 'author',
+        date: 'date',
+        text: 'text text text text text text text text text text text',
+      },
+      comment2: {
+        author: 'author2',
+        date: 'date2',
+        text: 'text2 text text text text text text text text text text',
+      },
+      comment3: {
+        author: 'author',
+        date: 'date',
+        text: 'text text text text text text text text text text text',
+      },
+    },
   },
   {
     id: 12,
     date: '30.06.2022',
     title: 'баги',
+    firstMessage: 'В этой теме предлагается описывать баги',
     lastMessage: 'Ваше приложение один сплошной баг, бугагашеньки',
-    qty: 10002030,
-    unrd: 1700,
+    qty: 99,
+    unrd: 88,
     edit: 'Редактировать',
+    comments: {
+      comment1: {
+        author: 'author',
+        date: 'date',
+        text: 'Ваше приложение один сплошной баг, бугагашеньки 1',
+      },
+      comment2: {
+        author: 'author2',
+        date: 'date2',
+        text: 'Ваше приложение один сплошной баг, бугагашеньки 2',
+      },
+      comment3: {
+        author: 'author',
+        date: 'date',
+        text: 'Ваше приложение один сплошной баг, бугагашеньки 3',
+      },
+    },
   },
   {
     id: 5,
     date: '30.06.2022',
     title: 'Нововведения',
+    firstMessage: 'Ввели в действие вот эту вот игру',
     lastMessage: 'Вся ваша радость, благодаря нововведениям',
-    qty: 3000069,
-    unrd: 1700,
+    qty: 130,
+    unrd: 120,
     remove: 'Удалить',
+    comments: {
+      comment1: {
+        author: 'author 1',
+        date: 'date',
+        text: 'Вся ваша радость, благодаря нововведениям 1',
+      },
+      comment2: {
+        author: 'author2',
+        date: 'date2',
+        text: 'Вся ваша радость, благодаря нововведениям 2',
+      },
+      comment3: {
+        author: 'author 1',
+        date: 'date',
+        text: 'Вся ваша радость, благодаря нововведениям 3',
+      },
+    },
   },
 ]
 
@@ -81,7 +150,7 @@ export const Forum: FC = () => {
     id: number,
     element: React.MouseEvent<HTMLTableRowElement, MouseEvent>
   ) => {
-    console.log(`clicked, in ${element} ${id}`)
+    console.log(`clicked: ${id}`, element)
     navigate(`/${RoutePath.Forum}/${id}`)
   }
 
@@ -135,7 +204,31 @@ export const Forum: FC = () => {
 
               <Table.TCell>
                 <div>
-                  {row.qty} {row.unrd ? `/ ${row.unrd}` : ''}
+                  <Indicator
+                    height={30}
+                    value={row.qty as number}
+                    backgroundColor="var(--color-light-graphic-positive)"
+                    color="var(--color-static-text-primary-light)"
+                    border={{
+                      width: 4,
+                      color: 'var(--badge-icon-bg-color)',
+                    }}
+                  />{' '}
+                  /
+                  {row.unrd ? (
+                    <Indicator
+                      height={30}
+                      value={row.unrd}
+                      backgroundColor="var(--color-light-bg-accent)"
+                      color="var(--color-static-text-primary-light)"
+                      border={{
+                        width: 4,
+                        color: 'var(--badge-icon-bg-color)',
+                      }}
+                    />
+                  ) : (
+                    ''
+                  )}
                 </div>
               </Table.TCell>
 
@@ -168,3 +261,5 @@ export const Forum: FC = () => {
     </div>
   )
 }
+
+export { data }
