@@ -1,9 +1,10 @@
 import { FC } from 'react'
-import { useRouteError } from 'react-router-dom'
+import { useNavigate, useRouteError } from 'react-router-dom'
 import { isRouteErrorResponse } from 'react-router'
 
 import { Typography } from '@alfalab/core-components/typography/cssm'
 import { Gap } from '@alfalab/core-components/gap/cssm'
+import { Button } from '@alfalab/core-components/button'
 
 import st from './ErrorPage.module.scss'
 
@@ -13,6 +14,7 @@ type ErrorResponse = {
 }
 
 export const ErrorPage: FC = () => {
+  const navigate = useNavigate()
   const error = useRouteError() as ErrorResponse
 
   let errorMessage = 'Something went wrong'
@@ -51,6 +53,12 @@ export const ErrorPage: FC = () => {
         <Typography.Title tag="h2" color="static-secondary-dark" view="small">
           {errorMessage}
         </Typography.Title>
+        <Gap size="xs" />
+        <Typography.Text view="primary-medium">
+          <Button onClick={() => navigate(-1)} view="link" size="xxs">
+            Вернуться
+          </Button>
+        </Typography.Text>
       </div>
     </div>
   )
