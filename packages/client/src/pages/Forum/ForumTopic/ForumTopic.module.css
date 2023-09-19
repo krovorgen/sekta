@@ -2,9 +2,18 @@
   margin: 40px 50px;
   padding: 30px;
   box-shadow: var(--shadow-xs-hard);
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
-.text {
+.back.back {
+  position: sticky;
+  top: 45px;
+  align-self: flex-end;
+}
+
+.text.text {
   width: 100%;
 }
 
@@ -21,4 +30,12 @@
 
 .author {
   padding: 0 16px;
+}
+
+.submit {
+  margin-right: var(--gap-s-neg);
+}
+
+.toast {
+  left: calc(50% - 180px);
 }
