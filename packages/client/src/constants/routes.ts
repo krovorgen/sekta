@@ -5,4 +5,5 @@ export enum RoutePath {
   Game = 'game',
   Leaderboards = 'leaderboards',
   Forum = 'forum',
+  Profile = 'profile',
 }
