@@ -24,12 +24,11 @@ export interface ITopic {
   edit?: string
 
   comments?: {
-    [index: string]: {
-      author: string
-      date: string
-      text: string
-    }
-  }
+    id: number
+    author: string
+    date: string
+    text: string
+  }[]
 }
 
 const data: ITopic[] = [
@@ -42,23 +41,26 @@ const data: ITopic[] = [
     unrd: undefined,
     remove: 'Удалить',
     edit: 'Редактировать',
-    comments: {
-      comment1: {
+    comments: [
+      {
+        id: 1,
         author: 'author',
         date: 'date',
         text: 'text text text text text text text text text text text',
       },
-      comment2: {
+      {
+        id: 2,
         author: 'author2',
         date: 'date2',
         text: 'text2 text text text text text text text text text text',
       },
-      comment3: {
+      {
+        id: 3,
         author: 'author',
         date: 'date',
         text: 'text text text text text text text text text text text',
       },
-    },
+    ],
   },
   {
     id: 12,
@@ -69,26 +71,29 @@ const data: ITopic[] = [
     qty: 99,
     unrd: 88,
     edit: 'Редактировать',
-    comments: {
-      comment1: {
+    comments: [
+      {
+        id: 4,
         author: 'author',
         date: 'date',
         text: 'Ваше приложение один сплошной баг, бугагашеньки 1',
       },
-      comment2: {
+      {
+        id: 5,
         author: 'author2',
         date: 'date2',
         text: 'Ваше приложение один сплошной баг, бугагашеньки 2',
       },
-      comment3: {
+      {
+        id: 6,
         author: 'author',
         date: 'date',
         text: 'Ваше приложение один сплошной баг, бугагашеньки 3',
       },
-    },
+    ],
   },
   {
-    id: 5,
+    id: 55,
     date: '30.06.2022',
     title: 'Нововведения',
     firstMessage: 'Ввели в действие вот эту вот игру',
@@ -96,23 +101,26 @@ const data: ITopic[] = [
     qty: 130,
     unrd: 120,
     remove: 'Удалить',
-    comments: {
-      comment1: {
+    comments: [
+      {
+        id: 1,
         author: 'author 1',
         date: 'date',
         text: 'Вся ваша радость, благодаря нововведениям 1',
       },
-      comment2: {
+      {
+        id: 7,
         author: 'author2',
         date: 'date2',
         text: 'Вся ваша радость, благодаря нововведениям 2',
       },
-      comment3: {
+      {
+        id: 9,
         author: 'author 1',
         date: 'date',
         text: 'Вся ваша радость, благодаря нововведениям 3',
       },
-    },
+    ],
   },
 ]
 
