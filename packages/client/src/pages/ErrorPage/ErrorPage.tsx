@@ -54,11 +54,9 @@ export const ErrorPage: FC = () => {
           {errorMessage}
         </Typography.Title>
         <Gap size="xs" />
-        <Typography.Text view="primary-medium">
-          <Button onClick={() => navigate(-1)} view="link" size="xxs">
-            Вернуться
-          </Button>
-        </Typography.Text>
+        <Button onClick={() => navigate(-1)} view="link" size="xxs">
+          Вернуться
+        </Button>
       </div>
     </div>
   )
