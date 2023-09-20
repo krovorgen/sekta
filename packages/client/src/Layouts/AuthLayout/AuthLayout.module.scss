@@ -1,0 +1,27 @@
+@import "../../scss/helpers/variables";
+@import "../../scss/helpers/mixins";
+
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-image: url("../../assets/images/AuthLayout/bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+.box {
+  padding: 16px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 0 2px rgb(0 0 0 / 50%);
+  background-color: rgba(#fff, 0.1);
+}
+
+.title {
+  margin-bottom: 24px;
+  text-align: center;
+}
