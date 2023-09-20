@@ -1,5 +1,10 @@
-import { createBrowserRouter } from 'react-router-dom'
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+} from 'react-router-dom'
 
+import { Layout } from '../Layouts/Base/Layout'
 import { ErrorPage } from '../pages/ErrorPage/ErrorPage'
 import { Root } from '../pages/Root/Root'
 import { RoutePath } from '../constants/routes'
@@ -10,47 +15,18 @@ import { Game } from '../pages/Game/Game'
 import { Leaderboards } from '../pages/Leaderboards/Leaderboards'
 import { Forum } from '../pages/Forum/Forum'
 import { ForumTopic } from '../pages/Forum/ForumTopic/ForumTopic'
-import { RootLayout } from '../Layouts/RootLayout/RootLayout'
 
-export const router = createBrowserRouter([
-  {
-    id: 'root',
-    path: '/',
-    Component: RootLayout,
-    ErrorBoundary: ErrorPage,
-    children: [
-      {
-        index: true,
-        Component: Root,
-      },
-      {
-        path: RoutePath.Login,
-        Component: Login,
-      },
-      {
-        path: RoutePath.Registration,
-        Component: Registration,
-      },
-      {
-        path: RoutePath.Settings,
-        Component: Settings,
-      },
-      {
-        path: RoutePath.Game,
-        Component: Game,
-      },
-      {
-        path: RoutePath.Leaderboards,
-        Component: Leaderboards,
-      },
-      {
-        path: RoutePath.Forum,
-        Component: Forum,
-      },
-      {
-        path: `${RoutePath.Forum}/:topicId`,
-        Component: ForumTopic,
-      },
-    ],
-  },
-])
+export const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<Layout />} errorElement={<ErrorPage />}>
+      <Route index element={<Root />} />
+      <Route path={RoutePath.Forum} element={<Forum />} />
+      <Route path={`${RoutePath.Forum}/:topicId`} element={<ForumTopic />} />
+      <Route path={RoutePath.Settings} element={<Settings />} />
+      <Route path={RoutePath.Leaderboards} element={<Leaderboards />} />
+      <Route path={RoutePath.Login} element={<Login />} />
+      <Route path={RoutePath.Registration} element={<Registration />} />
+      <Route path={RoutePath.Game} element={<Game />} />
+    </Route>
+  )
+)
