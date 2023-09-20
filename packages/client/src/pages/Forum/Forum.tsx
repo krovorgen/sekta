@@ -91,6 +91,61 @@ export const Forum: FC = () => {
     }
   }
 
+  const handleOpen = () => setOpenModal(true)
+
+  const handleClose = () => setOpenModal(false)
+
+  const handleSendNewTopic = (e: FormEvent) => {
+    e.preventDefault()
+    console.log(titleValue, firstMessageValue)
+    currentPageData.unshift({
+      id: Math.floor(Math.random() * 10),
+      date: `${date.getDay()}.${date.getMonth()}.${date.getFullYear()}`,
+      title: titleValue,
+      firstMessage: firstMessageValue,
+      qty: 1,
+      unrd: undefined,
+      remove: true,
+      edit: true,
+    })
+    handleClose()
+    setTitleValue('')
+    setFirstMessageValue('')
+  }
+
+  const handleOpenModalNewTopic = () => {
+    setAction('newTopic')
+    handleOpen()
+  }
+
+  const handleOpenModalEditTopic = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation()
+    setAction('editTopic')
+    handleOpen()
+    // тут нужно заполнить модалку текстом из топика
+    setTitleValue('some title')
+    setFirstMessageValue('some first message')
+  }
+
+  const handleDeleteTopic = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation()
+    console.log('handleDeleteTopic')
+  }
+
+  const onSubmit = (event: FormEvent<Element>) => {
+    console.log(action)
+    if (action === 'newTopic') {
+      handleSendNewTopic(event)
+    } else if (action === 'editTopic') {
+      console.log('handleEditTopic')
+      handleClose()
+      setTitleValue('')
+      setFirstMessageValue('')
+    } else {
+      console.log('wrong way')
+    }
+  }
+
   return (
     <section className={styles.forum}>
       <div className={styles.buttons}>
