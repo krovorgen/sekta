@@ -1,28 +1,36 @@
-import React, { FC } from 'react'
+import { FC, useState, useMemo, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { RoutePath } from '../../constants/routes'
+import styles from './Forum.module.scss'
 
 import { Table } from '@alfalab/core-components/table'
 import { Typography } from '@alfalab/core-components/typography'
 import { Space } from '@alfalab/core-components/space'
 import { Indicator } from '@alfalab/core-components/indicator'
 import { ButtonDesktop } from '@alfalab/core-components/button/desktop'
+import { Button } from '@alfalab/core-components/button'
+import { ActionButton } from '@alfalab/core-components/action-button'
+import { Modal } from '@alfalab/core-components/modal'
+import { Input } from '@alfalab/core-components/input'
+import { Textarea } from '@alfalab/core-components/textarea'
+
+import { ArrowBackHeavyMIcon } from '@alfalab/icons-glyph/ArrowBackHeavyMIcon'
+import { CommentPlusMIcon } from '@alfalab/icons-glyph/CommentPlusMIcon'
+import { Gap } from '@alfalab/core-components/gap'
+
+const date = new Date()
 
 export interface ITopic {
   id: number
   date: string
   title: string
-
-  // Для этих свойств вместо `undefined` нужно использовать `null`.
   firstMessage?: string | null
   lastMessage?: string | null
   qty?: number | null
   unrd?: number
-
-  remove?: string
-  edit?: string
-
+  remove?: boolean
+  edit?: boolean
   comments?: {
     id: number
     author: string
@@ -39,8 +47,8 @@ const data: ITopic[] = [
     firstMessage: 'скинуться по пятихатке, просто так',
     qty: 1,
     unrd: undefined,
-    remove: 'Удалить',
-    edit: 'Редактировать',
+    remove: true,
+    edit: true,
     comments: [
       {
         id: 1,
@@ -70,7 +78,7 @@ const data: ITopic[] = [
     lastMessage: 'Ваше приложение один сплошной баг, бугагашеньки',
     qty: 99,
     unrd: 88,
-    edit: 'Редактировать',
+    edit: true,
     comments: [
       {
         id: 4,
@@ -100,7 +108,7 @@ const data: ITopic[] = [
     lastMessage: 'Вся ваша радость, благодаря нововведениям',
     qty: 130,
     unrd: 120,
-    remove: 'Удалить',
+    remove: true,
     comments: [
       {
         id: 1,
@@ -137,9 +145,12 @@ Array(100)
 
 export const Forum: FC = () => {
   const navigate = useNavigate()
-
-  const [perPage, setPerPage] = React.useState(5)
-  const [page, setPage] = React.useState(0)
+  const [openModal, setOpenModal] = useState(false)
+  const [perPage, setPerPage] = useState(5)
+  const [page, setPage] = useState(0)
+  const [titleValue, setTitleValue] = useState('')
+  const [firstMessageValue, setFirstMessageValue] = useState('')
+  const [action, setAction] = useState('')
 
   const handlePerPageChange = (value: number) => {
     setPage(0)
@@ -150,7 +161,7 @@ export const Forum: FC = () => {
 
   const pagesCount = Math.ceil(data.length / perPage)
 
-  const currentPageData = React.useMemo(() => {
+  const currentPageData = useMemo(() => {
     return data.slice(page * perPage).slice(0, perPage)
   }, [data, page, perPage])
 
@@ -162,8 +173,79 @@ export const Forum: FC = () => {
     navigate(`/${RoutePath.Forum}/${id}`)
   }
 
+  const handleOpen = () => setOpenModal(true)
+
+  const handleClose = () => setOpenModal(false)
+
+  const handleSendNewTopic = (e: FormEvent) => {
+    e.preventDefault()
+    console.log(titleValue, firstMessageValue)
+    currentPageData.unshift({
+      id: Math.floor(Math.random() * 10),
+      date: `${date.getDay()}.${date.getMonth()}.${date.getFullYear()}`,
+      title: titleValue,
+      firstMessage: firstMessageValue,
+      qty: 1,
+      unrd: undefined,
+      remove: true,
+      edit: true,
+    })
+    handleClose()
+    setTitleValue('')
+    setFirstMessageValue('')
+  }
+
+  const handleOpenModalNewTopic = () => {
+    setAction('newTopic')
+    handleOpen()
+  }
+
+  const handleOpenModalEditTopic = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation()
+    setAction('editTopic')
+    handleOpen()
+    // тут нужно заполнить модалку текстом из топика
+    setTitleValue('some title')
+    setFirstMessageValue('some first message')
+  }
+
+  const handleDeleteTopic = (e: { stopPropagation: () => void }) => {
+    e.stopPropagation()
+    console.log('handleDeleteTopic')
+  }
+
+  const onSubmit = (event: FormEvent<Element>) => {
+    console.log(action)
+    if (action === 'newTopic') {
+      handleSendNewTopic(event)
+    } else if (action === 'editTopic') {
+      console.log('handleEditTopic')
+      handleClose()
+      setTitleValue('')
+      setFirstMessageValue('')
+    } else {
+      console.log('wrong way')
+    }
+  }
+
   return (
-    <div style={{ margin: '40px 50px 40px' }}>
+    <section className={styles.forum}>
+      <div className={styles.buttons}>
+        <ActionButton
+          className={styles.new}
+          iconWrapperClassName={styles.new}
+          // onClick={}
+          icon={<CommentPlusMIcon />}
+          view="primary"
+          onClick={handleOpenModalNewTopic}
+        />
+        <ActionButton
+          className={styles.back}
+          onClick={() => navigate(-1)}
+          icon={<ArrowBackHeavyMIcon />}
+          view="primary"
+        />
+      </div>
       <Table
         pagination={
           <Table.Pagination
@@ -181,8 +263,8 @@ export const Forum: FC = () => {
           <Table.THeadCell
             title="Сообщений/непрочитанных"
             textAlign="left"
-            width={268}>
-            Сообщений/непрочитанных
+            width={150}>
+            Сообщений / непрочитанных
           </Table.THeadCell>
           <Table.THeadCell title="Действия" textAlign="left" width={268}>
             Действия
@@ -221,8 +303,8 @@ export const Forum: FC = () => {
                       width: 4,
                       color: 'var(--badge-icon-bg-color)',
                     }}
-                  />{' '}
-                  /
+                  />
+                  {'  '}/{'  '}
                   {row.unrd ? (
                     <Indicator
                       height={30}
@@ -241,32 +323,72 @@ export const Forum: FC = () => {
               </Table.TCell>
 
               <Table.TCell>
-                {row.edit ? (
+                {row.edit && (
                   <ButtonDesktop
+                    className={styles.button}
                     view="accent"
                     size="xs"
-                    style={{ margin: '5px', padding: '5px' }}>
-                    {row.edit}
+                    onClick={handleOpenModalEditTopic}>
+                    Редактировать
                   </ButtonDesktop>
-                ) : (
-                  ''
                 )}
-                {row.remove ? (
+                {row.remove && (
                   <ButtonDesktop
+                    className={styles.button}
                     view="accent"
                     size="xs"
-                    style={{ margin: '5px', padding: '5px' }}>
-                    {row.remove}
+                    onClick={handleDeleteTopic}>
+                    Удалить
                   </ButtonDesktop>
-                ) : (
-                  ''
                 )}
               </Table.TCell>
             </Table.TRow>
           ))}
         </Table.TBody>
       </Table>
-    </div>
+
+      <Modal open={openModal} onClose={handleClose} size={'l'}>
+        <Modal.Header
+          hasCloser={true}
+          hasBackButton={false}
+          sticky={true}
+          title={'Что вы хотите написать?'}
+        />
+
+        <Modal.Content>
+          <form onSubmit={onSubmit}>
+            <Input
+              value={titleValue}
+              block={true}
+              onChange={e => setTitleValue(e.target.value)}
+              label="Заголовок"
+              // size="xl"
+            />
+            <Gap size="s" />
+            <Textarea
+              value={firstMessageValue}
+              block={true}
+              onChange={e => setFirstMessageValue(e.target.value)}
+              label="То о чем вы хотите написать"
+              size="xl"
+              minRows={3}
+              maxLength={96}
+              showCounter={true}
+            />
+          </form>
+        </Modal.Content>
+
+        <Modal.Footer sticky={false}>
+          <Button view="primary" size="s" onClick={onSubmit}>
+            Отправить
+          </Button>
+
+          <Button view="secondary" size="s" onClick={handleClose}>
+            Отмена
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </section>
   )
 }
 
