@@ -14,6 +14,6 @@ export default {
   },
   transform: {
     "^.+\\.tsx?$": "ts-jest",
-    "^.+\\.svg$": "<rootDir>/svgTransform.js"
+    "^.+\\.svg$": "<rootDir>/svgTransform.cjs"
   },
 }
