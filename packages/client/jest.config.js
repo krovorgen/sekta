@@ -12,4 +12,8 @@ export default {
     '^uuid$': 'uuid',
     '^.+\\.(css|scss)$': '<rootDir>/config/CSSStub.js',
   },
+  transform: {
+    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.svg$": "<rootDir>/svgTransform.js"
+  },
 }
