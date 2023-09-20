@@ -4,9 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import styles from './ForumTopic.module.scss'
 import { ReactComponent as sendIcon } from './images/send.svg'
 import { ArrowBackHeavyMIcon } from '@alfalab/icons-glyph/ArrowBackHeavyMIcon'
-// import { CommentWithTextLineMIcon } from '@alfalab/icons-glyph/CommentWithTextLineMIcon';
 
-import { data } from '../Forum'
+import { data } from '../temporary/data'
 
 import { ActionButton } from '@alfalab/core-components/action-button'
 import { Typography } from '@alfalab/core-components/typography'
@@ -17,7 +16,7 @@ import { Input } from '@alfalab/core-components/input'
 import { IconButton } from '@alfalab/core-components/icon-button'
 import { Toast } from '@alfalab/core-components/toast'
 
-import { ITopic } from '../Forum'
+import { ITopic } from '../temporary/data'
 
 export const ForumTopic: FC = () => {
   const navigate = useNavigate()
@@ -48,18 +47,6 @@ export const ForumTopic: FC = () => {
       date: Math.floor(Math.random() * 1000).toString(),
       text: inputValue,
     })
-    // не нашел способа, как во временном исполнении мутировать исходный объект, так, что бы обновлялся текущий и соответственно рендерился
-    // for (let i = 0; i <= data.length; i++) {
-    //   if (data[i].id === Number(topicId)) {
-    //     data[i].comments?.push({
-    //       id: 1488,
-    //       author: 'string;',
-    //       date: 'string;',
-    //       text: inputValue,
-    //     })
-    //     console.log(data[i].comments)
-    //   }
-    // }
     setTitle('Комментарий отправлен, а Вы восхитительны!')
     setInputValue('')
     toggleVisiblity()
@@ -69,7 +56,6 @@ export const ForumTopic: FC = () => {
 
   return (
     <section className={styles.topic}>
-      {/* <div>Forum with topic id: {topicId}</div> */}
       <ActionButton
         className={styles.back}
         onClick={() => navigate(-1)}
@@ -80,26 +66,16 @@ export const ForumTopic: FC = () => {
         tag="h2"
         view="small"
         font="system"
-        rowLimit={2}
-        // showSkeleton={showSkeleton}
-        // skeletonProps={{ width: IS_MOBILE ? ['100%', '34%'] : 420 }}
-      >
+        rowLimit={2}>
         {topic.title}
       </Typography.TitleResponsive>
 
       <Gap size="s" />
 
-      <Typography.Text
-        tag="p"
-        view="primary-medium"
-        // showSkeleton={showSkeleton}
-      >
+      <Typography.Text tag="p" view="primary-medium">
         {topic.firstMessage}
       </Typography.Text>
-      {/* {Object.values(topic.comments).forEach((comment) => {
-        console.log(comment)
 
-      })} */}
       {(topic.comments as []).map(
         (comment: {
           id: number
@@ -135,7 +111,7 @@ export const ForumTopic: FC = () => {
               className={styles.submit}
               view="secondary"
               onClick={onSendComment}
-              icon={sendIcon} // CommentWithTextLineMIcon
+              icon={sendIcon}
               size="s"
               dataTestId="icon"
             />
