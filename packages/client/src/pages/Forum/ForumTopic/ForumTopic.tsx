@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import styles from './ForumTopic.module.scss'
 import { ReactComponent as sendIcon } from './images/send.svg'
 import { ArrowBackHeavyMIcon } from '@alfalab/icons-glyph/ArrowBackHeavyMIcon'
+// import { CommentWithTextLineMIcon } from '@alfalab/icons-glyph/CommentWithTextLineMIcon';
 
 import { data } from '../temporary/data'
 
