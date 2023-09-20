@@ -7,7 +7,6 @@ import { Login } from '../pages/Login/Login'
 import { Registration } from '../pages/Registration/Registration'
 import { Settings } from '../pages/Settings/Settings'
 import { Game } from '../pages/Game/Game'
-import { Profile } from '../pages/Profile/Profile'
 import { Leaderboards } from '../pages/Leaderboards/Leaderboards'
 import { Forum } from '../pages/Forum/Forum'
 import { ForumTopic } from '../pages/Forum/ForumTopic/ForumTopic'
@@ -51,10 +50,6 @@ export const router = createBrowserRouter([
       {
         path: `${RoutePath.Forum}/:topicId`,
         Component: ForumTopic,
-      },
-      {
-        path: RoutePath.Profile,
-        Component: Profile,
       },
     ],
   },

@@ -2,7 +2,7 @@ import { ChangeEvent } from 'react'
 import { Attach } from '@alfalab/core-components/attach'
 import { Typography } from '@alfalab/core-components/typography/cssm'
 
-import styles from '../profile.module.scss'
+import styles from '../settings.module.scss'
 import { AvatarFormProps } from '../types'
 
 const resourcesUrl = 'https://ya-praktikum.tech/api/v2/resources'

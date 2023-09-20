@@ -1,21 +1,11 @@
-import { Space } from '@alfalab/core-components/space'
-import { PasswordInput } from '@alfalab/core-components/password-input/cssm'
-import { Button } from '@alfalab/core-components/button/cssm'
 import { Typography } from '@alfalab/core-components/typography/cssm'
-import { Controller, FieldValues, useForm } from 'react-hook-form'
+import { Button } from '@alfalab/core-components/button/cssm'
+import { Space } from '@alfalab/core-components/space'
+import { FieldValues, useForm } from 'react-hook-form'
 
-import styles from '../profile.module.scss'
-import { ProfileFormProps, ProfileFieldProps } from '../types'
-
-const PasswordField = ({ control, label, name }: ProfileFieldProps) => {
-  return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field }) => <PasswordInput {...field} label={label} block />}
-    />
-  )
-}
+import styles from '../settings.module.scss'
+import { ProfileFormProps } from '../types'
+import { PasswordField } from './fields'
 
 export const PasswordForm = ({ onSubmit }: ProfileFormProps) => {
   const { control, handleSubmit } = useForm()

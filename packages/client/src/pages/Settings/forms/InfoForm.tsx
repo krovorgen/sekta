@@ -1,32 +1,11 @@
-import { Input } from '@alfalab/core-components/input'
-import { Space } from '@alfalab/core-components/space'
-import { Button } from '@alfalab/core-components/button/cssm'
-import { PhoneInput } from '@alfalab/core-components/phone-input/cssm'
 import { Typography } from '@alfalab/core-components/typography/cssm'
-import { Controller, FieldValues, useForm } from 'react-hook-form'
+import { Button } from '@alfalab/core-components/button/cssm'
+import { Space } from '@alfalab/core-components/space'
+import { FieldValues, useForm } from 'react-hook-form'
 
-import styles from '../profile.module.scss'
-import { ProfileFieldProps, ProfileFormProps } from '../types'
-
-const ProfileField = ({ control, label, name }: ProfileFieldProps) => {
-  return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field }) => <Input {...field} label={label} block />}
-    />
-  )
-}
-
-const PhoneField = ({ control, label, name }: ProfileFieldProps) => {
-  return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field }) => <PhoneInput {...field} label={label} block />}
-    />
-  )
-}
+import { PhoneField, ProfileField } from './fields'
+import styles from '../settings.module.scss'
+import { ProfileFormProps } from '../types'
 
 export const InfoForm = ({ onSubmit }: ProfileFormProps) => {
   const { control, handleSubmit } = useForm()
