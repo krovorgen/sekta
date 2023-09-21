@@ -98,7 +98,21 @@ export const Forum: FC = () => {
   const handleSendNewTopic = (e: FormEvent) => {
     e.preventDefault()
     console.log(titleValue, firstMessageValue)
-    currentPageData.unshift({
+    const topicArr = [
+      {
+        id: Math.floor(Math.random() * 10),
+        date: `${date.getDay()}.${date.getMonth()}.${date.getFullYear()}`,
+        title: titleValue,
+        firstMessage: firstMessageValue,
+        qty: 1,
+        unrd: undefined,
+        remove: true,
+        edit: true,
+      },
+      ...topics,
+    ]
+    setTopics(topicArr)
+    data.unshift({
       id: Math.floor(Math.random() * 10),
       date: `${date.getDay()}.${date.getMonth()}.${date.getFullYear()}`,
       title: titleValue,
