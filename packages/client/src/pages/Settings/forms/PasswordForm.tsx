@@ -3,7 +3,7 @@ import { Button } from '@alfalab/core-components/button/cssm'
 import { Space } from '@alfalab/core-components/space'
 import { FieldValues, useForm } from 'react-hook-form'
 
-import styles from '../settings.module.scss'
+import styles from '../Settings.module.scss'
 import { ProfileFormProps } from '../types'
 import { PasswordField } from './fields'
 

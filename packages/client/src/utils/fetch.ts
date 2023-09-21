@@ -1,6 +1,15 @@
-type FetchMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
+import { baseUrl } from '../constants/urls'
 
-const baseUrl = 'https://ya-praktikum.tech/api/v2'
+export const fetchMethods = {
+  get: 'GET',
+  post: 'POST',
+  put: 'PUT',
+  delete: 'DELETE',
+} as const
+
+type KeysOfFetchMehods = keyof typeof fetchMethods
+
+type FetchMethod = typeof fetchMethods[KeysOfFetchMehods]
 
 export const fetchSekta = async (
   url: string,

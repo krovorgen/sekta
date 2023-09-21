@@ -1,12 +1,14 @@
 import { ChangeEvent } from 'react'
 import { Attach } from '@alfalab/core-components/attach'
 import { Typography } from '@alfalab/core-components/typography/cssm'
+import classNames from 'classnames/bind'
 
-import styles from '../settings.module.scss'
+import styles from '../Settings.module.scss'
 import { AvatarFormProps } from '../types'
+import { baseUrl, resourcesUrl } from '../../../constants/urls'
+import { fetchMethods } from '../../../utils/fetch'
 
-const resourcesUrl = 'https://ya-praktikum.tech/api/v2/resources'
-const apiUrl = 'https://ya-praktikum.tech/api/v2/user/profile/avatar'
+const cn = classNames.bind(styles)
 
 export const Avatar = ({ avatar, initials, setUser }: AvatarFormProps) => {
   const handleUpload = async (
@@ -17,8 +19,8 @@ export const Avatar = ({ avatar, initials, setUser }: AvatarFormProps) => {
 
     formData.append('avatar', payload.files[0])
 
-    const response = await fetch(apiUrl, {
-      method: 'PUT',
+    const response = await fetch(`${baseUrl}/user/profile/avatar`, {
+      method: fetchMethods.put,
       body: formData,
       credentials: 'include',
     })
@@ -27,12 +29,18 @@ export const Avatar = ({ avatar, initials, setUser }: AvatarFormProps) => {
     setUser(result)
   }
 
+  const avatarSectionClass = cn(styles.box, styles.avatar)
+
   return (
-    <section className={`${styles.box} ${styles.avatar}`}>
+    <section className={avatarSectionClass}>
       <Typography.Text view="primary-large"> Avatar</Typography.Text>
 
       {avatar ? (
-        <img src={`${resourcesUrl}${avatar}`} className={styles.avatarImg} />
+        <img
+          src={`${resourcesUrl}${avatar}`}
+          className={styles.avatarImg}
+          alt="user avatar"
+        />
       ) : (
         <div className={styles.noAvatar}>{initials}</div>
       )}
