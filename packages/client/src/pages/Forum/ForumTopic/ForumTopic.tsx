@@ -10,13 +10,13 @@ import { data } from '../temporary/data'
 import { ActionButton } from '@alfalab/core-components/action-button'
 import { Typography } from '@alfalab/core-components/typography'
 import { Gap } from '@alfalab/core-components/gap'
-import { Comment } from '@alfalab/core-components/comment'
-import { ButtonDesktop } from '@alfalab/core-components/button/desktop'
 import { Input } from '@alfalab/core-components/input'
 import { IconButton } from '@alfalab/core-components/icon-button'
 import { Toast } from '@alfalab/core-components/toast'
 
 import { ITopic } from '../temporary/data'
+
+import { CommentProps, TopicsComment } from './components/comment'
 
 export const ForumTopic: FC = () => {
   const navigate = useNavigate()
@@ -76,28 +76,14 @@ export const ForumTopic: FC = () => {
         {topic.firstMessage}
       </Typography.Text>
 
-      {(topic.comments as []).map(
-        (comment: {
-          id: number
-          text: string
-          author: string
-          date: string
-        }) => (
-          <div key={comment.id}>
-            <Comment className={styles.text}>{comment.text}</Comment>
-            <div className={styles.info}>
-              <ButtonDesktop className={styles.reply} view="ghost">
-                Ответить
-              </ButtonDesktop>
-              <div>
-                <span className={styles.author}>{comment.author}</span>
-                <span className={styles.author}>{comment.date}</span>
-              </div>
-            </div>
-            <Gap size="s" />
-          </div>
-        )
-      )}
+      {(topic.comments as []).map((comment: CommentProps) => (
+        <TopicsComment
+          id={comment.id}
+          text={comment.text}
+          author={comment.author}
+          date={comment.date}
+        />
+      ))}
 
       <form onSubmit={onSendComment}>
         <Input

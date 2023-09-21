@@ -13,25 +13,6 @@
   align-self: flex-end;
 }
 
-.text.text {
-  width: 100%;
-}
-
-.reply {
-  padding: 0 16px;
-}
-
-.info {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.author {
-  padding: 0 16px;
-}
-
 .submit.submit {
   margin-right: var(--gap-s-neg);
 }
