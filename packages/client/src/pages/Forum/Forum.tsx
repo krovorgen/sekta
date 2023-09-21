@@ -4,17 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import styles from './Forum.module.scss'
 import { data } from './temporary/data'
 
-import { Button } from '@alfalab/core-components/button'
 import { ActionButton } from '@alfalab/core-components/action-button'
-import { Modal } from '@alfalab/core-components/modal'
-import { Input } from '@alfalab/core-components/input'
-import { Textarea } from '@alfalab/core-components/textarea'
 
 import { ArrowBackHeavyMIcon } from '@alfalab/icons-glyph/ArrowBackHeavyMIcon'
 import { CommentPlusMIcon } from '@alfalab/icons-glyph/CommentPlusMIcon'
-import { Gap } from '@alfalab/core-components/gap'
 
 import { ForumsTable } from './components/table/ForumsTable'
+import { ForumsModal } from './components/modal/ForumsModal'
 
 const date = new Date()
 
@@ -117,47 +113,15 @@ export const Forum: FC = () => {
         handleOpenModalEditTopic={handleOpenModalEditTopic}
         handleDeleteTopic={handleDeleteTopic}
       />
-
-      <Modal open={openModal} onClose={handleClose} size={'l'}>
-        <Modal.Header
-          hasCloser={true}
-          hasBackButton={false}
-          sticky={true}
-          title={'Что вы хотите написать?'}
-        />
-
-        <Modal.Content>
-          <form onSubmit={onSubmit}>
-            <Input
-              value={titleValue}
-              block={true}
-              onChange={e => setTitleValue(e.target.value)}
-              label="Заголовок"
-            />
-            <Gap size="s" />
-            <Textarea
-              value={firstMessageValue}
-              block={true}
-              onChange={e => setFirstMessageValue(e.target.value)}
-              label="То о чем вы хотите написать"
-              size="xl"
-              minRows={3}
-              maxLength={96}
-              showCounter={true}
-            />
-          </form>
-        </Modal.Content>
-
-        <Modal.Footer sticky={false}>
-          <Button view="primary" size="s" onClick={onSubmit}>
-            Отправить
-          </Button>
-
-          <Button view="secondary" size="s" onClick={handleClose}>
-            Отмена
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <ForumsModal
+        openModal={openModal}
+        handleClose={handleClose}
+        onSubmit={onSubmit}
+        titleValue={titleValue}
+        setTitleValue={setTitleValue}
+        firstMessageValue={firstMessageValue}
+        setFirstMessageValue={setFirstMessageValue}
+      />
     </section>
   )
 }
