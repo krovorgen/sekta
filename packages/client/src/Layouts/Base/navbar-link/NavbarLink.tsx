@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import cn from 'classnames'
 import { NavLink } from 'react-router-dom'
 
 import styles from './NavbarLink.module.scss'
 
-const NavbarLink = ({ children, icon, to, ...props }) => {
+interface NavbarLinkProps {
+  children: string
+  to: string
+  icon?: ReactNode
+}
+
+const NavbarLink = ({ children, icon, to, ...props }: NavbarLinkProps) => {
   return (
     <NavLink
       {...props}

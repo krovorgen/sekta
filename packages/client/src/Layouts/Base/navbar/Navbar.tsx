@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import styles from './Navbar.module.scss'
 
-const Navbar = ({ children }) => {
+interface NavbarProps {
+  children: ReactNode
+}
+
+const Navbar = ({ children }: NavbarProps) => {
   return (
     <div className={styles.root}>
       {/* тут можно лого какое-нибудь прикрепить */}

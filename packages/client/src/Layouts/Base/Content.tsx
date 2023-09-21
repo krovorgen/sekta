@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import styles from './Layout.module.scss'
 
-const Content = ({ children }) => {
+interface ContentProps {
+  children: ReactNode
+}
+
+const Content = ({ children }: ContentProps) => {
   return <div className={styles.content}>{children}</div>
 }
 
