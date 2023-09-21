@@ -1,5 +1,9 @@
+@import "../../scss/helpers/mixins";
+
 .layout {
-  background: rgb(0 0 0 / 3.3%);
+  background-image: url("../../assets/images/AuthLayout/bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
   min-width: 100%;
   min-height: 100vh;
   display: flex;

@@ -1,7 +1,6 @@
 import React, { FC, useEffect } from 'react'
 
 import { Outlet } from 'react-router-dom'
-import { Content } from './Content'
 
 import { NavbarLink } from './navbar-link/NavbarLink'
 import { Navbar } from './navbar/Navbar'
@@ -22,13 +21,14 @@ const Layout: FC = () => {
   return (
     <div className={styles.layout}>
       <Navbar>
+        <NavbarLink to="/">Игра</NavbarLink>
         <NavbarLink to="/settings">Профиль</NavbarLink>
         <NavbarLink to="/leaderboards">Таблица лидеров</NavbarLink>
         <NavbarLink to="/forum">Форум</NavbarLink>
       </Navbar>
-      <Content>
+      <div className={styles.content}>
         <Outlet />
-      </Content>
+      </div>
     </div>
   )
 }
