@@ -6,7 +6,7 @@ import { FieldValues } from 'react-hook-form'
 import { Avatar } from './forms/AvatarForm'
 import { InfoForm } from './forms/InfoForm'
 import { PasswordForm } from './forms/PasswordForm'
-import { fetchMethods, fetchSekta } from '../../utils/fetch'
+import { FetchMethods, fetchSekta } from '../../utils/fetch'
 import { User } from '../../types/common'
 import styles from './Settings.module.scss'
 import { ProfileNotification } from './types'
@@ -28,7 +28,7 @@ export const Settings: FC = () => {
   }
 
   const onSubmit = async (data: FieldValues, path: string) => {
-    const response = await fetchSekta(path, fetchMethods.put, data)
+    const response = await fetchSekta(path, FetchMethods.PUT, data)
 
     if (response?.ok) {
       setNotification(prev => ({ ...prev, isVisible: true }))

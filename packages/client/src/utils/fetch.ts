@@ -1,19 +1,15 @@
 import { baseUrl } from '../constants/urls'
 
-export const fetchMethods = {
-  get: 'GET',
-  post: 'POST',
-  put: 'PUT',
-  delete: 'DELETE',
-} as const
-
-type KeysOfFetchMehods = keyof typeof fetchMethods
-
-type FetchMethod = typeof fetchMethods[KeysOfFetchMehods]
+export enum FetchMethods {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+}
 
 export const fetchSekta = async (
   url: string,
-  method: FetchMethod,
+  method: FetchMethods,
   body?: unknown
 ) => {
   try {
