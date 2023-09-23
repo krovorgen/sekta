@@ -9,6 +9,7 @@ import styles from './Root.module.scss'
 
 export const Root: FC = () => {
   const navigate = useNavigate()
+  const onStartGameBtnClick = () => navigate(RoutePath.Game)
 
   return (
     <div className={styles.root}>
@@ -28,7 +29,7 @@ export const Root: FC = () => {
         <Gap size="s" />
 
         <Button
-          onClick={() => navigate(RoutePath.Game)}
+          onClick={onStartGameBtnClick}
           view="accent"
           type="submit"
           size="xs">

@@ -1,6 +1,7 @@
 import React, { FC, useEffect } from 'react'
 
 import { Outlet } from 'react-router-dom'
+import { RoutePath } from '../../constants/routes'
 
 import { NavbarLink } from './navbar-link/NavbarLink'
 import { Navbar } from './navbar/Navbar'
@@ -18,13 +19,14 @@ const Layout: FC = () => {
 
     fetchServerData()
   }, [])
+
   return (
     <div className={styles.layout}>
       <Navbar>
         <NavbarLink to="/">Игра</NavbarLink>
-        <NavbarLink to="/settings">Профиль</NavbarLink>
-        <NavbarLink to="/leaderboards">Таблица лидеров</NavbarLink>
-        <NavbarLink to="/forum">Форум</NavbarLink>
+        <NavbarLink to={RoutePath.Settings}>Профиль</NavbarLink>
+        <NavbarLink to={RoutePath.Leaderboards}>Таблица лидеров</NavbarLink>
+        <NavbarLink to={RoutePath.Forum}>Форум</NavbarLink>
       </Navbar>
       <div className={styles.content}>
         <Outlet />

@@ -4,8 +4,7 @@ import { NavLink } from 'react-router-dom'
 
 import styles from './NavbarLink.module.scss'
 
-interface NavbarLinkProps {
-  children: string
+interface NavbarLinkProps extends React.PropsWithChildren {
   to: string
   icon?: ReactNode
 }
@@ -16,7 +15,9 @@ const NavbarLink = ({ children, icon, to, ...props }: NavbarLinkProps) => {
       {...props}
       to={to}
       className={({ isActive }) =>
-        isActive ? cn(styles.navbarlink, styles.active) : styles.navbarlink
+        cn(styles.navbarlink, {
+          [styles.active]: isActive,
+        })
       }>
       {icon && <span className="icon">{icon}</span>}
       {children}
