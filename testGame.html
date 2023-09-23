@@ -1,0 +1,135 @@
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Gamedev Canvas</title>
+  <style>
+	* { padding: 0; margin: 0; }
+  canvas { background: #eee; display: block; margin: 0 auto; }
+  </style>
+</head>
+<body>
+<canvas id="myCanvas" width="480" height="320"></canvas>
+<script>
+  var canvas = document.getElementById("myCanvas");
+  var ctx = canvas.getContext("2d");
+  var player = {
+    x: 20,
+    y: 200,
+    width: 50,
+    height: 55,
+    img: document.getElementById('source'),
+    draw: function() {
+      ctx.beginPath();
+      ctx.rect(this.x, this.y, this.width, this.height);
+      ctx.fillStyle = "green";
+      ctx.fill();
+      ctx.closePath();
+    }
+  }
+
+  var bricks = [];
+  var brick = {
+    x: 500,
+    y: 200,
+    width: 50,
+    height: 45,
+    dx: 1,
+    dy: -1,
+    draw: function() {
+      ctx.beginPath();
+      ctx.rect(this.x, this.y, this.width, this.height);
+      ctx.fillStyle = "#0095DD";
+      ctx.fill();
+      ctx.closePath();
+    },
+    move: function() {
+      this.x += -1;
+    }
+  }
+
+  function floor() {
+    ctx.beginPath();
+    ctx.rect(0, 255, 480, 1);
+    ctx.fillStyle = "#000";
+    ctx.fill();
+    ctx.closePath();
+  }
+  function clone() {
+    var newBrick = Object.assign({}, brick);
+    bricks.push(newBrick);
+  }
+
+ // move
+  var rightPressed = false;
+  var leftPressed = false;
+  var upPressed = false;
+
+  document.addEventListener("keydown", keyDownHandler, false);
+  document.addEventListener("keyup", keyUpHandler, false);
+
+  function keyDownHandler(e) {
+    if(e.keyCode == 39) {
+      rightPressed = true;
+    } else if(e.keyCode == 37) {
+        leftPressed = true;
+    } else if(e.keyCode == 38) {
+        upPressed = true;
+    } 
+  }
+
+  function keyUpHandler(e) {
+    if(e.keyCode == 39) {
+        rightPressed = false;
+    } else if(e.keyCode == 37) {
+        leftPressed = false;
+    } else if(e.keyCode == 38) {
+        upPressed = false;
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0,0, canvas.width, canvas.height)
+    player.draw();
+    floor();
+
+    if(rightPressed && player.x < canvas.width-player.width) {
+      player.x += 2;
+    }
+    else if(leftPressed && player.x > 0) {
+      player.x -= 2;
+    }
+
+    if (upPressed && player.y < canvas.height-player.height) {
+      player.y -= 5;
+      returnDown(5);
+    }
+
+    bricks.forEach(function(brick){
+      brick.draw();
+      brick.move();
+
+      if (isCollide(player, brick)) {
+        document.location.reload();
+        console.log("work");
+      } 
+    });
+  }
+  setInterval(draw, 10);
+  setInterval(clone, 5000)
+
+  function returnDown(val) {
+    setTimeout(function(e) {
+      player.y += val;
+    }, 300);
+  }
+
+  function isCollide(rect1, rect2) {
+    return (rect1.x < rect2.x + rect2.width &&
+            rect1.x + rect1.width > rect2.x &&
+            rect1.y < rect2.y + rect2.height &&
+            rect1.height + rect1.y > rect2.y);
+  }
+
+  </script>
+</body>
+</html>

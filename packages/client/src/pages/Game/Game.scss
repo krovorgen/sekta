@@ -1,0 +1,12 @@
+@import '../../scss/helpers/variables';
+
+.game-wrapper {
+  width: auto;
+}
+
+.game-canvas {
+    background: #eee;
+    display: block;
+    margin: 0 auto;
+    cursor: none;
+}
