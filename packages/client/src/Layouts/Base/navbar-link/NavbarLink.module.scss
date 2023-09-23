@@ -1,0 +1,31 @@
+@import '@alfalab/core-components/vars/colors-indigo.css';
+
+.navbarlink {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  transition: all 0.3s;
+  color: black;
+  text-decoration: none;
+  margin: 0 0.5px;
+
+  &:hover,
+  &:focus {
+    background: var(--color-light-text-primary);
+    color: #fff;
+  }
+}
+
+.active {
+  background: var(--color-light-text-primary);
+  color: #fff;
+}
+
+.icon {
+  margin-right: 5px;
+  display: flex;
+  align-items: center;
+  width: 15px;
+  height: 15px;
+}
