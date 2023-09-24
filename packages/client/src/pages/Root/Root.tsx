@@ -6,8 +6,10 @@ import { useNavigate } from 'react-router-dom'
 import { RoutePath } from '../../constants/routes'
 
 import styles from './Root.module.scss'
+import { withUserCheck } from '../../HOC/withUserCheck'
+import { PropsWithUser } from '../../types'
 
-export const Root: FC = () => {
+const RootPage: FC<PropsWithUser> = ({ user }) => {
   const navigate = useNavigate()
   const onStartGameBtnClick = () => navigate(RoutePath.Game)
 
@@ -39,3 +41,5 @@ export const Root: FC = () => {
     </div>
   )
 }
+
+export const Root = withUserCheck(RootPage)

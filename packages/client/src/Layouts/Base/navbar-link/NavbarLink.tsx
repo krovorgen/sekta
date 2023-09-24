@@ -5,12 +5,19 @@ import { NavLink } from 'react-router-dom'
 import styles from './NavbarLink.module.scss'
 
 interface NavbarLinkProps extends React.PropsWithChildren {
-  to: string
+  to?: string
   icon?: ReactNode
+  onClick?: () => void
 }
 
-const NavbarLink = ({ children, icon, to, ...props }: NavbarLinkProps) => {
-  return (
+const NavbarLink = ({
+  children,
+  icon,
+  to,
+  onClick,
+  ...props
+}: NavbarLinkProps) => {
+  return to ? (
     <NavLink
       {...props}
       to={to}
@@ -22,6 +29,13 @@ const NavbarLink = ({ children, icon, to, ...props }: NavbarLinkProps) => {
       {icon && <span className="icon">{icon}</span>}
       {children}
     </NavLink>
+  ) : (
+    <button
+      className={cn('reset-btn', styles.navbarlink)}
+      onClick={onClick}
+      type="button">
+      {children}
+    </button>
   )
 }
 
