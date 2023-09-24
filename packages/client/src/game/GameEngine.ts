@@ -1,6 +1,7 @@
 import { GAME_OPTIONS } from '../constants/game'
 import Entity from './core/Entity'
 import Brick from './core/entities/Brick'
+import Fireball from './core/entities/Fireball'
 import Floor from './core/entities/Floor'
 import Player from './core/entities/Player'
 import KeyControls, { KEYS } from './core/utils/controls'
@@ -28,6 +29,8 @@ export default class GameEngine {
   floor: Floor
   player: Player
   bricks: Brick[]
+  lastBrick = 0
+  fireballs: Fireball[]
 
   constructor(props: {
     canvas: HTMLCanvasElement
@@ -41,7 +44,8 @@ export default class GameEngine {
 
     this.floor = new Floor()
     this.player = new Player()
-    this.bricks = [new Brick()]
+    this.bricks = []
+    this.fireballs = []
 
     KeyControls.setControls()
     this.mainLoop()
@@ -60,20 +64,12 @@ export default class GameEngine {
 
   private update(dt: number): void {
     if (this.gameState == GameState.END) {
-      // ...
       return
     }
     this.gameTime += dt
 
-    this.handleInput(dt)
-    this.updateEntities(dt)
-
-    // с увеличением времени игры увеличиваетя кол-во попаданий в условие ниже
-    // формула: 1 - 0.993^gameTime
-    if (Math.random() < 1 - Math.pow(0.993, this.gameTime)) {
-      //enemies.push({});
-      //speed++;
-    }
+    this.handleInput(dt * this.gameSpeed)
+    this.updateEntities(dt * this.gameSpeed)
 
     this.checkCollisions()
   }
@@ -92,28 +88,68 @@ export default class GameEngine {
       this.player.offset.dx += this.player.speed * dt
     }
     if (KeyControls.isKeyDown(KEYS.SPACE)) {
-      this.player.jump(dt)
+      this.player.jump()
     }
   }
 
   private updateEntities(dt: number): void {
-    this.player.position.x += this.player.offset.dx * dt
-    this.player.position.y += this.player.offset.dy * dt
-    for (const brick of this.bricks) {
-      brick.position.x += brick.offset.dx * dt
-      brick.position.y += brick.offset.dy * dt
+    // с увеличением времени игры увеличиваетя кол-во попаданий в условие ниже
+    // формула: 1 - 0.999^gameTime
+    if (Math.random() < 1 - Math.pow(0.999, this.gameTime)) {
+      this.fireballs.push(new Fireball())
+      this.gameSpeed += GAME_OPTIONS.SPEED_STEP
     }
+    // появление препятствия с заданной периодичностью
+    if (Date.now() - this.lastBrick > GAME_OPTIONS.BRICK_TIME) {
+      this.bricks.push(new Brick())
+      this.lastBrick = Date.now()
+    }
+    // движение игрока
+    this.player.update(dt)
+    // движение препятствий
+    for (const brick of this.bricks) brick.update(dt)
+    // движение огненного дождя
+    for (const fireball of this.fireballs) fireball.update(dt)
   }
 
   private checkCollisions(): void {
+    // появление/удаление препятствий
+    const brickIndexesForDelete: number[] = []
     for (const brick of this.bricks) {
       // проверка на столкновение игрока с камнями
       if (Entity.isCollide(this.player, brick)) {
-        this.player.isDead = true
-        this.gameState = GameState.END
-        setTimeout(this.gameStateEndCallback, 100)
+        this.gameOver()
+      }
+      // проверка выхода камння за пределы экрана
+      if (Entity.isOutside(brick)) {
+        brickIndexesForDelete.push(this.bricks.indexOf(brick))
+        this.gameScore++
       }
     }
+    for (const indexForDelete of brickIndexesForDelete)
+      this.bricks.splice(indexForDelete, 1)
+    // появление/удаление огненного дождя
+    const fireballIndexesForDelete: number[] = []
+    for (const fireball of this.fireballs) {
+      // проверка на столкновение игрока с огненным дождем
+      if (Entity.isCollide(this.player, fireball)) {
+        this.gameOver()
+      }
+      // проверка выхода огненного дождя за пределы экрана
+      if (Entity.isOutside(fireball)) {
+        brickIndexesForDelete.push(this.fireballs.indexOf(fireball))
+      }
+    }
+    for (const indexForDelete of fireballIndexesForDelete)
+      this.fireballs.splice(indexForDelete, 1)
+  }
+
+  private gameOver(): void {
+    if (this.gameState == GameState.END) return
+
+    this.player.isDead = true
+    this.gameState = GameState.END
+    this.gameStateEndCallback()
   }
 
   private render(): void {
@@ -126,6 +162,7 @@ export default class GameEngine {
     this.floor.draw(this.context)
     this.player.draw(this.context)
     for (const brick of this.bricks) brick.draw(this.context)
+    for (const fireballs of this.fireballs) fireballs.draw(this.context)
   }
 
   private reset(): void {

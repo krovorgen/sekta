@@ -1,20 +1,23 @@
 import { GAME_OPTIONS } from '../../../constants/game'
 import Entity from '../Entity'
 
-const BRICK_WIDTH = 50
-const BRICK_HEIGHT = 50
-const BRICK_SPEED = 150
+const FIREBALL_WIDTH = 20
+const FIREBALL_HEIGHT = 20
+const FIREBALL_SPEED_MIN = 100
+const FIREBALL_SPEED_RANGE = 5
 
-export default class Brick extends Entity {
+export default class Fireball extends Entity {
   constructor() {
     super({
       position: {
-        x: GAME_OPTIONS.CANVAS_WIDTH,
-        y:
-          GAME_OPTIONS.CANVAS_HEIGHT - GAME_OPTIONS.FLOOR_HEIGHT - BRICK_HEIGHT,
+        x: Math.random() * GAME_OPTIONS.CANVAS_WIDTH,
+        y: -FIREBALL_HEIGHT,
       },
-      offset: { dx: -BRICK_SPEED, dy: 0 },
-      size: { width: BRICK_WIDTH, height: BRICK_HEIGHT },
+      offset: {
+        dx: Math.random() * 2 - 1,
+        dy: Math.random() * FIREBALL_SPEED_RANGE + FIREBALL_SPEED_MIN,
+      },
+      size: { width: FIREBALL_WIDTH, height: FIREBALL_HEIGHT },
     })
   }
 
@@ -31,7 +34,7 @@ export default class Brick extends Entity {
       this.size.width,
       this.size.height
     )
-    ctx.fillStyle = 'gray'
+    ctx.fillStyle = 'red'
     ctx.fill()
     ctx.closePath()
   }

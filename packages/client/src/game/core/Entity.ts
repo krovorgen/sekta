@@ -1,3 +1,4 @@
+import { GAME_OPTIONS } from '../../constants/game'
 import { TOffset, TPoint, TSize, boxCollides } from './utils/calculations'
 
 interface EntityProps {
@@ -18,7 +19,21 @@ export default class Entity {
   }
 
   // проверка пересечения двух сущностей
-  public static isCollide(e1: Entity, e2: Entity) {
-    return boxCollides(e1.position, e1.size, e2.position, e2.size)
+  public static isCollide(entity1: Entity, entity2: Entity) {
+    return boxCollides(
+      entity1.position,
+      entity1.size,
+      entity2.position,
+      entity2.size
+    )
+  }
+  // проверить находится сущность за сценой
+  public static isOutside(entity: Entity) {
+    return !boxCollides(
+      { x: 0, y: 0 },
+      { width: GAME_OPTIONS.CANVAS_WIDTH, height: GAME_OPTIONS.CANVAS_HEIGHT },
+      entity.position,
+      entity.size
+    )
   }
 }
