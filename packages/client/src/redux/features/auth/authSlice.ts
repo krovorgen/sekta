@@ -21,11 +21,7 @@ export const logoutTC = createAsyncThunk('auth/logout', async () => {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
-    setNewUserInfo: (state, action: PayloadAction<User>) => {
-      state.user = { ...state.user, ...action.payload }
-    },
-  },
+  reducers: {},
   extraReducers: builder => {
     builder
       .addCase(getUserTC.fulfilled, (state, action: PayloadAction<User>) => {
@@ -36,7 +32,5 @@ const authSlice = createSlice({
       })
   },
 })
-
-export const { setNewUserInfo } = authSlice.actions
 
 export const authReducer = authSlice.reducer

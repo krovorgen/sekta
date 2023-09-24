@@ -8,6 +8,7 @@ import { logoutTC } from '../../../redux/features/auth/authSlice'
 export const Header: FC = () => {
   const dispatch = useAppDispatch()
   const user = useAppSelector(state => state.auth.user)
+
   const onLogout = useCallback(() => {
     ;(async () => {
       await dispatch(logoutTC())
