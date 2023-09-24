@@ -6,7 +6,7 @@ import { Typography } from '@alfalab/core-components/typography/cssm'
 import { Gap } from '@alfalab/core-components/gap/cssm'
 import { Button } from '@alfalab/core-components/button'
 
-import st from './ErrorPage.module.scss'
+import styles from './ErrorPage.module.scss'
 
 type ErrorResponse = {
   status: number
@@ -44,8 +44,8 @@ export const ErrorPage: FC = () => {
   }
 
   return (
-    <div className={st.root}>
-      <div className={st.container}>
+    <div className={styles.root}>
+      <div className={styles.container}>
         <Typography.Title tag="h1" color="static-secondary-dark" view="xlarge">
           {error?.status}
         </Typography.Title>
