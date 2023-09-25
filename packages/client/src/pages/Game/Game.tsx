@@ -1,9 +1,11 @@
 import './Game.scss'
 import React, { FC, useEffect, useRef } from 'react'
+import { withUserCheck } from '../../HOC/withUserCheck'
+import { PropsWithUser } from '../../types'
 import { GAME_OPTIONS } from '../../constants/game'
 import GameEngine from '../../game/GameEngine'
 
-export const Game: FC = () => {
+const GamePage: FC<PropsWithUser> = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   useEffect(() => {
     const canvas = canvasRef.current
@@ -26,3 +28,5 @@ export const Game: FC = () => {
     </div>
   )
 }
+
+export const Game = withUserCheck(GamePage)
