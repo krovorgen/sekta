@@ -22,9 +22,9 @@ const LoginPage: FC = () => {
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  const changeVisibilityPassword = useCallback(() => {
+  const changeVisibilityPassword = () => {
     setPasswordVisible(v => !v)
-  }, [])
+  }
 
   const onSubmit: SubmitHandler<SignInDTO> = useCallback(async data => {
     setIsLoading(true)
