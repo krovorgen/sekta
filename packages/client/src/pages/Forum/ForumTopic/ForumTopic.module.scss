@@ -1,0 +1,25 @@
+@import '../../../scss/helpers/variables';
+@import '../../../scss/helpers/mixins';
+
+.topic {
+  margin: 40px 50px;
+  padding: 30px;
+  box-shadow: var(--shadow-xs-hard);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.back.back {
+  position: sticky;
+  top: 45px;
+  align-self: flex-end;
+}
+
+.submit.submit {
+  margin-right: var(--gap-s-neg);
+}
+
+.toast {
+  left: calc(50% - 360px / 2);
+}
