@@ -24,7 +24,7 @@ export const withUserCheck = <P extends WithUserType>(
       }
     }, [user])
 
-    if ((user === null && isUserRequired) || (user && !isUserRequired)) {
+    if (user === null && isUserRequired) {
       return null
     }
 

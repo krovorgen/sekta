@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import { NavbarLink } from '../navbar-link/NavbarLink'
 import { RoutePath } from '../../../constants/routes'
 import { Navbar } from '../navbar/Navbar'
@@ -15,7 +15,7 @@ export const Header: FC = () => {
 
   return (
     <Navbar>
-      {user ? (
+      {user && (
         <>
           <NavbarLink to="/">Игра</NavbarLink>
           <NavbarLink to={RoutePath.Settings}>Профиль</NavbarLink>
@@ -23,7 +23,8 @@ export const Header: FC = () => {
           <NavbarLink to={RoutePath.Leaderboards}>Таблица лидеров</NavbarLink>
           <NavbarLink onClick={onLogout}>Выйти</NavbarLink>
         </>
-      ) : (
+      )}
+      {!user && (
         <>
           <NavbarLink to={RoutePath.Login}>Логин</NavbarLink>
           <NavbarLink to={RoutePath.Registration}>Регистрация</NavbarLink>
