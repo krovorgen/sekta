@@ -2,7 +2,7 @@ import React, { FC, FormEvent } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
 import styles from './ForumTopic.module.scss'
-import { ReactComponent as sendIcon } from './images/send.svg'
+import { PaperAirplaneLineMIcon } from '@alfalab/icons-glyph/PaperAirplaneLineMIcon'
 import { ArrowBackHeavyMIcon } from '@alfalab/icons-glyph/ArrowBackHeavyMIcon'
 
 import { data } from '../temporary/data'
@@ -97,7 +97,7 @@ export const ForumTopic: FC = () => {
               className={styles.submit}
               view="secondary"
               onClick={onSendComment}
-              icon={sendIcon}
+              icon={PaperAirplaneLineMIcon}
               size="s"
               dataTestId="icon"
             />

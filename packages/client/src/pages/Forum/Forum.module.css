@@ -1,0 +1,12 @@
+.forum {
+  margin: 40px 50px;
+  position: relative;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  position: sticky;
+  top: 90px;
+  z-index: 1;
+}
