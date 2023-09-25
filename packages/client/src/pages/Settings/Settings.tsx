@@ -91,5 +91,6 @@ export const Settings: FC<PropsWithUser> = () => {
       />
     </div>
   )
+}
 
 export const Settings = withUserCheck(SettingsPage)
