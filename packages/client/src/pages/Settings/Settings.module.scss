@@ -1,0 +1,71 @@
+@import "../../scss/helpers/mixins";
+
+.pageContainer {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  @include backgroundImg
+}
+
+.content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.contentPart {
+  width: 25%;
+}
+
+.box {
+  display: flex;
+  align-items: center;
+  
+  @include box;
+
+  button {
+    width: fit-content;
+  }
+
+  form {
+    width: 100%;
+  }
+}
+
+.info {
+  height: 100%;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+
+  .fileInfo {
+    display: none;
+  }
+}
+
+.noAvatar {
+  height: 160px;
+  width: 160px;
+  background-color: rgb(240 172 46);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 64px;
+}
+
+.avatarImg {
+  height: 160px;
+  width: 160px;
+  border-radius: 50%;
+}
