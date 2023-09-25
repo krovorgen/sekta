@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export default {
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/js-with-ts',
   testEnvironment: 'jsdom',
   testMatch: ['<rootDir>/src/**/*.test.{ts,tsx}'],
   globals: {
@@ -12,4 +12,5 @@ export default {
     '^uuid$': 'uuid',
     '^.+\\.(css|scss)$': '<rootDir>/config/CSSStub.js',
   },
+  transformIgnorePatterns: ['node_modules/(?!ky/.*)'],
 }

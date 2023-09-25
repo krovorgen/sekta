@@ -13,12 +13,15 @@
   },
   "dependencies": {
     "@alfalab/core-components": "^42.9.0",
+    "@reduxjs/toolkit": "^1.9.5",
     "dotenv": "^16.0.2",
     "eslint-config-prettier": "^8.5.0",
+    "ky": "^0.33.3",
     "prettier": "^2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.46.1",
+    "react-redux": "^8.1.2",
     "react-router-dom": "^6.15.0"
   },
   "devDependencies": {
@@ -40,7 +43,7 @@
     "stylelint-config-standard-scss": "^11.0.0",
     "ts-jest": "^28.0.8",
     "typescript": "^4.8.2",
-    "vite": "^3.0.7"
+    "vite": "^4.4.9"
   },
   "license": "MIT"
 }

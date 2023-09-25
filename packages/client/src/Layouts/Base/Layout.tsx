@@ -1,14 +1,30 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { Outlet } from 'react-router-dom'
-import { RoutePath } from '../../constants/routes'
 
-import { NavbarLink } from './navbar-link/NavbarLink'
-import { Navbar } from './navbar/Navbar'
+import { useAppDispatch } from '../../redux/store'
+import { GlobalLoader } from '../../components/GlobalLoader/GlobalLoader'
+import { getUserTC } from '../../redux/features/auth/authSlice'
+import { Header } from './Header/Header'
 
 import styles from './Layout.module.scss'
 
 const Layout: FC = () => {
+  const dispatch = useAppDispatch()
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        await dispatch(getUserTC())
+      } catch (e) {
+        console.log(e)
+      } finally {
+        setIsLoading(false)
+      }
+    })()
+  }, [])
+
   useEffect(() => {
     const fetchServerData = async () => {
       const url = `http://localhost:${__SERVER_PORT__}`
@@ -20,14 +36,11 @@ const Layout: FC = () => {
     fetchServerData()
   }, [])
 
-  return (
+  return isLoading ? (
+    <GlobalLoader />
+  ) : (
     <div className={styles.layout}>
-      <Navbar>
-        <NavbarLink to="/">Игра</NavbarLink>
-        <NavbarLink to={RoutePath.Settings}>Профиль</NavbarLink>
-        <NavbarLink to={RoutePath.Leaderboards}>Таблица лидеров</NavbarLink>
-        <NavbarLink to={RoutePath.Forum}>Форум</NavbarLink>
-      </Navbar>
+      <Header />
       <div className={styles.content}>
         <Outlet />
       </div>
