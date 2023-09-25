@@ -3,6 +3,8 @@ import { Gap } from '@alfalab/core-components/gap/cssm'
 import { Notification } from '@alfalab/core-components/notification'
 import { FieldValues } from 'react-hook-form'
 
+import { withUserCheck } from '../../HOC/withUserCheck'
+import { PropsWithUser } from '../../types'
 import { Avatar } from './forms/AvatarForm'
 import { InfoForm } from './forms/InfoForm'
 import { PasswordForm } from './forms/PasswordForm'
@@ -17,7 +19,7 @@ const notificationInitState: ProfileNotification = {
   title: 'Success!',
 }
 
-export const Settings: FC = () => {
+export const Settings: FC<PropsWithUser> = () => {
   const [user, setUser] = useState<User>()
   const [notification, setNotification] = useState<ProfileNotification>(
     notificationInitState
@@ -89,4 +91,5 @@ export const Settings: FC = () => {
       />
     </div>
   )
-}
+
+export const Settings = withUserCheck(SettingsPage)
