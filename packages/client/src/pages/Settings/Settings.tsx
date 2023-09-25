@@ -9,7 +9,7 @@ import { Avatar } from './forms/AvatarForm'
 import { InfoForm } from './forms/InfoForm'
 import { PasswordForm } from './forms/PasswordForm'
 import { FetchMethods, fetchSekta } from '../../utils/fetch'
-import { User } from '../../types/common'
+import { User } from '../../types/index'
 import styles from './Settings.module.scss'
 import { ProfileNotification } from './types'
 
@@ -19,7 +19,7 @@ const notificationInitState: ProfileNotification = {
   title: 'Success!',
 }
 
-export const Settings: FC<PropsWithUser> = () => {
+const SettingsPage: FC<PropsWithUser> = () => {
   const [user, setUser] = useState<User>()
   const [notification, setNotification] = useState<ProfileNotification>(
     notificationInitState
