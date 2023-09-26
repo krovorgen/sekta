@@ -21,7 +21,8 @@ import { ITopic } from '../temporary/data'
 
 import { CommentProps, TopicsComment } from './components/comment'
 
-export const ForumTopic: FC<PropsWithUser> = () => { // export const ForumTopicPage: FC<PropsWithUser>
+export const ForumTopicPage: FC<PropsWithUser> = () => {
+  // export const ForumTopicPage: FC<PropsWithUser>
   const navigate = useNavigate()
   const [isVisible, setIsVisible] = React.useState(false)
   const [title, setTitle] = React.useState('')
