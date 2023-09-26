@@ -1,6 +1,9 @@
 import React, { FC, FormEvent } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
+import { withUserCheck } from '../../../HOC/withUserCheck'
+import { PropsWithUser } from '../../../types'
+
 import styles from './ForumTopic.module.scss'
 import { PaperAirplaneLineMIcon } from '@alfalab/icons-glyph/PaperAirplaneLineMIcon'
 import { ArrowBackHeavyMIcon } from '@alfalab/icons-glyph/ArrowBackHeavyMIcon'
@@ -18,7 +21,7 @@ import { ITopic } from '../temporary/data'
 
 import { CommentProps, TopicsComment } from './components/comment'
 
-export const ForumTopic: FC = () => {
+export const ForumTopic: FC<PropsWithUser> = () => { // export const ForumTopicPage: FC<PropsWithUser>
   const navigate = useNavigate()
   const [isVisible, setIsVisible] = React.useState(false)
   const [title, setTitle] = React.useState('')
@@ -29,6 +32,7 @@ export const ForumTopic: FC = () => {
     date: '',
     title: '',
   }
+
   const { topicId } = useParams()
 
   data.forEach((elem: ITopic) => {
@@ -123,3 +127,5 @@ export const ForumTopic: FC = () => {
     </section>
   )
 }
+
+export const ForumTopic = withUserCheck(ForumTopicPage)
