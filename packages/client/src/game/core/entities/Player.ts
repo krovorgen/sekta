@@ -1,19 +1,21 @@
 import { GAME_OPTIONS } from '../../../constants/game'
 import Entity from '../Entity'
 
-const PLAYER_WIDTH = 50
-const PLAYER_HEIGHT = 100
-const PLAYER_SPEED = 200
-const PLAYER_LEFT_OFFSET = 50
-const PLAYER_JUMP_MULTIPLIER = 1.8
-const PLAYER_JUMP_DURATION = 500
-const PLAYER_JUMP_BLOCKTIME = 1500
+const {
+  PLAYER_WIDTH,
+  PLAYER_HEIGHT,
+  PLAYER_SPEED,
+  PLAYER_LEFT_OFFSET,
+  PLAYER_JUMP_MULTIPLIER,
+  PLAYER_JUMP_DURATION,
+  PLAYER_JUMP_BLOCKTIME,
+} = GAME_OPTIONS
 
 export default class Player extends Entity {
   isDead = false
   isJump = false
   lastJump = 0
-  speed = PLAYER_SPEED
+  moveSpeed = PLAYER_SPEED
 
   constructor() {
     super({
@@ -37,6 +39,18 @@ export default class Player extends Entity {
       this.isJump = true
       this.lastJump = Date.now()
     }
+  }
+  public up() {
+    this.offset.dy -= this.moveSpeed
+  }
+  public down() {
+    this.offset.dy += this.moveSpeed
+  }
+  public left() {
+    this.offset.dx -= this.moveSpeed
+  }
+  public right() {
+    this.offset.dx += this.moveSpeed
   }
 
   public update(dt: number) {

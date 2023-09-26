@@ -1,21 +1,24 @@
-import { GAME_OPTIONS } from '../../../constants/game'
 import Entity from '../Entity'
+import { GAME_OPTIONS } from '../../../constants/game'
+import { randomRange } from '../utils/calculations'
 
-const FIREBALL_WIDTH = 20
-const FIREBALL_HEIGHT = 20
-const FIREBALL_SPEED_MIN = 100
-const FIREBALL_SPEED_RANGE = 5
+const {
+  FIREBALL_WIDTH,
+  FIREBALL_HEIGHT,
+  FIREBALL_SPEED_MIN,
+  FIREBALL_SPEED_MAX,
+} = GAME_OPTIONS
 
 export default class Fireball extends Entity {
   constructor() {
     super({
       position: {
-        x: Math.random() * GAME_OPTIONS.CANVAS_WIDTH,
+        x: randomRange(0, GAME_OPTIONS.CANVAS_WIDTH),
         y: -FIREBALL_HEIGHT,
       },
       offset: {
-        dx: Math.random() * 2 - 1,
-        dy: Math.random() * FIREBALL_SPEED_RANGE + FIREBALL_SPEED_MIN,
+        dx: randomRange(-1, 1),
+        dy: randomRange(FIREBALL_SPEED_MIN, FIREBALL_SPEED_MAX),
       },
       size: { width: FIREBALL_WIDTH, height: FIREBALL_HEIGHT },
     })

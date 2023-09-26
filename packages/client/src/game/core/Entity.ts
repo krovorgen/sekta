@@ -31,7 +31,10 @@ export default class Entity {
   public static isOutside(entity: Entity) {
     return !boxCollides(
       { x: 0, y: 0 },
-      { width: GAME_OPTIONS.CANVAS_WIDTH, height: GAME_OPTIONS.CANVAS_HEIGHT },
+      {
+        width: GAME_OPTIONS.CANVAS_WIDTH + 1,
+        height: GAME_OPTIONS.CANVAS_HEIGHT + 1,
+      },
       entity.position,
       entity.size
     )

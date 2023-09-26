@@ -54,11 +54,11 @@ export default class GameEngine {
   private mainLoop = (): void => {
     const now = performance.now()
     const dt = (now - this.timestamp) / 1000.0
+    this.timestamp = now
 
     this.update(dt)
     this.render()
 
-    this.timestamp = now
     window.requestAnimationFrame(this.mainLoop)
   }
 
@@ -68,24 +68,24 @@ export default class GameEngine {
     }
     this.gameTime += dt
 
-    this.handleInput(dt * this.gameSpeed)
-    this.updateEntities(dt * this.gameSpeed)
+    this.handleInput(dt)
+    this.updateEntities(dt)
 
     this.checkCollisions()
   }
 
   private handleInput(dt: number): void {
     if (KeyControls.isKeyDown(KEYS.UP)) {
-      this.player.offset.dy -= this.player.speed * dt
+      this.player.up()
     }
     if (KeyControls.isKeyDown(KEYS.DOWN)) {
-      this.player.offset.dy += this.player.speed * dt
+      this.player.down()
     }
     if (KeyControls.isKeyDown(KEYS.LEFT)) {
-      this.player.offset.dx -= this.player.speed * dt
+      this.player.left()
     }
     if (KeyControls.isKeyDown(KEYS.RIGHT)) {
-      this.player.offset.dx += this.player.speed * dt
+      this.player.right()
     }
     if (KeyControls.isKeyDown(KEYS.SPACE)) {
       this.player.jump()
@@ -107,49 +107,46 @@ export default class GameEngine {
     // движение игрока
     this.player.update(dt)
     // движение препятствий
-    for (const brick of this.bricks) brick.update(dt)
+    for (const brick of this.bricks) brick.update(dt * this.gameSpeed)
     // движение огненного дождя
-    for (const fireball of this.fireballs) fireball.update(dt)
+    for (const fireball of this.fireballs) fireball.update(dt * this.gameSpeed)
   }
 
   private checkCollisions(): void {
     // появление/удаление препятствий
-    const brickIndexesForDelete: number[] = []
     for (const brick of this.bricks) {
       // проверка на столкновение игрока с камнями
       if (Entity.isCollide(this.player, brick)) {
+        this.player.isDead = true
         this.gameOver()
-      }
-      // проверка выхода камння за пределы экрана
-      if (Entity.isOutside(brick)) {
-        brickIndexesForDelete.push(this.bricks.indexOf(brick))
-        this.gameScore++
+        break
       }
     }
-    for (const indexForDelete of brickIndexesForDelete)
-      this.bricks.splice(indexForDelete, 1)
     // появление/удаление огненного дождя
-    const fireballIndexesForDelete: number[] = []
     for (const fireball of this.fireballs) {
       // проверка на столкновение игрока с огненным дождем
       if (Entity.isCollide(this.player, fireball)) {
+        this.player.isDead = true
         this.gameOver()
-      }
-      // проверка выхода огненного дождя за пределы экрана
-      if (Entity.isOutside(fireball)) {
-        brickIndexesForDelete.push(this.fireballs.indexOf(fireball))
+        break
       }
     }
-    for (const indexForDelete of fireballIndexesForDelete)
-      this.fireballs.splice(indexForDelete, 1)
+    // удалить камни вышедшие за пределы экрана
+    const newBricks = this.bricks.filter(brick => !Entity.isOutside(brick))
+    const delBricksCount = this.bricks.length - newBricks.length
+    this.gameScore += delBricksCount
+    this.bricks = newBricks
+    // удалить огненный дождь вышедший за пределы экрана
+    this.fireballs = this.fireballs.filter(
+      fireball => !Entity.isOutside(fireball)
+    )
   }
 
   private gameOver(): void {
     if (this.gameState == GameState.END) return
-
-    this.player.isDead = true
     this.gameState = GameState.END
-    this.gameStateEndCallback()
+
+    setTimeout(this.gameStateEndCallback, 100)
   }
 
   private render(): void {
@@ -163,9 +160,19 @@ export default class GameEngine {
     this.player.draw(this.context)
     for (const brick of this.bricks) brick.draw(this.context)
     for (const fireballs of this.fireballs) fireballs.draw(this.context)
+    // вывод текущего времени игры
+    this.context.font = '30px Verdana'
+    this.context.fillStyle = 'gray'
+    this.context.textAlign = 'center'
+    this.context.textBaseline = 'top'
+    this.context.fillText(
+      `Score: ${this.gameScore} Time: ${this.gameTime.toFixed(0)}`,
+      this.canvas.width / 2,
+      50
+    )
   }
 
-  private reset(): void {
+  public reset(): void {
     this.gameState = GameState.READY
     this.gameScore = 0
     this.gameTime = 0

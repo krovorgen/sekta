@@ -1,9 +1,7 @@
 import { GAME_OPTIONS } from '../../../constants/game'
 import Entity from '../Entity'
 
-const BRICK_WIDTH = 50
-const BRICK_HEIGHT = 50
-const BRICK_SPEED = 150
+const { BRICK_WIDTH, BRICK_HEIGHT, BRICK_SPEED } = GAME_OPTIONS
 
 export default class Brick extends Entity {
   constructor() {

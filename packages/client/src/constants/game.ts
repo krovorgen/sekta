@@ -1,9 +1,29 @@
 export const GAME_OPTIONS = {
+  // настройки отображения
+  GAME_MAX_FPS: 60,
   CANVAS_WIDTH: 1280,
   CANVAS_HEIGHT: 720,
   FLOOR_HEIGHT: 150,
+  // настройки физики игры
   GRAVITY_VALUE: 30,
   FRICTION_FORCE: 0.05,
   BRICK_TIME: 3000,
-  SPEED_STEP: 0.01,
+  SPEED_STEP: 0.02,
+  // настройки персонажа
+  PLAYER_WIDTH: 50,
+  PLAYER_HEIGHT: 100,
+  PLAYER_SPEED: 5,
+  PLAYER_LEFT_OFFSET: 50,
+  PLAYER_JUMP_MULTIPLIER: 2.5,
+  PLAYER_JUMP_DURATION: 200,
+  PLAYER_JUMP_BLOCKTIME: 1500,
+  // настройки препятствий
+  BRICK_WIDTH: 50,
+  BRICK_HEIGHT: 50,
+  BRICK_SPEED: 200,
+  // настройки огненного дождя
+  FIREBALL_WIDTH: 20,
+  FIREBALL_HEIGHT: 20,
+  FIREBALL_SPEED_MIN: 100,
+  FIREBALL_SPEED_MAX: 105,
 }

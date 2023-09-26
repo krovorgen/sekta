@@ -6,10 +6,12 @@ import { GAME_OPTIONS } from '../../constants/game'
 import GameEngine from '../../game/GameEngine'
 
 const GamePage: FC<PropsWithUser> = () => {
+  let gameEngine: GameEngine | null = null
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   useEffect(() => {
+    if (gameEngine) return
     const canvas = canvasRef.current
-    new GameEngine({
+    gameEngine = new GameEngine({
       canvas: canvas as HTMLCanvasElement,
       gameStateEndCallback: () => {
         alert('Game over!')
