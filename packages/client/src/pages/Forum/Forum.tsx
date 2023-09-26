@@ -1,13 +1,14 @@
 import { FC, useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import styles from './Forum.module.scss'
 import { data } from './temporary/data'
 
 import { ActionButton } from '@alfalab/core-components/action-button'
 
 import { ArrowBackHeavyMIcon } from '@alfalab/icons-glyph/ArrowBackHeavyMIcon'
 import { CommentPlusMIcon } from '@alfalab/icons-glyph/CommentPlusMIcon'
+
+import styles from './Forum.module.scss'
 
 import { ForumsTable } from './components/table/ForumsTable'
 import { ForumsModal } from './components/modal/ForumsModal'
