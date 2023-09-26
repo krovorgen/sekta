@@ -19,7 +19,7 @@ import { Toast } from '@alfalab/core-components/toast'
 
 import { ITopic } from '../temporary/data'
 
-import { CommentProps, TopicsComment } from './components/comment'
+import { CommentProps, TopicsComment } from './components/Comment/Comment'
 
 export const ForumTopicPage: FC<PropsWithUser> = () => {
   // export const ForumTopicPage: FC<PropsWithUser>

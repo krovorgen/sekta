@@ -1,4 +1,4 @@
-import styles from './comment.module.scss'
+import styles from './Comment.module.scss'
 
 import { Gap } from '@alfalab/core-components/gap'
 import { Comment } from '@alfalab/core-components/comment'
