@@ -4,12 +4,11 @@ import { Notification } from '@alfalab/core-components/notification'
 import { FieldValues } from 'react-hook-form'
 
 import { withUserCheck } from '../../HOC/withUserCheck'
-import { PropsWithUser } from '../../types'
+import { PropsWithUser, User } from '../../types'
 import { Avatar } from './forms/AvatarForm'
 import { InfoForm } from './forms/InfoForm'
 import { PasswordForm } from './forms/PasswordForm'
 import { FetchMethods, fetchSekta } from '../../utils/fetch'
-import { User } from '../../types/index'
 import styles from './Settings.module.scss'
 import { ProfileNotification } from './types'
 
