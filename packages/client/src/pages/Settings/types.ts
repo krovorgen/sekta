@@ -1,5 +1,5 @@
 import { FieldValues, Control } from 'react-hook-form'
-import { User } from '../../types/common'
+import { User } from '../../types'
 
 export type ProfileFieldProps = {
   control: Control<FieldValues, unknown>
