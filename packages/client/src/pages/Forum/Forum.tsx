@@ -1,5 +1,8 @@
 import { FC, useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
+        
+import { withUserCheck } from '../../HOC/withUserCheck'
+import { PropsWithUser } from '../../types'
 
 import { data } from './temporary/data'
 
@@ -15,7 +18,7 @@ import { ForumsModal } from './components/modal/ForumsModal'
 
 const date = new Date()
 
-export const Forum: FC = () => {
+export const Forum: FC<PropsWithUser> = () => {
   const navigate = useNavigate()
   const [openModal, setOpenModal] = useState(false)
   const [topics, setTopics] = useState(data)
@@ -125,4 +128,7 @@ export const Forum: FC = () => {
       />
     </section>
   )
+
 }
+
+export const Forum = withUserCheck(ForumPage)
