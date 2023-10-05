@@ -25,20 +25,16 @@ import GameEngine, { GameState } from './GameEngine'
 import Brick from './core/entities/Brick'
 
 describe('GameEngine', () => {
-  let canvas: any
+  let canvas: HTMLCanvasElement | null
   let gameStateEndCallback
   let gameEngine: GameEngine | null = null
   HTMLCanvasElement.prototype.getContext = jest.fn()
 
   beforeEach(() => {
-    canvas = document.createElement('canvas')
+    canvas = document.createElement('canvas') as HTMLCanvasElement
     canvas.id = 'gameCanvas'
     document.body.appendChild(canvas)
 
-    // Мокируем метод getContext только для canvas элемента
-    canvas.getContext = jest.fn(() => {
-      return {} // Возвращает пустой объект, так как мы не тестируем детали рендера
-    })
     gameStateEndCallback = jest.fn()
 
     // Создаем экземпляр GameEngine внутри теста
@@ -47,7 +43,7 @@ describe('GameEngine', () => {
 
   afterEach(() => {
     // Очищаем экземпляр GameEngine после каждого теста
-    canvas.remove()
+    canvas?.remove()
     gameEngine = null
   })
 
