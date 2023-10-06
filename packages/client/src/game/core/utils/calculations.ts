@@ -61,3 +61,22 @@ export function randomRange(min: number, max: number): number {
   max = Math.floor(max)
   return Math.random() * (max - min) + min
 }
+
+// получить случайный элемент из массива
+export function randomElem(array: Array<unknown>) {
+  return array[Math.floor(Math.random() * array.length)]
+}
+
+// получить массив из чисел по порядку в диапазоне [min, max]
+export function rangeArray(start: number, end: number): number[] {
+  const arr: number[] = []
+  for (let i = start; i <= end; i++) {
+    arr.push(i)
+  }
+  return arr
+}
+
+// получить расстояние между двумя точками
+export function distance(src: TPoint, dest: TPoint) {
+  return Math.sqrt(Math.pow(dest.x - src.x, 2) + Math.pow(dest.y - src.x, 2))
+}

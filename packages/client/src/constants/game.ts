@@ -1,6 +1,6 @@
 export const GAME_OPTIONS = {
   // настройки отображения
-  GAME_MAX_FPS: 60,
+  GAME_MIN_FPS: 25,
   CANVAS_WIDTH: 1280,
   CANVAS_HEIGHT: 720,
   FLOOR_HEIGHT: 150,
@@ -26,4 +26,33 @@ export const GAME_OPTIONS = {
   FIREBALL_HEIGHT: 20,
   FIREBALL_SPEED_MIN: 100,
   FIREBALL_SPEED_MAX: 105,
+}
+
+export const GAME_RESOURCES = {
+  // настройки ресурсов
+  PLAYER_IDLE: '/sprites/player/idle.png',
+  PLAYER_JUMP: '/sprites/player/jump.png',
+  PLAYER_RUN: '/sprites/player/run.png',
+  PLAYER_SLIDE: '/sprites/player/slide.png',
+  PLAYER_WALK: '/sprites/player/walk.png',
+  FIREBALL: '/sprites/entities/fireball.png',
+  BONFIRE: '/sprites/entities/bonfire.png',
+  SPEARS: '/sprites/entities/spears.png',
+  WALL: '/sprites/entities/wall.png',
+  VAPOR: '/sprites/entities/vapor.png',
+  BONUS_SLOWING: '/sprites/entities/gems/gem_blue.png',
+  BONUS_IMMUNITY: '/sprites/entities/gems/gem_red.png',
+  BONUS_SCORE: '/sprites/entities/gems/coin_gold.png',
+  BACKGROUND_1_LANDSCAPE: '/sprites/background/city_day/landscape.png',
+  BACKGROUND_1_ROAD: '/sprites/background/city_day/road.png',
+  BACKGROUND_1_SKY: '/sprites/background/city_day/sky.png',
+  BACKGROUND_2_LANDSCAPE: '/sprites/background/city_night/landscape.png',
+  BACKGROUND_2_ROAD: '/sprites/background/city_night/road.png',
+  BACKGROUND_2_SKY: '/sprites/background/city_night/sky.png',
+  BACKGROUND_3_LANDSCAPE: '/sprites/background/forest_day/landscape.png',
+  BACKGROUND_3_ROAD: '/sprites/background/forest_day/road.png',
+  BACKGROUND_3_SKY: '/sprites/background/forest_day/sky.png',
+  BACKGROUND_4_LANDSCAPE: '/sprites/background/forest_night/landscape.png',
+  BACKGROUND_4_ROAD: '/sprites/background/forest_night/road.png',
+  BACKGROUND_4_SKY: '/sprites/background/forest_night/sky.png',
 }

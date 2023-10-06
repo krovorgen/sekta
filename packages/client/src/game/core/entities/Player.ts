@@ -1,5 +1,6 @@
 import { GAME_OPTIONS } from '../../../constants/game'
 import Entity from '../Entity'
+import AnimatedSprite from '../utils/AnimatedSprite'
 
 const {
   PLAYER_WIDTH,
@@ -16,8 +17,9 @@ export default class Player extends Entity {
   isJump = false
   lastJump = 0
   moveSpeed = PLAYER_SPEED
+  spriteRun?: AnimatedSprite
 
-  constructor() {
+  constructor(spriteRun?: AnimatedSprite) {
     super({
       position: {
         x: PLAYER_LEFT_OFFSET,
@@ -29,6 +31,7 @@ export default class Player extends Entity {
       offset: { dx: 0, dy: 0 },
       size: { width: PLAYER_WIDTH, height: PLAYER_HEIGHT },
     })
+    this.spriteRun = spriteRun
   }
 
   public jump() {
@@ -92,18 +95,25 @@ export default class Player extends Entity {
       this.position.y = 0
       this.offset.dy = 0
     }
+
+    // воспроизведение анимации
+    this.spriteRun?.update(dt)
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
-    ctx.beginPath()
-    ctx.rect(
-      this.position.x,
-      this.position.y,
-      this.size.width,
-      this.size.height
-    )
-    ctx.fillStyle = this.isDead ? 'red' : 'green'
-    ctx.fill()
-    ctx.closePath()
+    if (this.spriteRun) {
+      this.spriteRun.render(ctx, this)
+    } else {
+      ctx.beginPath()
+      ctx.rect(
+        this.position.x,
+        this.position.y,
+        this.size.width,
+        this.size.height
+      )
+      ctx.fillStyle = this.isDead ? 'red' : 'green'
+      ctx.fill()
+      ctx.closePath()
+    }
   }
 }
