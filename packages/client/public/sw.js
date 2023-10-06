@@ -7,7 +7,16 @@ async function networkFirst(request) {
     cache.put(request, response.clone());
     return response;
   } catch (error) {
-    return await cache.match(request);
+    const cached = await cache.match(request);
+
+    if (cached) {
+      return cached
+    } else {
+      return new Response("Network error, go to main page", {
+        status: 408,
+        headers: { "Content-Type": "text/plain" },
+      });
+    }
   }
 }
 
