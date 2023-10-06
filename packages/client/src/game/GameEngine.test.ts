@@ -1,25 +1,4 @@
-// import GameEngine from './GameEngine'
-// import React, { FC, useEffect, useRef } from 'react'
-
-// let gameEngine: GameEngine | null = null
-// const canvasRef = useRef<HTMLCanvasElement | null>(null)
-// const canvas = canvasRef.current
-
-// describe('проверяем движок игры', () => {
-
-//   gameEngine = new GameEngine({
-//     canvas: canvas as HTMLCanvasElement,
-//     gameStateEndCallback: () => {
-//       alert('Game over!')
-//       document.location.reload()
-//     },
-//   })
-
-//   test('проверяем reset', () => {
-//     expect(gameEngine?.reset()).toEqual();
-//   });
-// });
-
+import 'jest-canvas-mock'
 import { GAME_OPTIONS } from '../constants/game'
 import GameEngine, { GameState } from './GameEngine'
 import Brick from './core/entities/Brick'
@@ -28,7 +7,6 @@ describe('GameEngine', () => {
   let canvas: HTMLCanvasElement | null
   let gameStateEndCallback
   let gameEngine: GameEngine | null = null
-  HTMLCanvasElement.prototype.getContext = jest.fn()
 
   beforeEach(() => {
     canvas = document.createElement('canvas') as HTMLCanvasElement
@@ -63,9 +41,10 @@ describe('GameEngine', () => {
     const initialBricksCount: number | bigint = gameEngine?.bricks.length as
       | number
       | bigint
+    if (gameEngine) gameEngine.gameTime = 9000
+    if (gameEngine) gameEngine.lastBrick = 9000
 
-    if (gameEngine) gameEngine['updateEntities'](0.1) // Вызываем обновление с небольшим временем
-
+    if (gameEngine) gameEngine['updateEntities'](0.9)
     // Проверяем, что количество огненных шаров и камней увеличилось
     expect(gameEngine?.fireballs.length).toBeGreaterThan(initialFireballsCount)
     expect(gameEngine?.bricks.length).toBeGreaterThan(initialBricksCount)
@@ -79,7 +58,7 @@ describe('GameEngine', () => {
     // Создаем Brick, который находится в точке, где должно произойти столкновение
     const brick = new Brick()
     brick.position.x = player.position.x // Устанавливаем координаты так, чтобы было столкновение
-    brick.position.y = player.position.y - player.size.height // Немного выше игрока
+    brick.position.y = player.position.y
 
     // Добавляем Brick и игрока в игровой движок
     if (gameEngine) gameEngine.bricks.push(brick)
@@ -99,7 +78,6 @@ describe('GameEngine', () => {
   })
 
   it('should handle game over state', () => {
-    if (gameEngine) gameEngine.gameState = GameState.END
     const gameStateEndCallback = gameEngine?.gameStateEndCallback
     jest.useFakeTimers()
 
