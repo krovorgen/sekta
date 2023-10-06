@@ -11,6 +11,7 @@ export default {
   moduleNameMapper: {
     '^uuid$': 'uuid',
     '^.+\\.(css|scss)$': '<rootDir>/config/CSSStub.js',
+    '\\.scss$': 'identity-obj-proxy', //для отработки тестов, но не помогает
   },
   transform: {
     "^.+\\.tsx?$": "ts-jest",
