@@ -1,0 +1,10 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+if (typeof window !== 'undefined') {
+  window.matchMedia = window.matchMedia || function () {
+    return {
+      matches: false,
+      addListener: function () {},
+      removeListener: function () {}
+    };
+  };
+}

@@ -40,7 +40,6 @@ describe('ErrorPage component', () => {
         <ErrorPage />
       </MemoryRouter>
     )
-    console.log(wrapper.debug())
     expect(wrapper).toMatchSnapshot()
   })
 
