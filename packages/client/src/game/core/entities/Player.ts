@@ -39,7 +39,8 @@ export default class Player extends Entity {
     this.sprite = this.spriteRun()
   }
 
-  private spriteRun(): AnimatedSprite {
+  private spriteRun(): AnimatedSprite | undefined {
+    if (!this.resources) return
     return new AnimatedSprite({
       resource: this.resources.get(GAME_RESOURCES.PLAYER_RUN),
       mapPoint: { x: 0, y: 0 },
@@ -48,7 +49,8 @@ export default class Player extends Entity {
       speed: 25,
     })
   }
-  private spriteJump(): AnimatedSprite {
+  private spriteJump(): AnimatedSprite | undefined {
+    if (!this.resources) return
     return new AnimatedSprite({
       resource: this.resources.get(GAME_RESOURCES.PLAYER_JUMP),
       mapPoint: { x: 0, y: 0 },
