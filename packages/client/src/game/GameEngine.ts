@@ -20,7 +20,7 @@ export enum GameState {
 export default class GameEngine {
   canvas: HTMLCanvasElement
   context: CanvasRenderingContext2D
-  resources: Resources
+  resources?: Resources
   lastLoopTime = 0 // время предыдущей итерации игрового цикла
 
   gameStateEndCallback: () => void
@@ -50,10 +50,15 @@ export default class GameEngine {
   constructor(props: {
     canvas: HTMLCanvasElement
     gameStateEndCallback: () => void
+    disableResources?: boolean
   }) {
     this.canvas = props.canvas
     this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D
     this.gameStateEndCallback = props.gameStateEndCallback
+    if (props.disableResources) {
+      this.init()
+      return
+    }
     this.resources = new Resources() // хранилище ресурсов
     this.resources.load(getResourceUrls())
     // инициализация после загрузки всех ресурсов

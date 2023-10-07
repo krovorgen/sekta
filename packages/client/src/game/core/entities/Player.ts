@@ -22,7 +22,7 @@ export default class Player extends Entity {
   sprite?: AnimatedSprite
   resources?: Resources
 
-  constructor(resources: Resources) {
+  constructor(resources?: Resources) {
     super({
       position: {
         x: PLAYER_LEFT_OFFSET,

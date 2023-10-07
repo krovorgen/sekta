@@ -37,7 +37,7 @@ export default class Background extends Entity {
   opacity = 1
   fading = false
 
-  constructor(type: BACKGROUND_TYPE, resources: Resources) {
+  constructor(type: BACKGROUND_TYPE, resources?: Resources) {
     super({
       // объект на весь экран
       position: { x: 0, y: 0 },
@@ -108,14 +108,14 @@ export default class Background extends Entity {
     }
   }
 
-  private updateComponent(cmp: BackgroundComponent, dt: number) {
+  private updateComponent(dt: number, cmp?: BackgroundComponent) {
     if (!cmp) return
     cmp!.position.x -= cmp!.speed * dt
     if (cmp!.position.x <= -(2 * cmp!.size.width)) cmp!.position.x = 0
   }
   private drawComponent(
     ctx: CanvasRenderingContext2D,
-    cmp: BackgroundComponent
+    cmp?: BackgroundComponent
   ) {
     if (!cmp) return
     // изменить прозрачность
@@ -161,14 +161,14 @@ export default class Background extends Entity {
   }
 
   public update(dt: number) {
-    this.updateComponent(this.sky!, dt)
-    this.updateComponent(this.landscape!, dt)
-    this.updateComponent(this.road!, dt)
+    this.updateComponent(dt, this.sky)
+    this.updateComponent(dt, this.landscape)
+    this.updateComponent(dt, this.road)
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
-    this.drawComponent(ctx, this.sky!)
-    this.drawComponent(ctx, this.landscape!)
-    this.drawComponent(ctx, this.road!)
+    this.drawComponent(ctx, this.sky)
+    this.drawComponent(ctx, this.landscape)
+    this.drawComponent(ctx, this.road)
   }
 }

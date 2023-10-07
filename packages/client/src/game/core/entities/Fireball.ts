@@ -14,7 +14,7 @@ const {
 export default class Fireball extends Entity {
   sprite?: AnimatedSprite
 
-  constructor(resources: Resources) {
+  constructor(resources?: Resources) {
     super({
       position: {
         x: randomRange(0, GAME_OPTIONS.CANVAS_WIDTH),
