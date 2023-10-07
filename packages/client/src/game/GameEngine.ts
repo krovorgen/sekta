@@ -61,7 +61,7 @@ export default class GameEngine {
   }
 
   // инициализация и запуск игрового цикла
-  private init = (): void => {
+  public init = (): void => {
     this.currentBackground = new Background(
       this.backgroundList[this.backgroundIndex],
       this.resources

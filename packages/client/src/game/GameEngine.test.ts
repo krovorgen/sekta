@@ -17,6 +17,7 @@ describe('GameEngine', () => {
 
     // Создаем экземпляр GameEngine внутри теста
     gameEngine = new GameEngine({ canvas, gameStateEndCallback })
+    gameEngine.init()
   })
 
   afterEach(() => {
