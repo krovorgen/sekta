@@ -8,6 +8,7 @@ import { logoutTC } from '../../../redux/features/auth/authSlice'
 export const Header: FC = () => {
   const dispatch = useAppDispatch()
   const user = useAppSelector(state => state.auth.user)
+  const isOnline = window.navigator.onLine
 
   const onLogout = async () => {
     await dispatch(logoutTC())
@@ -15,7 +16,7 @@ export const Header: FC = () => {
 
   return (
     <Navbar>
-      {user && (
+      {user && isOnline ? (
         <>
           <NavbarLink to="/">Игра</NavbarLink>
           <NavbarLink to={RoutePath.Settings}>Профиль</NavbarLink>
@@ -23,8 +24,7 @@ export const Header: FC = () => {
           <NavbarLink to={RoutePath.Leaderboards}>Таблица лидеров</NavbarLink>
           <NavbarLink onClick={onLogout}>Выйти</NavbarLink>
         </>
-      )}
-      {!user && (
+      ) : (
         <>
           <NavbarLink to={RoutePath.Login}>Логин</NavbarLink>
           <NavbarLink to={RoutePath.Registration}>Регистрация</NavbarLink>
