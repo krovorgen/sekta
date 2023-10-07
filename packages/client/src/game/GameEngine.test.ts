@@ -6,7 +6,7 @@ import Brick from './core/entities/Brick'
 describe('GameEngine', () => {
   let canvas: HTMLCanvasElement | null
   let gameStateEndCallback
-  let gameEngine: GameEngine | null = null
+  let gameEngine: GameEngine
 
   beforeEach(() => {
     canvas = document.createElement('canvas') as HTMLCanvasElement
@@ -22,7 +22,7 @@ describe('GameEngine', () => {
   afterEach(() => {
     // Очищаем экземпляр GameEngine после каждого теста
     canvas?.remove()
-    gameEngine = null
+    // gameEngine = null
   })
 
   it('should initialize with the READY game state', () => {
@@ -30,9 +30,9 @@ describe('GameEngine', () => {
   })
 
   it('should reset the game state to READY', () => {
-    if (gameEngine) gameEngine.gameState = GameState.END
-    gameEngine?.reset()
-    expect(gameEngine?.gameState).toBe(GameState.READY)
+    gameEngine.gameState = GameState.END
+    gameEngine.reset()
+    expect(gameEngine.gameState).toBe(GameState.READY)
   })
 
   it('should update game entities', () => {
@@ -41,10 +41,10 @@ describe('GameEngine', () => {
     const initialBricksCount: number | bigint = gameEngine?.bricks.length as
       | number
       | bigint
-    if (gameEngine) gameEngine.gameTime = 9000
-    if (gameEngine) gameEngine.lastBrick = 9000
+    gameEngine.gameTime = 9000
+    gameEngine.lastBrick = 9000
 
-    if (gameEngine) gameEngine['updateEntities'](0.9)
+    gameEngine['updateEntities'](0.9)
     // Проверяем, что количество огненных шаров и камней увеличилось
     expect(gameEngine?.fireballs.length).toBeGreaterThan(initialFireballsCount)
     expect(gameEngine?.bricks.length).toBeGreaterThan(initialBricksCount)
@@ -61,14 +61,14 @@ describe('GameEngine', () => {
     brick.position.y = player.position.y
 
     // Добавляем Brick и игрока в игровой движок
-    if (gameEngine) gameEngine.bricks.push(brick)
-    if (gameEngine) gameEngine.player = player
+    gameEngine.bricks.push(brick)
+    gameEngine.player = player
 
     // Проверяем, что в начале игры gameState равен READY
     expect(gameEngine?.gameState).toBe(GameState.READY)
 
     // Вызываем checkCollisions, чтобы обнаружить столкновение
-    if (gameEngine) gameEngine['checkCollisions']()
+    gameEngine['checkCollisions']()
 
     // Проверяем, что gameState переходит в состояние END после столкновения
     expect(gameEngine?.gameState).toBe(GameState.END)
@@ -81,7 +81,7 @@ describe('GameEngine', () => {
     const gameStateEndCallback = gameEngine?.gameStateEndCallback
     jest.useFakeTimers()
 
-    if (gameEngine) gameEngine['gameOver']()
+    gameEngine['gameOver']()
 
     // Проверяем, что игра переходит в состояние END
     expect(gameEngine?.gameState).toBe(GameState.END)
@@ -97,13 +97,13 @@ describe('GameEngine', () => {
     // Мокаем методы отрисовки игровых элементов
     const context: CanvasRenderingContext2D | undefined = gameEngine?.context
     if (context) context.clearRect = jest.fn()
-    if (gameEngine) gameEngine.floor.draw = jest.fn()
-    if (gameEngine) gameEngine.player.draw = jest.fn()
-    if (gameEngine) gameEngine.bricks.forEach(brick => (brick.draw = jest.fn()))
+    gameEngine.floor.draw = jest.fn()
+    gameEngine.player.draw = jest.fn()
+    gameEngine.bricks.forEach(brick => (brick.draw = jest.fn()))
     if (gameEngine)
       gameEngine.fireballs.forEach(fireball => (fireball.draw = jest.fn()))
 
-    if (gameEngine) gameEngine['render']()
+    gameEngine['render']()
 
     // Проверяем, что методы отрисовки были вызваны с правильными параметрами
     expect(context?.clearRect).toHaveBeenCalledWith(
