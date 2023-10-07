@@ -46,7 +46,7 @@ describe('GameEngine', () => {
       | number
       | bigint
     gameEngine.gameTime = 9000
-    gameEngine.lastBrick = 9000
+    gameEngine.lastBrick = 3000
 
     gameEngine['updateEntities'](0.9)
     // Проверяем, что количество огненных шаров и камней увеличилось
