@@ -36,9 +36,9 @@ describe('GameEngine', () => {
   })
 
   it('should update game entities', () => {
-    const initialFireballsCount: number | bigint = gameEngine?.fireballs
+    const initialFireballsCount: number | bigint = gameEngine?.fireballs!
       .length as number | bigint
-    const initialBricksCount: number | bigint = gameEngine?.bricks.length as
+    const initialBricksCount: number | bigint = gameEngine?.bricks!.length as
       | number
       | bigint
     gameEngine.gameTime = 9000
@@ -46,8 +46,8 @@ describe('GameEngine', () => {
 
     gameEngine['updateEntities'](0.9)
     // Проверяем, что количество огненных шаров и камней увеличилось
-    expect(gameEngine?.fireballs.length).toBeGreaterThan(initialFireballsCount)
-    expect(gameEngine?.bricks.length).toBeGreaterThan(initialBricksCount)
+    expect(gameEngine?.fireballs!.length).toBeGreaterThan(initialFireballsCount)
+    expect(gameEngine?.bricks!.length).toBeGreaterThan(initialBricksCount)
   })
 
   it('should check collisions correctly', () => {
@@ -57,11 +57,11 @@ describe('GameEngine', () => {
 
     // Создаем Brick, который находится в точке, где должно произойти столкновение
     const brick = new Brick()
-    brick.position.x = player.position.x // Устанавливаем координаты так, чтобы было столкновение
-    brick.position.y = player.position.y
+    brick.position.x = player!.position.x // Устанавливаем координаты так, чтобы было столкновение
+    brick.position.y = player!.position.y
 
     // Добавляем Brick и игрока в игровой движок
-    gameEngine.bricks.push(brick)
+    gameEngine.bricks!.push(brick)
     gameEngine.player = player
 
     // Проверяем, что в начале игры gameState равен READY
@@ -74,7 +74,7 @@ describe('GameEngine', () => {
     expect(gameEngine?.gameState).toBe(GameState.END)
 
     // Проверяем, что игрок умирает (isDead становится true) после столкновения
-    expect(player.isDead).toBe(true)
+    expect(player!.isDead).toBe(true)
   })
 
   it('should handle game over state', () => {
@@ -97,11 +97,11 @@ describe('GameEngine', () => {
     // Мокаем методы отрисовки игровых элементов
     const context: CanvasRenderingContext2D | undefined = gameEngine?.context
     if (context) context.clearRect = jest.fn()
-    gameEngine.floor.draw = jest.fn()
-    gameEngine.player.draw = jest.fn()
-    gameEngine.bricks.forEach(brick => (brick.draw = jest.fn()))
+    gameEngine.floor!.draw = jest.fn()
+    gameEngine.player!.draw = jest.fn()
+    gameEngine.bricks!.forEach(brick => (brick.draw = jest.fn()))
     if (gameEngine)
-      gameEngine.fireballs.forEach(fireball => (fireball.draw = jest.fn()))
+      gameEngine.fireballs!.forEach(fireball => (fireball.draw = jest.fn()))
 
     gameEngine['render']()
 
@@ -112,12 +112,12 @@ describe('GameEngine', () => {
       GAME_OPTIONS.CANVAS_WIDTH,
       GAME_OPTIONS.CANVAS_HEIGHT
     )
-    expect(gameEngine?.floor.draw).toHaveBeenCalledWith(context)
-    expect(gameEngine?.player.draw).toHaveBeenCalledWith(context)
-    gameEngine?.bricks.forEach(brick => {
+    expect(gameEngine?.floor!.draw).toHaveBeenCalledWith(context)
+    expect(gameEngine?.player!.draw).toHaveBeenCalledWith(context)
+    gameEngine?.bricks!.forEach(brick => {
       expect(brick.draw).toHaveBeenCalledWith(context)
     })
-    gameEngine?.fireballs.forEach(fireball => {
+    gameEngine?.fireballs!.forEach(fireball => {
       expect(fireball.draw).toHaveBeenCalledWith(context)
     })
     // Проверяем, что текущее время и счет отображаются корректно

@@ -8,7 +8,7 @@ const { BRICK_WIDTH, BRICK_HEIGHT, BRICK_SPEED } = GAME_OPTIONS
 export default class Brick extends Entity {
   sprite?: AnimatedSprite
 
-  constructor(resources: Resources) {
+  constructor(resources?: Resources) {
     super({
       position: {
         x: GAME_OPTIONS.CANVAS_WIDTH,
@@ -18,12 +18,14 @@ export default class Brick extends Entity {
       offset: { dx: -BRICK_SPEED, dy: 0 },
       size: { width: BRICK_WIDTH, height: BRICK_HEIGHT },
     })
-    this.sprite = new AnimatedSprite({
-      resource: resources.get(GAME_RESOURCES.SPEARS),
-      mapPoint: { x: 0, y: 0 },
-      frameSize: { height: 50, width: 50 },
-      resultSize: { height: 50, width: 50 },
-    })
+    if (resources) {
+      this.sprite = new AnimatedSprite({
+        resource: resources.get(GAME_RESOURCES.SPEARS),
+        mapPoint: { x: 0, y: 0 },
+        frameSize: { height: 50, width: 50 },
+        resultSize: { height: 50, width: 50 },
+      })
+    }
   }
 
   public update(dt: number) {
