@@ -1,7 +1,7 @@
 import { GAME_OPTIONS, GAME_RESOURCES } from '../../../constants/game'
 import Entity from '../Entity'
 import AnimatedSprite from '../utils/AnimatedSprite'
-import Resources from '../utils/Resources'
+import Resources, { TResource } from '../utils/Resources'
 
 const {
   PLAYER_WIDTH,
@@ -18,7 +18,9 @@ export default class Player extends Entity {
   isJump = false
   lastJump = 0
   moveSpeed = PLAYER_SPEED
-  spriteRun?: AnimatedSprite
+
+  sprite?: AnimatedSprite
+  resources: Resources
 
   constructor(resources: Resources) {
     super({
@@ -32,12 +34,31 @@ export default class Player extends Entity {
       offset: { dx: 0, dy: 0 },
       size: { width: PLAYER_WIDTH, height: PLAYER_HEIGHT },
     })
-    this.spriteRun = new AnimatedSprite({
-      resource: resources.get(GAME_RESOURCES.PLAYER_RUN),
+    this.resources = resources
+    this.sprite = this.spriteRun()
+  }
+
+  private spriteRun(): AnimatedSprite {
+    return new AnimatedSprite({
+      resource: this.resources.get(GAME_RESOURCES.PLAYER_RUN),
       mapPoint: { x: 0, y: 0 },
       frameSize: { height: 100, width: 100 },
       resultSize: { height: 100, width: 100 },
       speed: 25,
+    })
+  }
+  private spriteJump(): AnimatedSprite {
+    return new AnimatedSprite({
+      resource: this.resources.get(GAME_RESOURCES.PLAYER_JUMP),
+      mapPoint: { x: 0, y: 0 },
+      frameSize: { height: 200, width: 100 },
+      resultSize: { height: 150, width: 80 },
+      frames: [
+        0, 1, 2, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3,
+        2, 1, 0,
+      ],
+      speed: 25,
+      once: true,
     })
   }
 
@@ -48,6 +69,7 @@ export default class Player extends Entity {
     ) {
       this.isJump = true
       this.lastJump = Date.now()
+      this.sprite = this.spriteJump()
     }
   }
   public up() {
@@ -89,14 +111,17 @@ export default class Player extends Entity {
     }
     if (
       this.position.y + this.size.height >
-      GAME_OPTIONS.CANVAS_HEIGHT - GAME_OPTIONS.FLOOR_HEIGHT
+      GAME_OPTIONS.CANVAS_HEIGHT - GAME_OPTIONS.FLOOR_HEIGHT + 1
     ) {
       this.position.y =
         GAME_OPTIONS.CANVAS_HEIGHT -
         GAME_OPTIONS.FLOOR_HEIGHT -
         this.size.height
       this.offset.dy = 0
-      this.isJump = false
+      if (this.isJump) {
+        this.isJump = false
+        this.sprite = this.spriteRun()
+      }
     }
     if (this.position.y < 0) {
       this.position.y = 0
@@ -104,12 +129,12 @@ export default class Player extends Entity {
     }
 
     // воспроизведение анимации
-    this.spriteRun?.update(dt)
+    this.sprite?.update(dt)
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
-    if (this.spriteRun) {
-      this.spriteRun.render(ctx, this)
+    if (this.sprite) {
+      this.sprite.render(ctx, this)
     } else {
       ctx.beginPath()
       ctx.rect(

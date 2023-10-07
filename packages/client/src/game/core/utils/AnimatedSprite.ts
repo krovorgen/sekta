@@ -110,6 +110,10 @@ export default class AnimatedSprite {
     )
   }
 
+  public reset(): void {
+    this._index = 0
+  }
+
   public update(dt: number): void {
     if (this.speed) {
       this._index += this.speed * dt
