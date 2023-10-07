@@ -47,6 +47,7 @@ export default class Background extends Entity {
         height: GAME_OPTIONS.CANVAS_HEIGHT,
       },
     })
+    if (!resources) return
     switch (type) {
       case BACKGROUND_TYPE.CITY_DAY:
         this.sky = new BackgroundComponent(
@@ -108,6 +109,7 @@ export default class Background extends Entity {
   }
 
   private updateComponent(cmp: BackgroundComponent, dt: number) {
+    if (!cmp) return
     cmp!.position.x -= cmp!.speed * dt
     if (cmp!.position.x <= -(2 * cmp!.size.width)) cmp!.position.x = 0
   }
@@ -115,6 +117,7 @@ export default class Background extends Entity {
     ctx: CanvasRenderingContext2D,
     cmp: BackgroundComponent
   ) {
+    if (!cmp) return
     // изменить прозрачность
     const globalAlpha = ctx.globalAlpha
     if (this.fading && this.opacity > 0) {

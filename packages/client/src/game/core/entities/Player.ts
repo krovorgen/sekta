@@ -20,7 +20,7 @@ export default class Player extends Entity {
   moveSpeed = PLAYER_SPEED
 
   sprite?: AnimatedSprite
-  resources: Resources
+  resources?: Resources
 
   constructor(resources: Resources) {
     super({
@@ -34,6 +34,7 @@ export default class Player extends Entity {
       offset: { dx: 0, dy: 0 },
       size: { width: PLAYER_WIDTH, height: PLAYER_HEIGHT },
     })
+    if (!resources) return
     this.resources = resources
     this.sprite = this.spriteRun()
   }

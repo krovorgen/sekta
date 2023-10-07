@@ -26,16 +26,15 @@ export default class Fireball extends Entity {
       },
       size: { width: FIREBALL_WIDTH, height: FIREBALL_HEIGHT },
     })
-    if (resources) {
-      this.sprite = new AnimatedSprite({
-        resource: resources.get(GAME_RESOURCES.FIREBALL),
-        mapPoint: { x: 0, y: 0 },
-        frameSize: { height: 512, width: 512 },
-        resultSize: { height: 20 * 5, width: 20 * 5 },
-        angle: 90,
-        speed: 25,
-      })
-    }
+    if (!resources) return
+    this.sprite = new AnimatedSprite({
+      resource: resources.get(GAME_RESOURCES.FIREBALL),
+      mapPoint: { x: 0, y: 0 },
+      frameSize: { height: 512, width: 512 },
+      resultSize: { height: 20 * 5, width: 20 * 5 },
+      angle: 90,
+      speed: 25,
+    })
   }
 
   public update(dt: number) {
