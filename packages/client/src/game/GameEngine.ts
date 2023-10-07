@@ -1,10 +1,10 @@
-import { GAME_OPTIONS, GAME_RESOURCES } from '../constants/game'
+import { GAME_OPTIONS } from '../constants/game'
 import Entity from './core/Entity'
+import Background, { BACKGROUND_TYPE } from './core/entities/Background'
 import Brick from './core/entities/Brick'
 import Fireball from './core/entities/Fireball'
 import Floor from './core/entities/Floor'
 import Player from './core/entities/Player'
-import AnimatedSprite from './core/utils/AnimatedSprite'
 import KeyControls, { KEYS } from './core/utils/KeyControls'
 import Resources, { getResourceUrls } from './core/utils/Resources'
 
@@ -34,6 +34,17 @@ export default class GameEngine {
   bricks?: Brick[]
   fireballs?: Fireball[]
 
+  backgroundIndex = 0
+  backgroundList: BACKGROUND_TYPE[] = [
+    BACKGROUND_TYPE.CITY_DAY,
+    BACKGROUND_TYPE.CITY_NIGHT,
+    BACKGROUND_TYPE.FOREST_NIGHT,
+    BACKGROUND_TYPE.FOREST_DAY,
+  ]
+  currentBackground?: Background
+  prevBackground?: Background
+
+  lastBackground = 0 // время последнего изменения фона
   lastBrick = 0 // время последнего препятствия
 
   constructor(props: {
@@ -43,7 +54,7 @@ export default class GameEngine {
     this.canvas = props.canvas
     this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D
     this.gameStateEndCallback = props.gameStateEndCallback
-    this.resources = new Resources()
+    this.resources = new Resources() // хранилище ресурсов
     this.resources.load(getResourceUrls())
     // инициализация после загрузки всех ресурсов
     this.resources.onReady(this.init)
@@ -51,16 +62,12 @@ export default class GameEngine {
 
   // инициализация и запуск игрового цикла
   private init = (): void => {
-    this.floor = new Floor()
-    this.player = new Player(
-      new AnimatedSprite({
-        resource: this.resources.get(GAME_RESOURCES.PLAYER_RUN),
-        startPoint: { x: 0, y: 0 },
-        frameSize: { height: 100, width: 100 },
-        resultSize: { height: 100, width: 100 },
-        speed: 25,
-      })
+    this.currentBackground = new Background(
+      this.backgroundList[this.backgroundIndex],
+      this.resources
     )
+    this.floor = new Floor()
+    this.player = new Player(this.resources)
     this.bricks = []
     this.fireballs = []
 
@@ -114,35 +121,32 @@ export default class GameEngine {
   }
 
   private updateEntities(dt: number): void {
+    // обновить движение/переход бесшовного фона
+    this.currentBackground!.update(dt)
+    this.prevBackground?.update(dt)
+    // изменение фона с заданной периодичностью
+    if (
+      this.gameTime - this.lastBackground >
+      GAME_OPTIONS.BACKGROUND_TIME / 1000
+    ) {
+      this.backgroundIndex++
+      this.prevBackground = this.currentBackground
+      this.prevBackground!.fading = true // эффект исчезания старого фона
+      this.currentBackground = new Background( // применить отображение следующего фона
+        this.backgroundList[this.backgroundIndex % this.backgroundList.length],
+        this.resources
+      )
+      this.lastBackground = this.gameTime
+    }
     // с увеличением времени игры увеличиваетя кол-во попаданий в условие ниже
     // формула: 1 - 0.999^gameTime
     if (Math.random() < 1 - Math.pow(0.999, this.gameTime)) {
-      this.fireballs!.push(
-        new Fireball(
-          new AnimatedSprite({
-            resource: this.resources.get(GAME_RESOURCES.FIREBALL),
-            startPoint: { x: 0, y: 0 },
-            frameSize: { height: 512, width: 512 },
-            resultSize: { height: 20 * 5, width: 20 * 5 },
-            angle: 90,
-            speed: 25,
-          })
-        )
-      )
+      this.fireballs!.push(new Fireball(this.resources))
       this.gameSpeed += GAME_OPTIONS.SPEED_STEP
     }
     // появление препятствия с заданной периодичностью
     if (this.gameTime - this.lastBrick > GAME_OPTIONS.BRICK_TIME / 1000) {
-      this.bricks!.push(
-        new Brick(
-          new AnimatedSprite({
-            resource: this.resources.get(GAME_RESOURCES.SPEARS),
-            startPoint: { x: 0, y: 0 },
-            frameSize: { height: 50, width: 50 },
-            resultSize: { height: 50, width: 50 },
-          })
-        )
-      )
+      this.bricks!.push(new Brick(this.resources))
       this.lastBrick = this.gameTime
     }
     // движение игрока
@@ -197,7 +201,9 @@ export default class GameEngine {
       GAME_OPTIONS.CANVAS_WIDTH,
       GAME_OPTIONS.CANVAS_HEIGHT
     )
-    this.floor!.draw(this.context)
+    this.currentBackground!.draw(this.context)
+    this.prevBackground?.draw(this.context)
+    //this.floor!.draw(this.context)
     this.player!.draw(this.context)
     for (const brick of this.bricks!) brick.draw(this.context)
     for (const fireballs of this.fireballs!) fireballs.draw(this.context)
@@ -209,7 +215,7 @@ export default class GameEngine {
     this.context.fillText(
       `Score: ${this.gameScore} Time: ${this.gameTime.toFixed(0)}`,
       this.canvas.width / 2,
-      50
+      150
     )
   }
 

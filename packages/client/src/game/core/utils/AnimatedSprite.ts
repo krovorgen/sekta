@@ -9,9 +9,9 @@ export enum ANIMATION_DIRECTION {
 type TAnimatedSprite = {
   // основные параметры
   resource: TResource // изображение спрайт-карты
-  startPoint: TPoint // начальные координаты на спрайт-карте
-  frameSize: TSize // размеры одного кадра на спрайт-карте
+  mapPoint?: TPoint // начальные координаты на спрайт-карте
   mapSize?: TSize // размеры спрайт-карты на изображении
+  frameSize?: TSize // размеры одного кадра на спрайт-карте
   resultSize?: TSize // итоговые размеры спрайта
   resultOffset?: TPoint // смещение итогового спрайта
   angle?: number // поворот итогового спрайта
@@ -24,9 +24,9 @@ type TAnimatedSprite = {
 export default class AnimatedSprite {
   // основные параметры
   resource: TResource
-  startPoint: TPoint
-  frameSize: TSize
+  mapPoint: TPoint
   mapSize: TSize
+  frameSize: TSize
   resultSize: TSize
   resultOffset: TPoint
   angle: number
@@ -81,13 +81,16 @@ export default class AnimatedSprite {
     // основные параметры
     const srcImg = props.resource as HTMLImageElement
     this.resource = props.resource
-    this.startPoint = props.startPoint
-    this.frameSize = props.frameSize
+    this.mapPoint = props.mapPoint || { x: 0, y: 0 }
     this.mapSize = props.mapSize || {
       width: srcImg.width,
       height: srcImg.height,
     }
-    this.resultSize = props.resultSize || props.frameSize
+    this.frameSize = props.frameSize || {
+      width: srcImg.width,
+      height: srcImg.height,
+    }
+    this.resultSize = props.resultSize || this.frameSize
     this.resultOffset = props.resultOffset || { x: 0, y: 0 }
     this.angle = props.angle || 0
     // параметры анимации
@@ -129,7 +132,7 @@ export default class AnimatedSprite {
     }
 
     // начальная точка на спрайт-карте
-    let { x, y } = this.startPoint
+    let { x, y } = this.mapPoint
     // рассчитать координаты точки расположения кадра
     const framePoint = this._framePoints[frame]
     if (framePoint) {

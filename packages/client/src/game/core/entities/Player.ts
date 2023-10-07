@@ -1,6 +1,7 @@
-import { GAME_OPTIONS } from '../../../constants/game'
+import { GAME_OPTIONS, GAME_RESOURCES } from '../../../constants/game'
 import Entity from '../Entity'
 import AnimatedSprite from '../utils/AnimatedSprite'
+import Resources from '../utils/Resources'
 
 const {
   PLAYER_WIDTH,
@@ -19,7 +20,7 @@ export default class Player extends Entity {
   moveSpeed = PLAYER_SPEED
   spriteRun?: AnimatedSprite
 
-  constructor(spriteRun?: AnimatedSprite) {
+  constructor(resources: Resources) {
     super({
       position: {
         x: PLAYER_LEFT_OFFSET,
@@ -31,7 +32,13 @@ export default class Player extends Entity {
       offset: { dx: 0, dy: 0 },
       size: { width: PLAYER_WIDTH, height: PLAYER_HEIGHT },
     })
-    this.spriteRun = spriteRun
+    this.spriteRun = new AnimatedSprite({
+      resource: resources.get(GAME_RESOURCES.PLAYER_RUN),
+      mapPoint: { x: 0, y: 0 },
+      frameSize: { height: 100, width: 100 },
+      resultSize: { height: 100, width: 100 },
+      speed: 25,
+    })
   }
 
   public jump() {

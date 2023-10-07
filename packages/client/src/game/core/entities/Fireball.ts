@@ -1,7 +1,8 @@
 import Entity from '../Entity'
-import { GAME_OPTIONS } from '../../../constants/game'
+import { GAME_OPTIONS, GAME_RESOURCES } from '../../../constants/game'
 import { randomRange } from '../utils/Calculations'
 import AnimatedSprite from '../utils/AnimatedSprite'
+import Resources from '../utils/Resources'
 
 const {
   FIREBALL_WIDTH,
@@ -13,7 +14,7 @@ const {
 export default class Fireball extends Entity {
   sprite?: AnimatedSprite
 
-  constructor(sprite?: AnimatedSprite) {
+  constructor(resources: Resources) {
     super({
       position: {
         x: randomRange(0, GAME_OPTIONS.CANVAS_WIDTH),
@@ -25,7 +26,14 @@ export default class Fireball extends Entity {
       },
       size: { width: FIREBALL_WIDTH, height: FIREBALL_HEIGHT },
     })
-    this.sprite = sprite
+    this.sprite = new AnimatedSprite({
+      resource: resources.get(GAME_RESOURCES.FIREBALL),
+      mapPoint: { x: 0, y: 0 },
+      frameSize: { height: 512, width: 512 },
+      resultSize: { height: 20 * 5, width: 20 * 5 },
+      angle: 90,
+      speed: 25,
+    })
   }
 
   public update(dt: number) {
