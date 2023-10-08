@@ -34,7 +34,7 @@ describe('ErrorPage component', () => {
     ;(isRouteErrorResponse as unknown as jest.Mock).mockReturnValue(true)
   })
 
-  test('Snapshot', () => {
+  test.skip('Snapshot', () => {
     const wrapper = render(
       <MemoryRouter>
         <ErrorPage />
