@@ -14,9 +14,10 @@ export const withUserCheck = <P extends WithUserType>(
   return (props: Omit<P, keyof WithUserType>) => {
     const user = useAppSelector(state => state.auth.user)
     const navigate = useNavigate()
+    const isOnline = window.navigator.onLine
 
     useEffect(() => {
-      if (user === null && isUserRequired) {
+      if (user === null && isUserRequired && isOnline) {
         navigate(`/${RoutePath.Login}`)
       }
       if (user && !isUserRequired) {
@@ -24,7 +25,7 @@ export const withUserCheck = <P extends WithUserType>(
       }
     }, [user])
 
-    if (user === null && isUserRequired) {
+    if (user === null && isUserRequired && isOnline) {
       return null
     }
 
