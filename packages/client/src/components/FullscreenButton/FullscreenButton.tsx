@@ -12,20 +12,20 @@ export const FullscreenButton = () => {
     }
   }
 
+  if (!screenfull.isEnabled) return null
+
   return (
-    screenfull.isEnabled && (
-      <button
-        onClick={toggleFullscreen}
-        className={styles.fullscreen}
-        type="button">
-        <img
-          className={styles.icon}
-          src={fullscreenIcon}
-          width={24}
-          height={24}
-          alt="fullscreen"
-        />
-      </button>
-    )
+    <button
+      onClick={toggleFullscreen}
+      className={styles.fullscreen}
+      type="button">
+      <img
+        className={styles.icon}
+        src={fullscreenIcon}
+        width={24}
+        height={24}
+        alt="fullscreen"
+      />
+    </button>
   )
 }
