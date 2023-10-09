@@ -16,14 +16,17 @@ export enum GameState {
   // игра завершена
   END = 2,
 }
-
+export type GameStateProps = {
+  gameScore: number
+  gameTime: number
+}
 export default class GameEngine {
   canvas: HTMLCanvasElement
   context: CanvasRenderingContext2D
   resources?: Resources
   lastLoopTime = 0 // время предыдущей итерации игрового цикла
 
-  gameStateEndCallback: () => void
+  gameStateEndCallback: (props: GameStateProps) => void
   gameState: GameState = GameState.READY // состояние игры
   gameScore = 0 // кол-во очков
   gameTime = 0 // продолжительность игры
@@ -49,8 +52,8 @@ export default class GameEngine {
 
   constructor(props: {
     canvas: HTMLCanvasElement
-    gameStateEndCallback: () => void
     disableResources?: boolean
+    gameStateEndCallback: (props: GameStateProps) => void
   }) {
     this.canvas = props.canvas
     this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D
@@ -196,7 +199,14 @@ export default class GameEngine {
     if (this.gameState == GameState.END) return
     this.gameState = GameState.END
 
-    setTimeout(this.gameStateEndCallback, 100)
+    setTimeout(
+      () =>
+        this.gameStateEndCallback({
+          gameScore: this.gameScore,
+          gameTime: this.gameTime,
+        }),
+      100
+    )
   }
 
   private render(): void {
