@@ -70,20 +70,37 @@ export default class GameEngine {
 
   // инициализация и запуск игрового цикла
   public init = (): void => {
+    this.reset()
+    KeyControls.setControls()
+    this.mainLoop()
+  }
+  public reset(): void {
+    this.gameState = GameState.READY
+    this.gameScore = 0
+    this.gameTime = 0
+    this.gameSpeed = 1
+
+    this.backgroundIndex = 0
     this.currentBackground = new Background(
       this.backgroundList[this.backgroundIndex],
       this.resources
     )
+    this.prevBackground = undefined
     this.floor = new Floor()
     this.player = new Player(this.resources)
     this.bricks = []
     this.fireballs = []
 
-    KeyControls.setControls()
-    this.mainLoop()
+    this.lastBackground = 0
+    this.lastBrick = 0
   }
 
   private mainLoop = (currentTime = 0): void => {
+    if (this.lastLoopTime === -1) {
+      // остановка игрового цикла
+      this.lastLoopTime = 0
+      return
+    }
     const deltaTime = currentTime - this.lastLoopTime
     const minDeltaTime = 1000 / GAME_OPTIONS.GAME_MIN_FPS
 
@@ -234,10 +251,12 @@ export default class GameEngine {
     )
   }
 
-  public reset(): void {
-    this.gameState = GameState.READY
-    this.gameScore = 0
-    this.gameTime = 0
-    this.gameSpeed = 1
+  public destroy(): void {
+    // сброс игровых объектов
+    this.reset()
+    // остановка игрового цикла
+    this.lastLoopTime = -1
+    // очистка обработчиков событий
+    KeyControls.clearControls()
   }
 }

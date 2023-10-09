@@ -35,29 +35,55 @@ export const GAME_OPTIONS = {
 
 export const GAME_RESOURCES = {
   // настройки ресурсов
-  PLAYER_IDLE: '/sprites/player/idle.png',
-  PLAYER_JUMP: '/sprites/player/jump.png',
-  PLAYER_RUN: '/sprites/player/run.png',
-  PLAYER_SLIDE: '/sprites/player/slide.png',
-  PLAYER_WALK: '/sprites/player/walk.png',
-  FIREBALL: '/sprites/entities/fireball.png',
-  BONFIRE: '/sprites/entities/bonfire.png',
-  SPEARS: '/sprites/entities/spears.png',
-  WALL: '/sprites/entities/wall.png',
-  VAPOR: '/sprites/entities/vapor.png',
-  BONUS_SLOWING: '/sprites/entities/gems/gem_blue.png',
-  BONUS_IMMUNITY: '/sprites/entities/gems/gem_red.png',
-  BONUS_SCORE: '/sprites/entities/gems/coin_gold.png',
-  BACKGROUND_0_LANDSCAPE: '/sprites/background/city_day/landscape.png',
-  BACKGROUND_0_ROAD: '/sprites/background/city_day/road.png',
-  BACKGROUND_0_SKY: '/sprites/background/city_day/sky.png',
-  BACKGROUND_1_LANDSCAPE: '/sprites/background/city_night/landscape.png',
-  BACKGROUND_1_ROAD: '/sprites/background/city_night/road.png',
-  BACKGROUND_1_SKY: '/sprites/background/city_night/sky.png',
-  BACKGROUND_2_LANDSCAPE: '/sprites/background/forest_day/landscape.png',
-  BACKGROUND_2_ROAD: '/sprites/background/forest_day/road.png',
-  BACKGROUND_2_SKY: '/sprites/background/forest_day/sky.png',
-  BACKGROUND_3_LANDSCAPE: '/sprites/background/forest_night/landscape.png',
-  BACKGROUND_3_ROAD: '/sprites/background/forest_night/road.png',
-  BACKGROUND_3_SKY: '/sprites/background/forest_night/sky.png',
+  PLAYER_IDLE: PLAYER_IDLE_IMG,
+  PLAYER_JUMP: PLAYER_JUMP_IMG,
+  PLAYER_RUN: PLAYER_RUN_IMG,
+  PLAYER_SLIDE: PLAYER_SLIDE_IMG,
+  PLAYER_WALK: PLAYER_WALK_IMG,
+  FIREBALL: FIREBALL_IMG,
+  BONFIRE: BONFIRE_IMG,
+  SPEARS: SPEARS_IMG,
+  WALL: WALL_IMG,
+  VAPOR: VAPOR_IMG,
+  BONUS_SLOWING: BONUS_SLOWING_IMG,
+  BONUS_IMMUNITY: BONUS_IMMUNITY_IMG,
+  BONUS_SCORE: BONUS_SCORE_IMG,
+  BACKGROUND_0_LANDSCAPE: BACKGROUND_0_LANDSCAPE_IMG,
+  BACKGROUND_0_ROAD: BACKGROUND_0_ROAD_IMG,
+  BACKGROUND_0_SKY: BACKGROUND_0_SKY_IMG,
+  BACKGROUND_1_LANDSCAPE: BACKGROUND_1_LANDSCAPE_IMG,
+  BACKGROUND_1_ROAD: BACKGROUND_1_ROAD_IMG,
+  BACKGROUND_1_SKY: BACKGROUND_1_SKY_IMG,
+  BACKGROUND_2_LANDSCAPE: BACKGROUND_2_LANDSCAPE_IMG,
+  BACKGROUND_2_ROAD: BACKGROUND_2_ROAD_IMG,
+  BACKGROUND_2_SKY: BACKGROUND_2_SKY_IMG,
+  BACKGROUND_3_LANDSCAPE: BACKGROUND_3_LANDSCAPE_IMG,
+  BACKGROUND_3_ROAD: BACKGROUND_3_ROAD_IMG,
+  BACKGROUND_3_SKY: BACKGROUND_3_SKY_IMG,
 }
+
+import PLAYER_IDLE_IMG from '../assets/sprites/player/idle.png'
+import PLAYER_JUMP_IMG from '../assets/sprites/player/jump.png'
+import PLAYER_RUN_IMG from '../assets/sprites/player/run.png'
+import PLAYER_SLIDE_IMG from '../assets/sprites/player/slide.png'
+import PLAYER_WALK_IMG from '../assets/sprites/player/walk.png'
+import FIREBALL_IMG from '../assets/sprites/entities/fireball.png'
+import BONFIRE_IMG from '../assets/sprites/entities/bonfire.png'
+import SPEARS_IMG from '../assets/sprites/entities/spears.png'
+import WALL_IMG from '../assets/sprites/entities/wall.png'
+import VAPOR_IMG from '../assets/sprites/entities/vapor.png'
+import BONUS_SLOWING_IMG from '../assets/sprites/entities/gems/gem_blue.png'
+import BONUS_IMMUNITY_IMG from '../assets/sprites/entities/gems/gem_red.png'
+import BONUS_SCORE_IMG from '../assets/sprites/entities/gems/coin_gold.png'
+import BACKGROUND_0_LANDSCAPE_IMG from '../assets/sprites/background/city_day/landscape.png'
+import BACKGROUND_0_ROAD_IMG from '../assets/sprites/background/city_day/road.png'
+import BACKGROUND_0_SKY_IMG from '../assets/sprites/background/city_day/sky.png'
+import BACKGROUND_1_LANDSCAPE_IMG from '../assets/sprites/background/city_night/landscape.png'
+import BACKGROUND_1_ROAD_IMG from '../assets/sprites/background/city_night/road.png'
+import BACKGROUND_1_SKY_IMG from '../assets/sprites/background/city_night/sky.png'
+import BACKGROUND_2_LANDSCAPE_IMG from '../assets/sprites/background/forest_day/landscape.png'
+import BACKGROUND_2_ROAD_IMG from '../assets/sprites/background/forest_day/road.png'
+import BACKGROUND_2_SKY_IMG from '../assets/sprites/background/forest_day/sky.png'
+import BACKGROUND_3_LANDSCAPE_IMG from '../assets/sprites/background/forest_night/landscape.png'
+import BACKGROUND_3_ROAD_IMG from '../assets/sprites/background/forest_night/road.png'
+import BACKGROUND_3_SKY_IMG from '../assets/sprites/background/forest_night/sky.png'
