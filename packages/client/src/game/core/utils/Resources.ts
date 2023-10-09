@@ -1,4 +1,4 @@
-import { GAME_RESOURCES } from '../../../constants/game'
+import { GAME_RESOURCES, GameResourcesInit } from '../../../constants/game'
 
 export type TResource = HTMLImageElement | boolean
 
@@ -9,6 +9,7 @@ export default class Resources {
   constructor() {
     this.resourceCache = {}
     this.readyCallbacks = []
+    GameResourcesInit()
   }
 
   private _load(url: string): void {
