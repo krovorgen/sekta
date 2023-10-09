@@ -12,6 +12,7 @@ export default {
   moduleNameMapper: {
     '^uuid$': 'uuid',
     '\\.scss$': 'identity-obj-proxy', //для отработки тестов, но не помогает
+    '\\.(jpg|jpeg|png)$': 'identity-obj-proxy',
     '^.+\\.(css|scss)$': '<rootDir>/config/CSSStub.js',
   },
   transform: {

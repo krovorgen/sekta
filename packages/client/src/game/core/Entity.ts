@@ -1,5 +1,5 @@
 import { GAME_OPTIONS } from '../../constants/game'
-import { TOffset, TPoint, TSize, boxCollides } from './utils/calculations'
+import { TOffset, TPoint, TSize, boxCollides } from './utils/Calculations'
 
 interface EntityProps {
   position: TPoint
