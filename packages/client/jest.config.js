@@ -16,8 +16,8 @@ export default {
     '^.+\\.(css|scss)$': '<rootDir>/config/CSSStub.js',
   },
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
-    "^.+\\.svg$": "<rootDir>/svgTransform.cjs"
+    '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\.svg$': '<rootDir>/svgTransform.cjs',
   },
-  transformIgnorePatterns: ['node_modules/(?!ky/.*)'],
+  transformIgnorePatterns: ['node_modules/(?!(ky|screenfull)/.*)'],
 }

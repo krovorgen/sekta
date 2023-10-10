@@ -8,6 +8,7 @@ import { getUserTC } from '../../redux/features/auth/authSlice'
 import { Header } from './Header/Header'
 
 import styles from './Layout.module.scss'
+import { FullscreenButton } from '../../components/FullscreenButton/FullscreenButton'
 
 const Layout: FC = () => {
   const dispatch = useAppDispatch()
@@ -44,6 +45,7 @@ const Layout: FC = () => {
       <div className={styles.content}>
         <Outlet />
       </div>
+      <FullscreenButton />
     </div>
   )
 }
