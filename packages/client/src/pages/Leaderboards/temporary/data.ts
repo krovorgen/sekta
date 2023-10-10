@@ -38,14 +38,4 @@ const data: IPlayer[] = [
   },
 ]
 
-// Array(100)
-//   .fill('')
-//   .forEach((_, i) => {
-//     data.push({
-//       id: (i + 1) * 100,
-//       player: 'Fantomas',
-//       time: Math.floor(Math.random() * 100000),
-//     })
-//   })
-
 export { data }
