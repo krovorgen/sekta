@@ -9,6 +9,7 @@ export type ProfileFieldProps = {
 
 export type ProfileFormProps = {
   onSubmit: (data: FieldValues, path: string) => void
+  user?: User
 }
 
 export type ProfileNotification = {
@@ -19,6 +20,6 @@ export type ProfileNotification = {
 
 export type AvatarFormProps = {
   initials: string
-  setUser: (value: User) => void
+  getUser: () => void
   avatar?: string
 }

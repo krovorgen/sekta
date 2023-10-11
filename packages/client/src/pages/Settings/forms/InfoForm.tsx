@@ -10,8 +10,8 @@ import { ProfileFormProps } from '../types'
 
 const cn = classNames.bind(styles)
 
-export const InfoForm = ({ onSubmit }: ProfileFormProps) => {
-  const { control, handleSubmit } = useForm()
+export const InfoForm = ({ onSubmit, user }: ProfileFormProps) => {
+  const { control, handleSubmit } = useForm<FieldValues>({ values: user })
 
   const submit = (data: FieldValues) => onSubmit(data, '/user/profile')
 
