@@ -11,7 +11,6 @@ import { PasswordForm } from './forms/PasswordForm'
 import { FetchMethods, fetchSekta } from '../../utils/fetch'
 import styles from './Settings.module.scss'
 import { ProfileNotification } from './types'
-import { useAppSelector } from '../../redux/store'
 import { useAppDispatch } from '../../redux/store'
 import { getUserTC } from '../../redux/features/auth/authSlice'
 
@@ -21,8 +20,7 @@ const notificationInitState: ProfileNotification = {
   title: 'Success!',
 }
 
-const SettingsPage: FC<PropsWithUser> = () => {
-  const user = useAppSelector(state => state.auth.user)
+const SettingsPage: FC<PropsWithUser> = ({ user }) => {
   const [notification, setNotification] = useState<ProfileNotification>(
     notificationInitState
   )
