@@ -1,0 +1,17 @@
+@import "../../scss/helpers/variables";
+@import "../../scss/helpers/mixins";
+
+.fullscreen {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: #fff;
+  position: fixed;
+  bottom: 8px;
+  right: 8px;
+  border: none;
+  margin: 0;
+}
+
+.icon {
+
+}

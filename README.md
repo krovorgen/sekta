@@ -1,3 +1,6 @@
+### Preview
+[preview](https://www.youtube.com/watch?v=sctMx054gM0)
+
 ### Как запускать?
 
 1. Убедитесь что у вас установлен `node` и `docker`

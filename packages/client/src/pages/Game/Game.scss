@@ -1,0 +1,71 @@
+@import "../../scss/helpers/variables";
+
+.game-wrapper {
+  width: auto;
+}
+
+.game-canvas {
+  background: #eee;
+  display: block;
+  margin: 0 auto;
+  cursor: none;
+}
+
+.timer-wrapper {
+  min-height: 100vh;
+  padding: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-over-wrapper {
+  min-height: 100vh;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.timer {
+  width: 600px;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.timer-body {
+  width: 400px;
+  height: 400px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.timer-counter span {
+  font-size: 60px;
+  color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  text-transform: uppercase;
+  animation: counter 4s forwards;
+}
+
+@keyframes counter {
+  0% {}
+
+  50% {
+    transform: translate(0, -1200px);
+    font-size: 100px;
+  }
+
+  100% {
+    transform: translate(0, -1200px);
+    font-size: 150px;
+  }
+}

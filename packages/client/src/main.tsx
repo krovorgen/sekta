@@ -1,10 +1,33 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
-import './index.css'
+import { createRoot } from 'react-dom/client'
+import { App } from './App'
+import './scss/index.scss'
+import { store } from './redux/store'
+import { Provider } from 'react-redux'
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+const container = document.getElementById('root') as HTMLElement
+const root = createRoot(container)
+
+root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 )
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/sw.js')
+      .then(registration => {
+        console.log(
+          'ServiceWorker registration successful with scope: ',
+          registration.scope
+        )
+      })
+      .catch((error: string) => {
+        console.log('ServiceWorker registration failed: ', error)
+      })
+  })
+}
