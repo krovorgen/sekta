@@ -10,7 +10,7 @@ import { FetchMethods } from '../../../utils/fetch'
 
 const cn = classNames.bind(styles)
 
-export const Avatar = ({ avatar, initials, setUser }: AvatarFormProps) => {
+export const Avatar = ({ avatar, initials, getUser }: AvatarFormProps) => {
   const handleUpload = async (
     _e: ChangeEvent<HTMLInputElement>,
     payload: { files: File[] }
@@ -24,9 +24,7 @@ export const Avatar = ({ avatar, initials, setUser }: AvatarFormProps) => {
       body: formData,
       credentials: 'include',
     })
-    const result = await response.json()
-
-    setUser(result)
+    if (response.ok) getUser()
   }
 
   const avatarSectionClass = cn(styles.box, styles.avatar)
