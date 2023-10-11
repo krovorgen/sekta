@@ -48,10 +48,10 @@ classDiagram
   }
 
   class Player {
-    +isDead: boolean
-    +isJump: boolean
-    +lastJump: number
-    +moveSpeed: number
+    +isDead : boolean
+    +isJump : boolean
+    +lastJump : number
+    +moveSpeed : number
 
     -sprite : AnimatedSprite
     -resources : Resources
@@ -75,27 +75,27 @@ classDiagram
   class Background {
     +type: BACKGROUND_TYPE
     +fading = false
-    -sky?: BackgroundComponent
-    -road?: BackgroundComponent
-    -landscape?: BackgroundComponent
-    -opacity = 1
+    -sky? : BackgroundComponent
+    -road? : BackgroundComponent
+    -landscape? : BackgroundComponent
+    -opacity : number
 
-    update(dt: number): void
-    draw(ctx: CanvasRenderingContext2D): void
+    update(dt: number) : void
+    draw(ctx: CanvasRenderingContext2D) : void
   }
 
   class Brick {
-    +sprite?: AnimatedSprite
+    +sprite? : AnimatedSprite
 
-    +update(dt: number): void
-    +draw(ctx: CanvasRenderingContext2D): void
+    +update(dt: number) : void
+    +draw(ctx: CanvasRenderingContext2D) : void
   }
 
   class Fireball {
-    +sprite?: AnimatedSprite
+    +sprite? : AnimatedSprite
 
-    +update(dt: number): void
-    +draw(ctx: CanvasRenderingContext2D): void
+    +update(dt: number) : void
+    +draw(ctx: CanvasRenderingContext2D) : void
   }
 
   class AnimatedSprite {
@@ -114,44 +114,44 @@ classDiagram
 
     +reset() void
     +update(dt: number) void
-    +render(ctx: CanvasRenderingContext2D, entity: Entity): void
+    +render(ctx: CanvasRenderingContext2D, entity: Entity) : void
   }
 
   class GameEngine {
-    +canvas: HTMLCanvasElement
-    +context: CanvasRenderingContext2D
-    +resources?: Resources
-    +lastLoopTime = 0
+    +canvas : HTMLCanvasElement
+    +context : CanvasRenderingContext2D
+    +resources? : Resources
+    +lastLoopTime : number
 
-    +gameStateEndCallback: (props: GameStateProps) => void
-    +gameState: GameState
-    +gameScore = 0
-    +gameTime = 0
-    +gameSpeed = 1
+    +gameStateEndCallback : (props: GameStateProps) => void
+    +gameState : GameState
+    +gameScore : number
+    +gameTime : number
+    +gameSpeed : number
 
-    +floor?: Floor
-    +player?: Player
-    +bricks?: Brick[]
-    +fireballs?: Fireball[]
+    +floor? : Floor
+    +player? : Player
+    +bricks? : Brick[]
+    +fireballs? : Fireball[]
 
-    +backgroundIndex = 0
-    +backgroundList: BACKGROUND_TYPE[]
-    +currentBackground?: Background
-    +prevBackground?: Background
+    +backgroundIndex : number
+    +backgroundList : BACKGROUND_TYPE[]
+    +currentBackground? : Background
+    +prevBackground? : Background
 
-    +lastBackground = 0
-    +lastBrick = 0
+    +lastBackground : number
+    +lastBrick : number
 
-    +init(): void
-    +reset(): void
-    +destroy(): void
-    -mainLoop(currentTime: number): void
-    -update(dt: number): void
-    -handleInput(): void
-    -updateEntities(dt: number): void
-    -checkCollisions(): void
-    -gameOver(): void
-    -render(): void
+    +init() : void
+    +reset() : void
+    +destroy() : void
+    -mainLoop(currentTime: number) : void
+    -update(dt: number) : void
+    -handleInput() : void
+    -updateEntities(dt: number) : void
+    -checkCollisions() : void
+    -gameOver() : void
+    -render() : void
   }
 
   GameEngine o-- "1" Player
@@ -383,10 +383,7 @@ this.sprite.render(ctx)
 {
   position: {
     x: PLAYER_LEFT_OFFSET,
-    y:
-      GAME_OPTIONS.CANVAS_HEIGHT -
-      GAME_OPTIONS.FLOOR_HEIGHT -
-      PLAYER_HEIGHT,
+    y: GAME_OPTIONS.CANVAS_HEIGHT - GAME_OPTIONS.FLOOR_HEIGHT - PLAYER_HEIGHT
   },
   offset: { dx: 0, dy: 0 },
   size: { width: PLAYER_WIDTH, height: PLAYER_HEIGHT },
@@ -406,7 +403,7 @@ this.sprite.render(ctx)
     y: GAME_OPTIONS.CANVAS_HEIGHT - GAME_OPTIONS.FLOOR_HEIGHT,
   },
   offset: { dx: 0, dy: 0 },
-  size: { width: GAME_OPTIONS.CANVAS_WIDTH, height: GAME_OPTIONS.FLOOR_HEIGHT },
+  size: { width: GAME_OPTIONS.CANVAS_WIDTH, height: GAME_OPTIONS.FLOOR_HEIGHT }
 }
 ```
 
@@ -427,7 +424,7 @@ this.sprite.render(ctx)
     y: GAME_OPTIONS.CANVAS_HEIGHT - GAME_OPTIONS.FLOOR_HEIGHT - BRICK_HEIGHT,
   },
   offset: { dx: -BRICK_SPEED, dy: 0 },
-  size: { width: BRICK_WIDTH, height: BRICK_HEIGHT },
+  size: { width: BRICK_WIDTH, height: BRICK_HEIGHT }
 }
 ```
 
@@ -451,7 +448,7 @@ this.sprite.render(ctx)
     dx: randomRange(-1, 1),
     dy: randomRange(FIREBALL_SPEED_MIN, FIREBALL_SPEED_MAX),
   },
-  size: { width: FIREBALL_WIDTH, height: FIREBALL_HEIGHT },
+  size: { width: FIREBALL_WIDTH, height: FIREBALL_HEIGHT }
 }
 ```
 
@@ -471,10 +468,7 @@ this.sprite.render(ctx)
   // объект на весь экран
   position: { x: 0, y: 0 },
   offset: { dx: 0, dy: 0 },
-  size: {
-    width: GAME_OPTIONS.CANVAS_WIDTH,
-    height: GAME_OPTIONS.CANVAS_HEIGHT,
-  },
+  size: { width: GAME_OPTIONS.CANVAS_WIDTH, height: GAME_OPTIONS.CANVAS_HEIGHT }
 }
 ```
 
@@ -482,7 +476,7 @@ this.sprite.render(ctx)
 
 ### KeyControls
 
-Вспомогательный класс отслеживания нажатия клавиш, который сохраняет состояние нажатой клавиши в общем объекте, путем добавления обработчика событий keyup и keydown. Основной метод isKeyDown, принимающий в качестве аргумента символ, например 'a', и возвращает true, в случае, если это клавиша была нажата. Так же можно передать следующие значения: SPACE, LEFT, UP, RIGHT, DOWN.
+Вспомогательный класс отслеживания нажатия клавиш, который сохраняет состояние нажатой клавиши в общем объекте, путем добавления обработчика событий keyup и keydown. Основной метод isKeyDown, принимающий в качестве аргумента символ, например 'a', и возвращает true, в случае, если это клавиша была нажата. Так же можно передать значения: SPACE, LEFT, UP, RIGHT, DOWN.
 
 Аргументом конструктора является объект типа `TAudioOptions`:
 
