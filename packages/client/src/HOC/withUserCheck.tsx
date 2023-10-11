@@ -29,9 +29,9 @@ export const withUserCheck = <P extends WithUserType>(
       return null
     }
 
-    if (user && !isUserRequired) {
+    if (user && isUserRequired) {
       return <WrappedComponent {...(props as P)} user={user} />
     }
-    return <WrappedComponent {...(props as P)} user={user} />
+    return <WrappedComponent {...(props as P)} />
   }
 }
