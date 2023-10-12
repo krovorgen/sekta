@@ -47,7 +47,6 @@ const GamePage: FC<PropsWithUser> = ({ user }) => {
               ? user.display_name
               : `${user.first_name} ${user.second_name}`,
           }
-          console.log(data)
           LeaderboardApi.addResult({
             data,
             ratingFieldName,

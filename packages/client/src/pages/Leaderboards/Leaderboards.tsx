@@ -2,7 +2,6 @@ import React, { FC, useState, useMemo, useEffect } from 'react'
 import { HTTPError } from 'ky'
 import { withUserCheck } from '../../HOC/withUserCheck'
 
-// import { IPlayer, data } from './temporary/data'
 import { LeaderboardApi } from '../../api/LeaderboardAPI'
 import { Player } from '../../types/leaderboard'
 import { ratingFieldName, cursor, limit } from '../../constants/leaderboard'
@@ -47,17 +46,7 @@ const LeaderboardsPage: FC = () => {
   }, [page, perPage])
 
   const handlePageChange = (pageIndex: number) => setPage(pageIndex)
-
   const pagesCount = Math.ceil(dataFromApi.length / perPage)
-
-  // const ratedData = useMemo(() => {
-  //   data.sort((a, b) => b.time - a.time)
-  //   data.forEach(elem => {
-  //     elem.place = data.indexOf(elem) + 1
-  //   })
-  //   return data
-  // }, [data])
-
   const currentPageData = useMemo(() => {
     return dataFromApi.slice(page * perPage).slice(0, perPage)
   }, [dataFromApi, page, perPage])
