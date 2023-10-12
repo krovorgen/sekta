@@ -40,8 +40,8 @@ describe('GameEngine', () => {
   })
 
   it('should update game entities', () => {
-    const initialFireballsCount: number | bigint = gameEngine?.fireballs!
-      .length as number | bigint
+    const initialFireballsCount: number | bigint = gameEngine?.fireballs
+      ?.length as number | bigint
     const initialBricksCount: number | bigint = gameEngine?.bricks?.length as
       | number
       | bigint
@@ -129,7 +129,7 @@ describe('GameEngine', () => {
     })
     // Проверяем, что текущее время и счет отображаются корректно
     expect(context?.fillText).toHaveBeenCalledWith(
-      expect.stringContaining('Score:'),
+      expect.stringContaining('Time:'),
       expect.any(Number),
       expect.any(Number)
     )
