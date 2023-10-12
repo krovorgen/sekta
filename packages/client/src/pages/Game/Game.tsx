@@ -5,6 +5,8 @@ import { PropsWithUser } from '../../types'
 import { GAME_OPTIONS } from '../../constants/game'
 import GameEngine, { GameStateProps } from '../../game/GameEngine'
 import { GameOver } from './GameOver'
+import { LeaderboardApi } from '../../api/LeaderboardAPI'
+import { teamName, ratingFieldName } from '../../constants/leaderboard'
 
 const GameState = {
   startPreview: 'start',
@@ -12,7 +14,7 @@ const GameState = {
   endPreview: 'end',
 }
 
-const GamePage: FC<PropsWithUser> = () => {
+const GamePage: FC<PropsWithUser> = ({ user }) => {
   const [gameState, setGameState] = useState(GameState.startPreview)
   const [gameResult, setGameResult] = useState<GameStateProps>({
     gameScore: 0,
@@ -38,6 +40,19 @@ const GamePage: FC<PropsWithUser> = () => {
         gameStateEndCallback: gameResult => {
           setGameState(GameState.endPreview)
           setGameResult(gameResult)
+          const data = {
+            id: user.id,
+            time: Math.trunc(gameResult.gameTime * 1000),
+            player: user.display_name
+              ? user.display_name
+              : `${user.first_name} ${user.second_name}`,
+          }
+          console.log(data)
+          LeaderboardApi.addResult({
+            data,
+            ratingFieldName,
+            teamName,
+          })
         },
       })
     }

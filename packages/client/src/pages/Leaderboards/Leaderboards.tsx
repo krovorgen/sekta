@@ -13,7 +13,7 @@ import { Space } from '@alfalab/core-components/space'
 
 import styles from './Leaderboards.module.scss'
 
-import { timeFormatter } from './helpers/timeFormatter'
+import { timeFormatter } from '../../utils/timeFormatter'
 
 const LeaderboardsPage: FC = () => {
   const [dataFromApi, setDataFromApi] = useState<Player[]>([])
@@ -44,7 +44,7 @@ const LeaderboardsPage: FC = () => {
       }
     }
     fetchData()
-  }, [])
+  }, [page, perPage])
 
   const handlePageChange = (pageIndex: number) => setPage(pageIndex)
 

@@ -11,9 +11,9 @@ export const timeFormatter = (time: number) => {
   const formattedSeconds = seconds
     ? `${seconds < 10 ? '0' + seconds : seconds} s `
     : ''
-  const formattedMilliSeconds = milliseconds
-    ? `${milliseconds < 10 ? '0' + milliseconds : milliseconds} ms `
-    : ''
+  const formattedMilliSeconds = `${milliseconds} ms`
+  // ? `${milliseconds < 10 ? '0' + milliseconds : milliseconds} ms `
+  // : ''
 
   return (
     formattedHours + formattedMinutes + formattedSeconds + formattedMilliSeconds

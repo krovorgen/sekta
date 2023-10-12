@@ -7,6 +7,8 @@ import { Button } from '@alfalab/core-components/button/cssm'
 
 import { GameStateProps } from '../../game/GameEngine'
 
+import { timeFormatter } from '../../utils/timeFormatter'
+
 type GameOverProps = {
   values: GameStateProps
   onReloadGame: () => void
@@ -15,12 +17,12 @@ type GameOverProps = {
 export const GameOver: FC<GameOverProps> = ({ values, onReloadGame }) => {
   return (
     <div className="game-over-wrapper">
-      <Typography.Title tag="h1" color="negative" view="xlarge">
+      {/* <Typography.Title tag="h1" color="negative" view="xlarge">
         {`Score: ${values.gameScore}`}
       </Typography.Title>
-      <Gap size="xs" />
+      <Gap size="xs" /> */}
       <Typography.Title tag="h1" color="negative" view="xlarge">
-        {`Time: ${values.gameTime.toFixed(0)}`}
+        {`Time: ${timeFormatter(Math.trunc(values.gameTime * 1000))}`}
       </Typography.Title>
       <Gap size="l" />
       <Button onClick={onReloadGame} view="accent" type="button" size="s">

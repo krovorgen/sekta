@@ -8,6 +8,8 @@ import Player from './core/entities/Player'
 import KeyControls, { KEYS } from './core/utils/KeyControls'
 import Resources, { getResourceUrls } from './core/utils/Resources'
 
+import { timeFormatter } from '../utils/timeFormatter'
+
 export enum GameState {
   // готовность к игре
   READY = 0,
@@ -245,7 +247,8 @@ export default class GameEngine {
     this.context.textAlign = 'center'
     this.context.textBaseline = 'top'
     this.context.fillText(
-      `Score: ${this.gameScore} Time: ${this.gameTime.toFixed(0)}`,
+      // `Score: ${this.gameScore} Time: ${timeFormatter(Math.trunc(this.gameTime * 1000))}`,
+      `Time: ${timeFormatter(Math.trunc(this.gameTime * 1000))}`,
       this.canvas.width / 2,
       150
     )
