@@ -33,7 +33,7 @@ const data: IPlayer[] = [
   },
   {
     id: 6,
-    player: 'Jon Snow-Stark',
+    player: 'Jon Snow Stark',
     time: 10000000,
   },
 ]

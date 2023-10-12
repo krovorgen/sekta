@@ -1,7 +1,11 @@
-import React, { FC, useState, useMemo } from 'react'
+import React, { FC, useState, useMemo, useEffect } from 'react'
+import { HTTPError } from 'ky'
 import { withUserCheck } from '../../HOC/withUserCheck'
 
-import { IPlayer, data } from './temporary/data'
+// import { IPlayer, data } from './temporary/data'
+import { LeaderboardApi } from '../../api/LeaderboardAPI'
+import { Player } from '../../types/leaderboard'
+import { ratingFieldName, cursor, limit } from '../../constants/leaderboard'
 
 import { Table } from '@alfalab/core-components/table'
 import { Typography } from '@alfalab/core-components/typography'
@@ -12,28 +16,51 @@ import styles from './Leaderboards.module.scss'
 import { timeFormatter } from './helpers/timeFormatter'
 
 const LeaderboardsPage: FC = () => {
+  const [dataFromApi, setDataFromApi] = useState<Player[]>([])
   const [perPage, setPerPage] = useState(5)
   const [page, setPage] = useState(0)
   const handlePerPageChange = (value: number) => {
     setPage(0)
     setPerPage(value)
   }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const results = (await LeaderboardApi.getResults({
+          ratingFieldName: ratingFieldName,
+          cursor: cursor,
+          limit: limit,
+        })) as []
+        const arr: Player[] = []
+        results.forEach((element: { data: Player }) => {
+          arr.push(element.data)
+        })
+        setDataFromApi(arr)
+      } catch (error) {
+        if (error instanceof HTTPError) {
+          const responseBody = await error.response.json()
+          console.log(responseBody.reason)
+        }
+      }
+    }
+    fetchData()
+  }, [])
 
   const handlePageChange = (pageIndex: number) => setPage(pageIndex)
 
-  const pagesCount = Math.ceil(data.length / perPage)
+  const pagesCount = Math.ceil(dataFromApi.length / perPage)
 
-  const ratedData = useMemo(() => {
-    data.sort((a, b) => b.time - a.time)
-    data.forEach(elem => {
-      elem.place = data.indexOf(elem) + 1
-    })
-    return data
-  }, [data])
+  // const ratedData = useMemo(() => {
+  //   data.sort((a, b) => b.time - a.time)
+  //   data.forEach(elem => {
+  //     elem.place = data.indexOf(elem) + 1
+  //   })
+  //   return data
+  // }, [data])
 
   const currentPageData = useMemo(() => {
-    return ratedData.slice(page * perPage).slice(0, perPage)
-  }, [ratedData, page, perPage])
+    return dataFromApi.slice(page * perPage).slice(0, perPage)
+  }, [dataFromApi, page, perPage])
 
   return (
     <section className={styles.leaderboard}>
@@ -45,7 +72,7 @@ const LeaderboardsPage: FC = () => {
             pagesCount={pagesCount}
             onPageChange={handlePageChange}
             onPerPageChange={handlePerPageChange}
-            possiblePerPage={[5, 25, 50, 100]}
+            possiblePerPage={[5, 25, 50]}
           />
         }>
         <Table.THead>
@@ -58,11 +85,11 @@ const LeaderboardsPage: FC = () => {
           </Table.THeadCell>
         </Table.THead>
         <Table.TBody>
-          {currentPageData.map((row: IPlayer) => (
+          {currentPageData.map((row: Player) => (
             <Table.TRow key={row.id}>
               <Table.TCell>
                 <Typography.Text view="primary-small" tag="div">
-                  {row.place}
+                  {currentPageData.indexOf(row) + 1}
                 </Typography.Text>
               </Table.TCell>
 
