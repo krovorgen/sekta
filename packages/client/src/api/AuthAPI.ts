@@ -15,6 +15,11 @@ export type SignUpDTO = {
   phone: string
 }
 
+export type YandexSignUpDTO = {
+  code: string
+  redirect_uri: string
+}
+
 class Auth extends BaseAPI {
   signIn(data: SignInDTO): Promise<unknown> {
     return this.http.post('auth/signin', { json: data })
@@ -22,6 +27,17 @@ class Auth extends BaseAPI {
 
   signUp(data: SignUpDTO): Promise<unknown> {
     return this.http.post('auth/signup', { json: data })
+  }
+
+  async getYandexServiceId(params: string): Promise<void> {
+    const data: { service_id: string } = await this.http
+      .get(`oauth/yandex/service-id?redirect_uri=${params}`)
+      .json()
+    window.location.href = `https://oauth.yandex.ru/authorize?response_type=code&client_id=${data.service_id}&redirect_uri=http://localhost:3000/signin`
+  }
+
+  getYandexAccount(params: YandexSignUpDTO): Promise<unknown> {
+    return this.http.post(`oauth/yandex`, { json: params })
   }
 
   read(): Promise<User> {

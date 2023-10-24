@@ -42,6 +42,20 @@ const LoginPage: FC = () => {
     }
   }, [])
 
+  const onYandexSignIn = useCallback(async () => {
+    try {
+      await AuthApi.getYandexServiceId('http://localhost:3000/signin')
+    } catch (error) {
+      if (error instanceof HTTPError) {
+        const responseBody = await error.response.json()
+        // на моменте валидаций сделай красивый вывод ошибок
+        console.log(responseBody.reason)
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
   return (
     <AuthLayout title="Login">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -80,6 +94,11 @@ const LoginPage: FC = () => {
         <Gap size="s" />
         <Button view="accent" type="submit" block size="s" disabled={isLoading}>
           Continue
+        </Button>
+        <Gap size="s" />
+
+        <Button onClick={onYandexSignIn} view="accent" block size="s">
+          Sign in with Yandex ID
         </Button>
       </form>
     </AuthLayout>
