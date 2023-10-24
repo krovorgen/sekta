@@ -43,7 +43,7 @@ export const withUserCheck = <P extends WithUserType>(
       }
     }, [user, code])
 
-    if (user === null && isUserRequired && isOnline) {
+    if (!user && isUserRequired && isOnline) {
       return null
     }
 
