@@ -18,7 +18,7 @@ export const GameOver: FC<GameOverProps> = ({ values, onReloadGame }) => {
   return (
     <div className="game-over-wrapper">
       <Typography.Title tag="h1" color="negative" view="xlarge">
-        {`Time: ${timeFormatter(Math.trunc(values.gameTime * 1000))}`}
+        {`Time: ${timeFormatter(values.gameTime)}`}
       </Typography.Title>
       <Gap size="l" />
       <Button onClick={onReloadGame} view="accent" type="button" size="s">

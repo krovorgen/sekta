@@ -4,7 +4,11 @@ import { withUserCheck } from '../../HOC/withUserCheck'
 
 import { LeaderboardApi } from '../../api/LeaderboardAPI'
 import { Player } from '../../types/leaderboard'
-import { ratingFieldName, cursor, limit } from '../../constants/leaderboard'
+import {
+  RATING_FIELD_NAME,
+  CURSOR,
+  LIMIT_TO_LOAD,
+} from '../../constants/leaderboard'
 
 import { Table } from '@alfalab/core-components/table'
 import { Typography } from '@alfalab/core-components/typography'
@@ -26,14 +30,13 @@ const LeaderboardsPage: FC = () => {
     const fetchData = async () => {
       try {
         const results = (await LeaderboardApi.getResults({
-          ratingFieldName: ratingFieldName,
-          cursor: cursor,
-          limit: limit,
-        })) as []
-        const arr: Player[] = []
-        results.forEach((element: { data: Player }) => {
-          arr.push(element.data)
-        })
+          ratingFieldName: RATING_FIELD_NAME,
+          cursor: CURSOR,
+          limit: LIMIT_TO_LOAD,
+        })) as { data: Player }[]
+        const arr: Player[] = results.map(
+          (element: { data: Player }) => element.data
+        )
         setDataFromApi(arr)
       } catch (error) {
         if (error instanceof HTTPError) {

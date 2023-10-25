@@ -6,7 +6,7 @@ import { GAME_OPTIONS } from '../../constants/game'
 import GameEngine, { GameStateProps } from '../../game/GameEngine'
 import { GameOver } from './GameOver'
 import { LeaderboardApi } from '../../api/LeaderboardAPI'
-import { teamName, ratingFieldName } from '../../constants/leaderboard'
+import { TEAM_NAME, RATING_FIELD_NAME } from '../../constants/leaderboard'
 
 const GameState = {
   startPreview: 'start',
@@ -49,8 +49,8 @@ const GamePage: FC<PropsWithUser> = ({ user }) => {
           }
           LeaderboardApi.addResult({
             data,
-            ratingFieldName,
-            teamName,
+            ratingFieldName: RATING_FIELD_NAME,
+            teamName: TEAM_NAME,
           })
         },
       })

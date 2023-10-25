@@ -247,7 +247,7 @@ export default class GameEngine {
     this.context.textAlign = 'center'
     this.context.textBaseline = 'top'
     this.context.fillText(
-      `Time: ${timeFormatter(Math.trunc(this.gameTime * 1000))}`,
+      `Time: ${timeFormatter(this.gameTime)}`,
       this.canvas.width / 2,
       150
     )

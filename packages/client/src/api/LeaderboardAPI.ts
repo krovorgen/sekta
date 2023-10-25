@@ -1,5 +1,5 @@
 import { BaseAPI } from './BaseApi'
-import { teamName } from '../constants/leaderboard'
+import { TEAM_NAME } from '../constants/leaderboard'
 
 export type AddToBoardDTO = {
   data: object
@@ -19,7 +19,7 @@ class Leaderboard extends BaseAPI {
   }
 
   getResults(data: ExtractFromBoardDTO): Promise<unknown> {
-    return this.http.post(`leaderboard/${teamName}`, { json: data }).json()
+    return this.http.post(`leaderboard/${TEAM_NAME}`, { json: data }).json()
   }
 
   create = undefined
