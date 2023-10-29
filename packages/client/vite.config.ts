@@ -9,10 +9,11 @@ export default defineConfig({
     port: Number(process.env.CLIENT_PORT) || 3000,
   },
   define: {
-    __SERVER_PORT__: process.env.SERVER_PORT,
+    __SERVER_PORT__: process.env.SERVER_PORT || 3001,
   },
   plugins: [react()],
   build: {
+    cssCodeSplit: false,
     commonjsOptions: {
       transformMixedEsModules: true,
     },
