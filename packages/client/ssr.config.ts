@@ -9,8 +9,6 @@ export default defineConfig({
     commonjsOptions: {
       transformMixedEsModules: true,
     },
-    outDir: 'ssr-dist',
-    ssr: true,
     lib: {
       entry: path.resolve(__dirname, 'ssr.tsx'),
       name: 'Client',
