@@ -4,7 +4,6 @@ import { User } from '../../../types'
 
 type AuthState = {
   user: User | null
-  init?: boolean
 }
 
 const initialState: AuthState = {
@@ -27,7 +26,6 @@ const authSlice = createSlice({
     builder
       .addCase(getUserTC.fulfilled, (state, action: PayloadAction<User>) => {
         state.user = action.payload
-        state.init = true
       })
       .addCase(logoutTC.fulfilled, state => {
         state.user = null

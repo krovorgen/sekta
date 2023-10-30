@@ -13,7 +13,6 @@ export default defineConfig({
   },
   plugins: [react()],
   build: {
-    cssCodeSplit: false,
     commonjsOptions: {
       transformMixedEsModules: true,
     },

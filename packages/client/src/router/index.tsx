@@ -1,9 +1,4 @@
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouteObject,
-} from 'react-router-dom'
+import { RouteObject } from 'react-router-dom'
 
 import { Layout } from '../Layouts/Base/Layout'
 import { ErrorPage } from '../pages/ErrorPage/ErrorPage'
@@ -25,30 +20,36 @@ export const routes: RouteObject[] = [
     children: [
       {
         index: true,
-        // loader: homeLoader,
         element: <Root />,
+      },
+      {
+        path: RoutePath.Forum,
+        element: <Forum />,
+      },
+      {
+        path: `${RoutePath.Forum}/:topicId`,
+        element: <ForumTopic />,
       },
       {
         path: RoutePath.Settings,
         element: <Settings />,
       },
       {
+        path: RoutePath.Leaderboards,
+        element: <Leaderboards />,
+      },
+      {
+        path: RoutePath.Login,
+        element: <Login />,
+      },
+      {
+        path: RoutePath.Registration,
+        element: <Registration />,
+      },
+      {
         path: RoutePath.Game,
-        // loader: dashboardLoader,
         element: <Game />,
       },
-      // {
-      //   path: "lazy",
-      //   lazy: () => import("./lazy"),
-      // },
-      // {
-      //   path: "redirect",
-      //   loader: redirectLoader,
-      // },
-      // {
-      //   path: "*",
-      //   element: <NoMatch />,
-      // },
     ],
   },
 ]

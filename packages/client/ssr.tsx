@@ -5,22 +5,15 @@ import {
   createStaticRouter,
   StaticRouterProvider,
 } from 'react-router-dom/server'
-import { renderToString } from 'react-dom/server'
-
-import { routes } from './src/router'
 import { Provider } from 'react-redux'
-import { createStore } from './src/redux/store'
+import { renderToString } from 'react-dom/server'
+import { routes } from './src/router'
+import { store } from './src/redux/store'
 
-export async function render(request) {
+export async function render(request: express.Request) {
   const { query, dataRoutes } = createStaticHandler(routes)
   const remixRequest = createFetchRequest(request)
   const context = await query(remixRequest)
-  const store = createStore({
-    auth: {
-      user: null,
-      init: false,
-    },
-  })
 
   if (context instanceof Response) {
     throw context
@@ -30,18 +23,15 @@ export async function render(request) {
 
   return renderToString(
     <Provider store={store}>
-      <StaticRouterProvider
-        router={router}
-        context={context}
-        nonce="the-nonce"
-      />
+      <StaticRouterProvider router={router} context={context} />
     </Provider>
   )
 }
 
-export function createFetchRequest(req: express.Request): Request {
+// из документации react router dom v6 ssr
+function createFetchRequest(req: express.Request): Request {
   const origin = `${req.protocol}://${req.get('host')}`
-  // Note: This had to take originalUrl into account for presumably vite's proxying
+
   const url = new URL(req.originalUrl || req.url, origin)
 
   const controller = new AbortController()
