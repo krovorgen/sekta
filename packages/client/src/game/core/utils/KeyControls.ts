@@ -4,6 +4,10 @@ export enum KEYS {
   UP = 'UP',
   RIGHT = 'RIGHT',
   DOWN = 'DOWN',
+  W = 'W',
+  A = 'A',
+  S = 'S',
+  D = 'D',
 }
 
 export default abstract class KeyControls {

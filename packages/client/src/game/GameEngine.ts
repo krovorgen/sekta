@@ -1,4 +1,4 @@
-import { GAME_OPTIONS } from '../constants/game'
+import { GAME_OPTIONS, GAME_RESOURCES } from '../constants/game'
 import Entity from './core/Entity'
 import Background, { BACKGROUND_TYPE } from './core/entities/Background'
 import Brick from './core/entities/Brick'
@@ -6,9 +6,10 @@ import Fireball from './core/entities/Fireball'
 import Floor from './core/entities/Floor'
 import Player from './core/entities/Player'
 import KeyControls, { KEYS } from './core/utils/KeyControls'
-import Resources, { getResourceUrls } from './core/utils/Resources'
+import Resources, { TResource, getResourceUrls } from './core/utils/Resources'
 
 import { timeFormatter } from '../utils/timeFormatter'
+import Sound from './core/utils/Sound'
 
 export enum GameState {
   // готовность к игре
@@ -51,6 +52,8 @@ export default class GameEngine {
 
   lastBackground = 0 // время последнего изменения фона
   lastBrick = 0 // время последнего препятствия
+
+  backgroundSound?: Sound
 
   constructor(props: {
     canvas: HTMLCanvasElement
@@ -95,6 +98,15 @@ export default class GameEngine {
 
     this.lastBackground = 0
     this.lastBrick = 0
+
+    this.backgroundSound = new Sound({
+      resource: this.resources?.get(
+        GAME_RESOURCES.BACKGROUND_SOUND
+      ) as TResource,
+      volume: 0.5,
+      lopped: true,
+    })
+    this.backgroundSound.play()
   }
 
   private mainLoop = (currentTime = 0): void => {
@@ -130,20 +142,21 @@ export default class GameEngine {
   }
 
   private handleInput(): void {
-    if (KeyControls.isKeyDown(KEYS.UP)) {
-      this.player!.up()
+    if (
+      KeyControls.isKeyDown(KEYS.UP) ||
+      KeyControls.isKeyDown(KEYS.W) ||
+      KeyControls.isKeyDown(KEYS.SPACE)
+    ) {
+      this.player!.jump()
     }
-    if (KeyControls.isKeyDown(KEYS.DOWN)) {
+    if (KeyControls.isKeyDown(KEYS.DOWN) || KeyControls.isKeyDown(KEYS.S)) {
       this.player!.down()
     }
-    if (KeyControls.isKeyDown(KEYS.LEFT)) {
+    if (KeyControls.isKeyDown(KEYS.LEFT) || KeyControls.isKeyDown(KEYS.A)) {
       this.player!.left()
     }
-    if (KeyControls.isKeyDown(KEYS.RIGHT)) {
+    if (KeyControls.isKeyDown(KEYS.RIGHT) || KeyControls.isKeyDown(KEYS.D)) {
       this.player!.right()
-    }
-    if (KeyControls.isKeyDown(KEYS.SPACE)) {
-      this.player!.jump()
     }
   }
 
@@ -217,6 +230,8 @@ export default class GameEngine {
   private gameOver(): void {
     if (this.gameState == GameState.END) return
     this.gameState = GameState.END
+    this.backgroundSound?.stop()
+    this.player?.run_sound?.stop()
 
     setTimeout(
       () =>
@@ -224,7 +239,7 @@ export default class GameEngine {
           gameScore: this.gameScore,
           gameTime: this.gameTime,
         }),
-      100
+      500
     )
   }
 
@@ -242,15 +257,15 @@ export default class GameEngine {
     for (const brick of this.bricks!) brick.draw(this.context)
     for (const fireballs of this.fireballs!) fireballs.draw(this.context)
     // вывод текущего времени игры
+    const timeText = `Time: ${timeFormatter(this.gameTime)}`
     this.context.font = '30px Verdana'
     this.context.fillStyle = 'gray'
     this.context.textAlign = 'center'
     this.context.textBaseline = 'top'
-    this.context.fillText(
-      `Time: ${timeFormatter(this.gameTime)}`,
-      this.canvas.width / 2,
-      150
-    )
+    this.context.strokeStyle = 'white'
+    this.context.lineWidth = 0.75
+    this.context.strokeText(timeText, this.canvas.width / 2, 150)
+    this.context.fillText(timeText, this.canvas.width / 2, 150)
   }
 
   public destroy(): void {

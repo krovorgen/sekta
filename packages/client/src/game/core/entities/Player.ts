@@ -1,7 +1,8 @@
 import { GAME_OPTIONS, GAME_RESOURCES } from '../../../constants/game'
 import Entity from '../Entity'
 import AnimatedSprite from '../utils/AnimatedSprite'
-import Resources, { TResource } from '../utils/Resources'
+import Resources from '../utils/Resources'
+import Sound from '../utils/Sound'
 
 const {
   PLAYER_WIDTH,
@@ -20,6 +21,8 @@ export default class Player extends Entity {
   moveSpeed = PLAYER_SPEED
 
   sprite?: AnimatedSprite
+  run_sound?: Sound
+  jump_sound?: Sound
   resources?: Resources
 
   constructor(resources?: Resources) {
@@ -37,6 +40,14 @@ export default class Player extends Entity {
     if (!resources) return
     this.resources = resources
     this.sprite = this.spriteRun()
+    this.jump_sound = new Sound({
+      resource: this.resources.get(GAME_RESOURCES.PLAYER_JUMP_SOUND),
+    })
+    this.run_sound = new Sound({
+      resource: this.resources.get(GAME_RESOURCES.PLAYER_RUN_SOUND),
+      lopped: true,
+    })
+    this.run_sound.play()
   }
 
   private spriteRun(): AnimatedSprite | undefined {
@@ -73,10 +84,9 @@ export default class Player extends Entity {
       this.isJump = true
       this.lastJump = Date.now()
       this.sprite = this.spriteJump()
+      this.run_sound?.stop()
+      this.jump_sound?.restart()
     }
-  }
-  public up() {
-    this.offset.dy -= this.moveSpeed
   }
   public down() {
     this.offset.dy += this.moveSpeed
@@ -124,6 +134,7 @@ export default class Player extends Entity {
       if (this.isJump) {
         this.isJump = false
         this.sprite = this.spriteRun()
+        this.run_sound?.restart()
       }
     }
     if (this.position.y < 0) {

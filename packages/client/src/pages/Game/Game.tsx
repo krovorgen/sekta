@@ -55,9 +55,6 @@ const GamePage: FC<PropsWithUser> = ({ user }) => {
         },
       })
     }
-    return () => {
-      gameEngine?.destroy()
-    }
   }, [gameState])
 
   return (
