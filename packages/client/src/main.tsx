@@ -1,33 +1,39 @@
 import React from 'react'
-import { createRoot } from 'react-dom/client'
-import { App } from './App'
+import ReactDOM from 'react-dom/client'
 import './scss/index.scss'
-import { store } from './redux/store'
-import { Provider } from 'react-redux'
+import { AppWithoutRedux } from './AppWithoutRedux'
+import { BrowserRouter } from 'react-router-dom'
 
-const container = document.getElementById('root') as HTMLElement
-const root = createRoot(container)
-
-root.render(
+ReactDOM.hydrateRoot(
+  document.getElementById('root') as HTMLElement,
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <BrowserRouter>
+      <AppWithoutRedux />
+    </BrowserRouter>
   </React.StrictMode>
 )
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/sw.js')
-      .then(registration => {
-        console.log(
-          'ServiceWorker registration successful with scope: ',
-          registration.scope
-        )
-      })
-      .catch((error: string) => {
-        console.log('ServiceWorker registration failed: ', error)
-      })
-  })
-}
+// использовать когда будет ssr && redux
+// ReactDOM.hydrateRoot(
+//   document.getElementById('root') as HTMLElement,
+//   <React.StrictMode>
+//     <Provider store={store}>
+//       <App />
+//     </Provider>
+//   </React.StrictMode>
+// )
+// if ('serviceWorker' in navigator) {
+//   window.addEventListener('load', () => {
+//     navigator.serviceWorker
+//       .register('/sw.js')
+//       .then(registration => {
+//         console.log(
+//           'ServiceWorker registration successful with scope: ',
+//           registration.scope
+//         )
+//       })
+//       .catch((error: string) => {
+//         console.log('ServiceWorker registration failed: ', error)
+//       })
+//   })
+// }
