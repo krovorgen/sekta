@@ -3,13 +3,17 @@ import ReactDOM from 'react-dom/client'
 import './scss/index.scss'
 import { AppWithoutRedux } from './AppWithoutRedux'
 import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import { store } from './redux/store'
 
 ReactDOM.hydrateRoot(
   document.getElementById('root') as HTMLElement,
   <React.StrictMode>
-    <BrowserRouter>
-      <AppWithoutRedux />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <AppWithoutRedux />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 )
 

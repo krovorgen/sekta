@@ -43,7 +43,7 @@ export const ForumsModal = ({
             label="Заголовок"
           />
           <Gap size="s" />
-          <Textarea
+          {/* <Textarea
             value={firstMessageValue}
             block={true}
             onChange={e => setFirstMessageValue(e.target.value)}
@@ -52,7 +52,7 @@ export const ForumsModal = ({
             minRows={3}
             maxLength={96}
             showCounter={true}
-          />
+          /> */}
         </form>
       </Modal.Content>
 
