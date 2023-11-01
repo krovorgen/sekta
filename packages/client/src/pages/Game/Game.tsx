@@ -55,6 +55,11 @@ const GamePage: FC<PropsWithUser> = ({ user }) => {
         },
       })
     }
+    return () => {
+      if ([GameState.endPreview, GameState.game].includes(gameState)) {
+        gameEngine?.destroy()
+      }
+    }
   }, [gameState])
 
   return (

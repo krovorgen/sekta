@@ -103,7 +103,7 @@ export default class GameEngine {
       resource: this.resources?.get(
         GAME_RESOURCES.BACKGROUND_SOUND
       ) as TResource,
-      volume: 0.5,
+      volume: GAME_OPTIONS.BACKGROUND_SOUND_VOLUME,
       lopped: true,
     })
     this.backgroundSound.play()
@@ -227,11 +227,15 @@ export default class GameEngine {
     )
   }
 
+  private stopSounds(): void {
+    this.backgroundSound?.stop()
+    this.player?.run_sound?.stop()
+  }
+
   private gameOver(): void {
     if (this.gameState == GameState.END) return
     this.gameState = GameState.END
-    this.backgroundSound?.stop()
-    this.player?.run_sound?.stop()
+    this.stopSounds()
 
     setTimeout(
       () =>
@@ -273,6 +277,8 @@ export default class GameEngine {
     this.reset()
     // остановка игрового цикла
     this.lastLoopTime = -1
+    // остановка звукового сопровождения
+    this.stopSounds()
     // очистка обработчиков событий
     KeyControls.clearControls()
   }

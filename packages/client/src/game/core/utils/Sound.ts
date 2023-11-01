@@ -1,3 +1,4 @@
+import { GAME_OPTIONS } from '../../../constants/game'
 import { TResource } from './Resources'
 
 type TSound = {
@@ -16,7 +17,9 @@ export default class Sound {
     this._sound.setAttribute('preload', 'auto')
     this._sound.setAttribute('controls', 'none')
     this._sound.style.display = 'none'
-    this._sound.volume = props.volume ?? 1.0
+    this._sound.volume = props.volume
+      ? props.volume * GAME_OPTIONS.MASTER_SOUND_VOLUME
+      : GAME_OPTIONS.MASTER_SOUND_VOLUME
     this._sound.loop = props.lopped ?? false
     document?.body.appendChild(this._sound)
   }

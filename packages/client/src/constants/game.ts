@@ -31,6 +31,9 @@ export const GAME_OPTIONS = {
   BACKGROUND_ROAD_SPEED: 100,
   BACKGROUND_SKY_SPEED: 50,
   BACKGROUND_TIME: 20000,
+  // настройки звукового сопровождения
+  MASTER_SOUND_VOLUME: 1.0,
+  BACKGROUND_SOUND_VOLUME: 0.5,
 }
 
 export enum REGEX_FILE_EXT {
