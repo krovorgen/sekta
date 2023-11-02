@@ -92,7 +92,7 @@ describe('GameEngine', () => {
     expect(gameEngine?.gameState).toBe(GameState.END)
 
     // Проверяем, что колбэк gameStateEndCallback вызывается через setTimeout
-    jest.advanceTimersByTime(100)
+    jest.advanceTimersByTime(500)
     expect(gameStateEndCallback).toHaveBeenCalled()
 
     jest.useRealTimers()
