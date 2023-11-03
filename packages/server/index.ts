@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import { createServer as createViteServer } from 'vite'
 import type { ViteDevServer } from 'vite'
+import cookieParser from 'cookie-parser'
 
 dotenv.config()
 
@@ -39,9 +40,10 @@ async function startServer() {
     app.use('/assets', express.static(path.resolve(distPath, 'assets')))
   }
 
-  app.use('*', async (req, res, next) => {
+  app.use('*', cookieParser(), async (req, res, next) => {
     const url = req.originalUrl
-
+    console.log(req.cookies)
+    console.log(req.headers)
     try {
       let template: string
 

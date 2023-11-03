@@ -6,6 +6,9 @@ import * as path from 'path'
 export default defineConfig({
   plugins: [react()],
   build: {
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
     lib: {
       entry: path.resolve(__dirname, 'ssr.tsx'),
       name: 'Client',
