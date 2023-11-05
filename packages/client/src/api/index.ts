@@ -2,7 +2,9 @@ import ky from 'ky'
 
 export let apiUrl = 'http://localhost:3000/api/v2'
 
-if (import.meta.env.VITE_DIRECT_URL) {
+const isDirect = process.env.VITE_DIRECT_URL
+
+if (isDirect === 'true') {
   apiUrl = 'https://ya-praktikum.tech/api/v2'
 }
 
