@@ -11,7 +11,6 @@ import express from 'express'
 import * as fs from 'fs'
 import * as path from 'path'
 import jsesc from 'jsesc'
-// import serveStatic from 'serve-static'
 import { loadState } from './preload'
 
 const isDev = () => process.env.NODE_ENV === 'development'
@@ -54,15 +53,13 @@ async function startServer() {
   })
 
   if (!isDev()) {
-    // app.use(serveStatic(distPath))
     app.use('/assets', express.static(path.resolve(distPath, 'assets')))
+    app.use(express.static(path.resolve(srcPath, 'ssr-dist')))
   }
 
   app.use('*', async (req, res, next) => {
     const url = req.originalUrl
-    console.log(1, req.cookies)
-    console.log(2, req.headers['cookie'])
-    console.log(3, url)
+
     try {
       let template: string
 
