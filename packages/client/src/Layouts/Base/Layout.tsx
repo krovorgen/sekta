@@ -13,9 +13,12 @@ import { FullscreenButton } from '../../components/FullscreenButton/FullscreenBu
 const Layout: FC = () => {
   const dispatch = useAppDispatch()
   const loadingStatus = useAppSelector(state => state.auth.loadingStatus)
+  const stateee = useAppSelector(state => state.auth)
   const [isLoading, setIsLoading] = useState(false)
 
   const isRequested = loadingStatus !== 'idle'
+
+  console.log(stateee)
 
   useEffect(() => {
     const getUser = async () => {

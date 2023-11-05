@@ -1,9 +1,5 @@
-import { RootState } from './redux/store'
+declare const __SERVER_PORT__: number
 
-declare global {
-  const __SERVER_PORT__: number
-
-  interface Window {
-    initialState?: RootState
-  }
+declare interface Window {
+  initialState?: string
 }

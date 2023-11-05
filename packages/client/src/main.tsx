@@ -1,22 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './scss/index.scss'
-import { AppWithoutRedux } from './AppWithoutRedux'
-import { BrowserRouter } from 'react-router-dom'
+
 import { Provider } from 'react-redux'
 import { createStore } from './redux/store'
+import { App } from './App'
 
 const initialState = window.initialState
 
 delete window.initialState
 
+const store = createStore(JSON.parse(initialState ?? '{}'))
+
 ReactDOM.hydrateRoot(
   document.getElementById('root') as HTMLElement,
   <React.StrictMode>
-    <Provider store={createStore(initialState)}>
-      <BrowserRouter>
-        <AppWithoutRedux />
-      </BrowserRouter>
+    <Provider store={store}>
+      <App />
     </Provider>
   </React.StrictMode>
 )

@@ -5,7 +5,7 @@ import classNames from 'classnames/bind'
 
 import styles from '../Settings.module.scss'
 import { AvatarFormProps } from '../types'
-import { baseUrl, resourcesUrl } from '../../../constants/urls'
+import { apiUrl } from '../../../api'
 import { FetchMethods } from '../../../utils/fetch'
 
 const cn = classNames.bind(styles)
@@ -19,7 +19,7 @@ export const Avatar = ({ avatar, initials, getUser }: AvatarFormProps) => {
 
     formData.append('avatar', payload.files[0])
 
-    const response = await fetch(`${baseUrl}/user/profile/avatar`, {
+    const response = await fetch(`${apiUrl}/user/profile/avatar`, {
       method: FetchMethods.PUT,
       body: formData,
       credentials: 'include',
@@ -35,7 +35,7 @@ export const Avatar = ({ avatar, initials, getUser }: AvatarFormProps) => {
 
       {avatar ? (
         <img
-          src={`${resourcesUrl}${avatar}`}
+          src={`${apiUrl}/resources${avatar}`}
           className={styles.avatarImg}
           alt="user avatar"
         />
