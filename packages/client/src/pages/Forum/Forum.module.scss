@@ -13,3 +13,12 @@
   top: 90px;
   z-index: 1;
 }
+
+.textarea {
+  width: 100%;
+  resize: none;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background-color: rgb(226 225 225);
+}

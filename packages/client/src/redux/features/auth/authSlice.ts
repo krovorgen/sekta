@@ -2,12 +2,14 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AuthApi } from '../../../api/AuthAPI'
 import { User } from '../../../types'
 
-type AuthState = {
+export type AuthState = {
   user: User | null
+  loadingStatus: 'idle' | 'loaded' | 'error'
 }
 
 const initialState: AuthState = {
   user: null,
+  loadingStatus: 'idle',
 }
 
 export const getUserTC = createAsyncThunk('auth/getUser', async () => {
@@ -15,7 +17,7 @@ export const getUserTC = createAsyncThunk('auth/getUser', async () => {
 })
 
 export const logoutTC = createAsyncThunk('auth/logout', async () => {
-  return await AuthApi.logout()
+  await AuthApi.logout()
 })
 
 const authSlice = createSlice({
@@ -26,6 +28,10 @@ const authSlice = createSlice({
     builder
       .addCase(getUserTC.fulfilled, (state, action: PayloadAction<User>) => {
         state.user = action.payload
+        state.loadingStatus = 'loaded'
+      })
+      .addCase(getUserTC.rejected, state => {
+        state.loadingStatus = 'error'
       })
       .addCase(logoutTC.fulfilled, state => {
         state.user = null

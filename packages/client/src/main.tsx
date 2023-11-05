@@ -4,12 +4,16 @@ import './scss/index.scss'
 import { AppWithoutRedux } from './AppWithoutRedux'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import { store } from './redux/store'
+import { createStore } from './redux/store'
+
+const initialState = window.initialState
+
+delete window.initialState
 
 ReactDOM.hydrateRoot(
   document.getElementById('root') as HTMLElement,
   <React.StrictMode>
-    <Provider store={store}>
+    <Provider store={createStore(initialState)}>
       <BrowserRouter>
         <AppWithoutRedux />
       </BrowserRouter>
