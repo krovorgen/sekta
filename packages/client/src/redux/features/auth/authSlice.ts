@@ -1,6 +1,12 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+  PayloadAction,
+} from '@reduxjs/toolkit'
 import { AuthApi } from '../../../api/AuthAPI'
 import { User } from '../../../types'
+import { RootState } from '../../store'
 
 export type AuthState = {
   user: User | null
@@ -38,5 +44,12 @@ const authSlice = createSlice({
       })
   },
 })
+
+export const authSelector = (state: RootState) => state.auth
+
+export const userLoadingStatusSelector = createSelector(
+  authSelector,
+  state => state.loadingStatus
+)
 
 export const authReducer = authSlice.reducer

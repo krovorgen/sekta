@@ -4,7 +4,10 @@ import { Outlet } from 'react-router-dom'
 
 import { useAppDispatch, useAppSelector } from '../../redux/store'
 import { GlobalLoader } from '../../components/GlobalLoader/GlobalLoader'
-import { getUserTC } from '../../redux/features/auth/authSlice'
+import {
+  getUserTC,
+  userLoadingStatusSelector,
+} from '../../redux/features/auth/authSlice'
 import { Header } from './Header/Header'
 
 import styles from './Layout.module.scss'
@@ -12,7 +15,7 @@ import { FullscreenButton } from '../../components/FullscreenButton/FullscreenBu
 
 const Layout: FC = () => {
   const dispatch = useAppDispatch()
-  const loadingStatus = useAppSelector(state => state.auth.loadingStatus)
+  const loadingStatus = useAppSelector(userLoadingStatusSelector)
   const [isLoading, setIsLoading] = useState(false)
 
   const isRequested = loadingStatus !== 'idle'
@@ -22,7 +25,7 @@ const Layout: FC = () => {
       try {
         await dispatch(getUserTC())
       } catch (e) {
-        console.log(e)
+        console.error(e)
       } finally {
         setIsLoading(false)
       }

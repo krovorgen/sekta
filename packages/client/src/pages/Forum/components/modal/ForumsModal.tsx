@@ -2,7 +2,6 @@ import { FormEvent } from 'react'
 
 import { Modal } from '@alfalab/core-components/modal'
 import { Input } from '@alfalab/core-components/input'
-// import { Textarea } from '@alfalab/core-components/textarea'
 import { Button } from '@alfalab/core-components/button'
 import { Gap } from '@alfalab/core-components/gap'
 
@@ -45,16 +44,6 @@ export const ForumsModal = ({
             label="Заголовок"
           />
           <Gap size="s" />
-          {/* <Textarea
-            value={firstMessageValue}
-            block={true}
-            onChange={e => setFirstMessageValue(e.target.value)}  
-            label="То о чем вы хотите написать"
-            size="xl"
-            minRows={3}
-            maxLength={96}
-            showCounter={true}
-          /> */}
           <textarea
             className={styles.textarea}
             value={firstMessageValue}
