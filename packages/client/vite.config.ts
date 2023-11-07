@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import dotenv from 'dotenv'
+import EnvironmentPlugin from 'vite-plugin-environment'
 dotenv.config()
 
 // https://vitejs.dev/config/
@@ -9,9 +10,12 @@ export default defineConfig({
     port: Number(process.env.CLIENT_PORT) || 3000,
   },
   define: {
-    __SERVER_PORT__: process.env.SERVER_PORT || 3001,
+    // у нас oauth.yandex.ru настроен с redirect_uri=http://localhost:3000
+    // для того чтоб oauth.yandex.ru работал на другом порте нужно его добавить в настройках яндекса
+    // пока временно меняем порт
+    __SERVER_PORT__: process.env.SERVER_PORT || 3000,
   },
-  plugins: [react()],
+  plugins: [react(), EnvironmentPlugin(['VITE_DIRECT_URL'])],
   build: {
     commonjsOptions: {
       transformMixedEsModules: true,

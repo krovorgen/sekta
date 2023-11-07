@@ -10,7 +10,9 @@ export const ProfileField = ({ control, label, name }: ProfileFieldProps) => {
     <Controller
       name={name}
       control={control}
-      render={({ field }) => <Input {...field} label={label} block />}
+      render={({ field }) => (
+        <Input {...field} value={field.value ?? ''} label={label} block />
+      )}
     />
   )
 }
