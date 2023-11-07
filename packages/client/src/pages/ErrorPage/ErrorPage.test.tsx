@@ -1,6 +1,8 @@
 import React from 'react'
 import '@testing-library/jest-dom'
 import { render, screen, fireEvent } from '@testing-library/react'
+import { createStore } from '../../redux/store'
+
 import {
   MemoryRouter,
   isRouteErrorResponse,
@@ -8,7 +10,11 @@ import {
   useRouteError,
 } from 'react-router-dom'
 import { ErrorPage as $ErrorPage } from './ErrorPage'
-import { store } from '../../redux/store'
+const initialState = window.initialState
+
+delete window.initialState
+
+const store = createStore(JSON.parse(initialState ?? '{}'))
 
 import { Provider } from 'react-redux'
 
