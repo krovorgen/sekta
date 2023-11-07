@@ -16,6 +16,7 @@ import { Gap } from '@alfalab/core-components/gap'
 import { Input } from '@alfalab/core-components/input'
 import { IconButton } from '@alfalab/core-components/icon-button'
 import { Toast } from '@alfalab/core-components/toast'
+import { useAppSelector } from '../../../redux/store'
 
 import { ITopic } from '../temporary/data'
 
@@ -24,6 +25,7 @@ import { CommentProps, TopicsComment } from './components/Comment/Comment'
 export const ForumTopicPage: FC<PropsWithUser> = () => {
   // export const ForumTopicPage: FC<PropsWithUser>
   const navigate = useNavigate()
+  const theme = useAppSelector(state => state.auth.theme)
   const [isVisible, setIsVisible] = React.useState(false)
   const [title, setTitle] = React.useState('')
   const [inputValue, setInputValue] = React.useState('')
@@ -92,6 +94,7 @@ export const ForumTopicPage: FC<PropsWithUser> = () => {
 
       <form onSubmit={onSendComment}>
         <Input
+          colors={theme === 'light' ? 'default' : 'inverted'}
           value={inputValue}
           block={true}
           onChange={e => setInputValue(e.target.value)}

@@ -30,10 +30,7 @@ const NavbarLink = ({
       {children}
     </NavLink>
   ) : (
-    <button
-      className={cn('reset-btn', styles.navbarlink)}
-      onClick={onClick}
-      type="button">
+    <button className={styles.navbarlink} onClick={onClick} type="button">
       {children}
     </button>
   )

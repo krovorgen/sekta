@@ -9,12 +9,13 @@ import {
   userLoadingStatusSelector,
 } from '../../redux/features/auth/authSlice'
 import { Header } from './Header/Header'
-
+import cn from 'classnames'
 import styles from './Layout.module.scss'
 import { FullscreenButton } from '../../components/FullscreenButton/FullscreenButton'
 
 const Layout: FC = () => {
   const dispatch = useAppDispatch()
+  const theme = useAppSelector(state => state.auth.theme)
   const loadingStatus = useAppSelector(userLoadingStatusSelector)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -50,7 +51,11 @@ const Layout: FC = () => {
   return isLoading || !isRequested ? (
     <GlobalLoader />
   ) : (
-    <div className={styles.layout}>
+    <div
+      className={cn({
+        [styles.layout_light]: theme === 'light',
+        [styles.layout_dark]: theme === 'dark',
+      })}>
       <Header />
       <div className={styles.content}>
         <Outlet />

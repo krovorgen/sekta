@@ -4,8 +4,9 @@
   align-items: center;
   justify-content: space-between;
   box-sizing: border-box;
-  border-bottom: 1px solid rgb(0 0 0 / 15.9%);
-  background: #fff;
+  border-bottom: var(--colors-border-bottom);
+  background: var(--colors-bg);
+  box-shadow: var(--shadow);
   padding: 0;
   position: sticky;
   top: 0;
@@ -18,4 +19,19 @@
   align-items: center;
   flex-grow: 1;
   justify-content: flex-end;
+}
+
+.switchThemeBtn {
+  padding: 0 1rem;
+  margin: 15px;
+  background-color: var(--colors-ui-base);
+  box-shadow: var(--shadow);
+  line-height: 2.5;
+  border-radius: var(--radii);
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-text);
+  cursor: pointer;
 }

@@ -9,8 +9,9 @@ import styles from './Root.module.scss'
 import { withUserCheck } from '../../HOC/withUserCheck'
 import { PropsWithUser } from '../../types'
 
-const RootPage: FC<PropsWithUser> = ({ user }) => {
+const RootPage: FC<PropsWithUser> = () => {
   const navigate = useNavigate()
+
   const onStartGameBtnClick = () => navigate(RoutePath.Game)
 
   return (
@@ -20,7 +21,7 @@ const RootPage: FC<PropsWithUser> = ({ user }) => {
           FIER RUNNER
         </Typography.Title>
         <Gap size="xs" />
-        <Typography.Title tag="h2" color="static-primary-dark" view="small">
+        <Typography.Title tag="h2" view="small">
           Описание игры Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           Etiam at sapien risus. Nulla blandit ullamcorper turpis ut rhoncus.
           Cras gravida nibh id mauris rutrum ornare. Mauris efficitur arcu
