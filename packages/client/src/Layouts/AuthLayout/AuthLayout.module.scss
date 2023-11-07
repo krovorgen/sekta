@@ -1,5 +1,5 @@
-@import "../../scss/helpers/variables";
-@import "../../scss/helpers/mixins";
+@import '../../scss/helpers/variables';
+@import '../../scss/helpers/mixins';
 
 .root {
   display: flex;
@@ -7,14 +7,13 @@
   justify-content: center;
   min-height: 100vh;
 
-  @include backgroundImg_light
+  @include backgroundImg_light;
 }
-
 
 .box {
   max-width: 400px;
 
-  @include box
+  @include box;
 }
 
 .title {

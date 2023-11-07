@@ -1,4 +1,4 @@
-@import "../../scss/helpers/mixins";
+@import '../../scss/helpers/mixins';
 
 .pageContainer {
   width: 100%;
@@ -22,7 +22,7 @@
 .box {
   display: flex;
   align-items: center;
-  
+
   @include box;
 
   button {

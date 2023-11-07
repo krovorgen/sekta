@@ -7,7 +7,16 @@ import {
   useNavigate,
   useRouteError,
 } from 'react-router-dom'
-import { ErrorPage } from './ErrorPage'
+import { ErrorPage as $ErrorPage } from './ErrorPage'
+import { store } from '../../redux/store'
+
+import { Provider } from 'react-redux'
+
+const ErrorPage = () => (
+  <Provider store={store}>
+    <$ErrorPage />
+  </Provider>
+)
 
 // Mock the useNavigate hook
 jest.mock('react-router-dom', () => ({

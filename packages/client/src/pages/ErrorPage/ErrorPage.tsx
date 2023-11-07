@@ -16,6 +16,9 @@ type ErrorResponse = {
 
 export const ErrorPage: FC = () => {
   const theme = useAppSelector(state => state.auth.theme)
+  const typographyTheme =
+    theme === 'light' ? 'static-secondary-dark' : 'secondary-inverted'
+  const btnTheme = theme === 'light' ? 'default' : 'inverted'
 
   const navigate = useNavigate()
   const error = useRouteError() as ErrorResponse
@@ -52,21 +55,11 @@ export const ErrorPage: FC = () => {
         [styles.root_dark]: theme === 'dark',
       })}>
       <div className={styles.container}>
-        <Typography.Title
-          tag="h1"
-          color={
-            theme === 'light' ? 'static-secondary-dark' : 'secondary-inverted'
-          }
-          view="xlarge">
+        <Typography.Title tag="h1" color={typographyTheme} view="xlarge">
           {error?.status}
         </Typography.Title>
         <Gap size="xs" />
-        <Typography.Title
-          color={
-            theme === 'light' ? 'static-secondary-dark' : 'secondary-inverted'
-          }
-          tag="h2"
-          view="small">
+        <Typography.Title color={typographyTheme} tag="h2" view="small">
           {errorMessage}
         </Typography.Title>
         <Gap size="xs" />
@@ -74,7 +67,7 @@ export const ErrorPage: FC = () => {
           onClick={() => navigate(-1)}
           view="link"
           size="xxs"
-          colors={theme === 'light' ? 'default' : 'inverted'}>
+          colors={btnTheme}>
           Вернуться
         </Button>
       </div>

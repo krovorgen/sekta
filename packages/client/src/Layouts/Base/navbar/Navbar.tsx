@@ -1,4 +1,4 @@
-import React, { useEffect, ReactNode } from 'react'
+import React, { useEffect, ReactNode, FC } from 'react'
 import { BsMoonFill, BsSun } from 'react-icons/bs'
 import styles from './Navbar.module.scss'
 import { useAppDispatch, useAppSelector } from '../../../redux/store'
@@ -8,7 +8,12 @@ interface NavbarProps {
   children: ReactNode
 }
 
-const ThemeSwtcher = ({ onClick, theme }) => {
+type Props = {
+  onClick: () => void
+  theme: string
+}
+
+const ThemeSwtcher: FC<Props> = ({ onClick, theme }) => {
   return (
     <button className={styles.switchThemeBtn} onClick={onClick}>
       {theme === 'light' && (
@@ -35,10 +40,6 @@ const Navbar = ({ children }: NavbarProps) => {
   const toggleTheme = () => {
     dispatch(setTheme(theme === 'light' ? 'dark' : 'light'))
   }
-
-  useEffect(() => {
-    // dispatch(setTheme('light'))
-  }, [])
 
   useEffect(() => {
     document.body.setAttribute('data-theme', theme)

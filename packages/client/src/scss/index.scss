@@ -1,9 +1,9 @@
-@import "core/fonts";
-@import "helpers/mixins";
-@import "helpers/variables";
-@import "core/reset";
-@import "core/global";
-@import "@alfalab/core-components/vars/index.css";
+@import 'core/fonts';
+@import 'helpers/mixins';
+@import 'helpers/variables';
+@import 'core/reset';
+@import 'core/global';
+@import '@alfalab/core-components/vars/index.css';
 
 * {
   box-sizing: border-box;
@@ -13,7 +13,7 @@
   --radii: 0.5rem;
 }
 
-body[data-theme="dark"] {
+body[data-theme='dark'] {
   --colors-text: hsl(0deg 0% 100%);
   --colors-bg: hsl(210deg 1% 34%);
   --colors-border-bottom: 1px solid rgb(245 242 242 / 47.2%);
@@ -23,7 +23,7 @@ body[data-theme="dark"] {
   --shadow: rgb(245 245 245 / 20%) 0 0 8px;
 }
 
-body[data-theme="light"] {
+body[data-theme='light'] {
   --colors-text: hsl(200deg 15% 8%);
   --colors-bg: hsl(0deg 0% 98%);
   --colors-border-bottom: 1px solid rgb(0 0 0 / 57%);

@@ -1,5 +1,5 @@
-@import "../../scss/helpers/variables";
-@import "../../scss/helpers/mixins";
+@import '../../scss/helpers/variables';
+@import '../../scss/helpers/mixins';
 
 .root {
   display: flex;
@@ -7,7 +7,7 @@
   justify-content: center;
   min-height: 100vh;
 
-  @include backgroundImg_light
+  @include backgroundImg_light;
 }
 
 .root_dark {
@@ -16,7 +16,7 @@
   justify-content: center;
   min-height: 100vh;
 
-  @include backgroundImg_dark
+  @include backgroundImg_dark;
 }
 
 .container {

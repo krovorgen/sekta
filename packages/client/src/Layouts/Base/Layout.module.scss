@@ -1,4 +1,4 @@
-@import "../../scss/helpers/mixins";
+@import '../../scss/helpers/mixins';
 
 .layout {
   min-width: 100%;
@@ -9,12 +9,12 @@
 
 .layout_light {
   @extend .layout;
-  @include backgroundImg_light
+  @include backgroundImg_light;
 }
 
 .layout_dark {
   @extend .layout;
-  @include backgroundImg_dark
+  @include backgroundImg_dark;
 }
 
 .content {
