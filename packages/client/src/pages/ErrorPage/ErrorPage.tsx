@@ -5,7 +5,8 @@ import { isRouteErrorResponse } from 'react-router'
 import { Typography } from '@alfalab/core-components/typography/cssm'
 import { Gap } from '@alfalab/core-components/gap/cssm'
 import { Button } from '@alfalab/core-components/button'
-
+import { useAppSelector } from '../../redux/store'
+import cn from 'classnames'
 import styles from './ErrorPage.module.scss'
 
 type ErrorResponse = {
@@ -14,6 +15,8 @@ type ErrorResponse = {
 }
 
 export const ErrorPage: FC = () => {
+  const theme = useAppSelector(state => state.auth.theme)
+
   const navigate = useNavigate()
   const error = useRouteError() as ErrorResponse
 
@@ -44,17 +47,34 @@ export const ErrorPage: FC = () => {
   }
 
   return (
-    <div className={styles.root}>
+    <div
+      className={cn(styles.root, {
+        [styles.root_dark]: theme === 'dark',
+      })}>
       <div className={styles.container}>
-        <Typography.Title tag="h1" color="static-secondary-dark" view="xlarge">
+        <Typography.Title
+          tag="h1"
+          color={
+            theme === 'light' ? 'static-secondary-dark' : 'secondary-inverted'
+          }
+          view="xlarge">
           {error?.status}
         </Typography.Title>
         <Gap size="xs" />
-        <Typography.Title tag="h2" color="static-secondary-dark" view="small">
+        <Typography.Title
+          color={
+            theme === 'light' ? 'static-secondary-dark' : 'secondary-inverted'
+          }
+          tag="h2"
+          view="small">
           {errorMessage}
         </Typography.Title>
         <Gap size="xs" />
-        <Button onClick={() => navigate(-1)} view="link" size="xxs">
+        <Button
+          onClick={() => navigate(-1)}
+          view="link"
+          size="xxs"
+          colors={theme === 'light' ? 'default' : 'inverted'}>
           Вернуться
         </Button>
       </div>

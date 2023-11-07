@@ -11,11 +11,13 @@ import { RootState } from '../../store'
 export type AuthState = {
   user: User | null
   loadingStatus: 'idle' | 'loaded' | 'error'
+  theme: string
 }
 
 const initialState: AuthState = {
   user: null,
   loadingStatus: 'idle',
+  theme: 'light',
 }
 
 export const getUserTC = createAsyncThunk('auth/getUser', async () => {
@@ -29,7 +31,11 @@ export const logoutTC = createAsyncThunk('auth/logout', async () => {
 const authSlice = createSlice({
   name: 'auth',
   initialState: () => initialState,
-  reducers: {},
+  reducers: {
+    setTheme(state, { payload }) {
+      state.theme = payload
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(getUserTC.fulfilled, (state, action: PayloadAction<User>) => {
@@ -47,9 +53,11 @@ const authSlice = createSlice({
 
 export const authSelector = (state: RootState) => state.auth
 
+
 export const userLoadingStatusSelector = createSelector(
   authSelector,
   state => state.loadingStatus
 )
 
+export const { setTheme } = authSlice.actions
 export const authReducer = authSlice.reducer

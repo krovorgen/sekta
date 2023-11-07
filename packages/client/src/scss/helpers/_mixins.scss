@@ -10,8 +10,14 @@
   }
 }
 
-@mixin backgroundImg {
+@mixin backgroundImg_light {
   background-image: url("../../assets/images/AuthLayout/bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+@mixin backgroundImg_dark {
+  background-image: url("../../assets/images/AuthLayout/bg_dark.jpg");
   background-size: cover;
   background-repeat: no-repeat;
 }
