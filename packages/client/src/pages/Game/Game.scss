@@ -1,4 +1,4 @@
-@import "../../scss/helpers/variables";
+@import '../../scss/helpers/variables';
 
 .game-wrapper {
   width: auto;
@@ -57,7 +57,8 @@
 }
 
 @keyframes counter {
-  0% {}
+  0% {
+  }
 
   50% {
     transform: translate(0, -1200px);

@@ -33,7 +33,7 @@ async function startServer() {
       root: srcPath,
       appType: 'custom',
     })
-
+    require.extensions['.css'] = () => undefined
     app.use(vite.middlewares)
   }
 
