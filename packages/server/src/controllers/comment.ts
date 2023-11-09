@@ -5,7 +5,7 @@ export const commentController = {
   async getComments(req: Request, res: Response) {
     try {
       const comments = await Comment.findAll({
-        where: { id_topic: req.query.id_topic, id_parent: null },
+        where: { id_topic: req.query.id_topic },
       })
       res.status(200).json(comments)
     } catch (error) {

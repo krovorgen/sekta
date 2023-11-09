@@ -17,20 +17,12 @@ import { topicRouter } from './src/routes/topic-router'
 import { commentsRoutes } from './src/routes/comments-router'
 import { checkAuth } from './src/middlewares/checkAuth'
 
-// GET /forum/topic
-// POST /forum/topic (body)
-// GET /forum/topic/:id
-//
-// GET /forum/comment/?id_topic=123
-//   POST /forum/comment (body)
-// GET /forum/comment/:id
 const isDev = () => process.env.NODE_ENV === 'development'
 
 async function startServer() {
   await createClientAndConnect()
   const app = express()
 
-  app.use(express.json())
   app.use(express.json(), cookieParser(), cors())
 
   const port = Number(process.env.SERVER_PORT) || 3000
