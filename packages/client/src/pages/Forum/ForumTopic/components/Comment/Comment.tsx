@@ -8,9 +8,9 @@ import { Comment } from '@alfalab/core-components/comment'
 import styles from './Comment.module.scss'
 
 export type CommentProps = {
-  id: number
+  id: string
   text: string
-  id_author: number
+  id_author: string
   date: string
 }
 

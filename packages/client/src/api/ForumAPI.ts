@@ -3,18 +3,18 @@ import { topics, comments } from '../pages/Forum/temporary/data'
 import { BaseAPI } from './BaseApi'
 
 export type TopicDTO = {
-  id: number
+  id: string
   created_at: string
-  id_author: number
+  id_author: string
   title: string
   content: string
 }
 
 export type CommentDTO = {
-  id: number
-  id_topic: number
-  id_parent?: number
-  id_author: number
+  id: string
+  id_topic: string
+  id_parent?: string | null
+  id_author: string
   created_at: string
   content: string
 }
@@ -57,7 +57,7 @@ class Forum extends BaseAPI {
     // return this.http.post(`forum/topic`, { json: data }).json()
   }
 
-  getTopicById(id: number) /* : Promise<unknown> */ {
+  getTopicById(id: string) /* : Promise<unknown> */ {
     let temp = {}
     topics.map(elem => {
       if (id === elem.id) {
@@ -68,7 +68,7 @@ class Forum extends BaseAPI {
     // return this.http.get(`forum/topic/${id}`).json()
   }
 
-  getCommentsByTopicsId(id_topic: number) /* : Promise<unknown> */ {
+  getCommentsByTopicsId(id_topic: string) /* : Promise<unknown> */ {
     const temp: CommentDTO[] = []
     comments.map(elem => {
       if (id_topic === elem.id_topic) {
@@ -80,7 +80,7 @@ class Forum extends BaseAPI {
   }
 
   postCommentsToTopic(
-    id_topic: number,
+    id_topic: string,
     data: CommentDTO // нужно заменить на sendCommentDTO
   ) /* : Promise<unknown> */ {
     comments.push(data)
@@ -89,7 +89,7 @@ class Forum extends BaseAPI {
     //   .json()
   }
 
-  getUserByID(id_author: number): Promise<UserByIdDTO> {
+  getUserByID(id_author: string): Promise<UserByIdDTO> {
     return this.http.get(`user/${id_author}`).json()
   }
 

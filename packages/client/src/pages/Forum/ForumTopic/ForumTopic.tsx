@@ -35,9 +35,11 @@ export const ForumTopicPage: FC<PropsWithUser> = () => {
   const { topicId } = useParams()
   const fetchData = async () => {
     try {
-      setTopic((await ForumAPI.getTopicById(Number(topicId))) as TopicDTO)
+      setTopic((await ForumAPI.getTopicById(topicId as string)) as TopicDTO)
       setComments(
-        (await ForumAPI.getCommentsByTopicsId(Number(topicId))) as CommentDTO[]
+        (await ForumAPI.getCommentsByTopicsId(
+          topicId as string
+        )) as CommentDTO[]
       )
     } catch (error) {
       consoleLogger(error)
@@ -52,11 +54,11 @@ export const ForumTopicPage: FC<PropsWithUser> = () => {
   const onSendComment = async (e: FormEvent) => {
     e.preventDefault()
     try {
-      await ForumAPI.postCommentsToTopic(Number(topicId), {
-        id: Math.floor(Math.random() * 10),
-        id_topic: Number(topicId),
-        id_parent: 0,
-        id_author: user?.id as number,
+      await ForumAPI.postCommentsToTopic(topicId as string, {
+        id: Math.floor(Math.random() * 10).toString(),
+        id_topic: topicId as string,
+        id_parent: null,
+        id_author: (user?.id as number).toString(),
         created_at: Math.floor(Math.random() * 1000).toString(),
         content: inputValue,
       })

@@ -27,7 +27,7 @@ export const ForumsTable = ({ data }: TableProps) => {
     return rows.slice(page * perPage).slice(0, perPage)
   }, [rows, page, perPage])
 
-  const handleRoute = (id: number) => {
+  const handleRoute = (id: string) => {
     navigate(`/${RoutePath.Forum}/${id}`)
   }
 

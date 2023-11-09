@@ -45,8 +45,8 @@ export const ForumPage: FC<PropsWithUser> = () => {
     e.preventDefault()
     try {
       await ForumAPI.postTopic({
-        id: Math.floor(Math.random() * 10),
-        id_author: user?.id as number,
+        id: Math.floor(Math.random() * 10).toString(),
+        id_author: (user?.id as number).toString(),
         created_at: Math.floor(Math.random() * 1000).toString(),
         title: titleValue,
         content: firstMessageValue,
