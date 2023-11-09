@@ -43,7 +43,6 @@ export const ForumPage: FC<PropsWithUser> = () => {
 
   const handleSendNewTopic = async (e: FormEvent) => {
     e.preventDefault()
-    console.log(titleValue, firstMessageValue)
     try {
       await ForumAPI.postTopic({
         id: Math.floor(Math.random() * 10),
@@ -67,11 +66,9 @@ export const ForumPage: FC<PropsWithUser> = () => {
   }
 
   const onSubmit = (event: FormEvent<Element>) => {
-    console.log(action)
     if (action === 'newTopic') {
       handleSendNewTopic(event)
     } else if (action === 'editTopic') {
-      console.log('handleEditTopic')
       handleClose()
       setTitleValue('')
       setFirstMessageValue('')

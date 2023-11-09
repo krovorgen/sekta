@@ -22,7 +22,6 @@ export const ForumsTable = ({ data }: TableProps) => {
   const handlePageChange = (pageIndex: number) => setPage(pageIndex)
 
   const pagesCount = Math.ceil(data.length / perPage)
-  console.log(data)
   const rows = useMemo(() => data, [data])
   const currentPageData = useMemo(() => {
     return rows.slice(page * perPage).slice(0, perPage)

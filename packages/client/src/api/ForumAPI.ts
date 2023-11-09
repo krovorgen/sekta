@@ -43,12 +43,6 @@ export type sendCommentDTO = {
   content: string
 }
 
-// const [topicsFromAPI, setTopicsFromAPI] = useState<TopicDTO[]>([])
-// const [commentsFromAPI, setCommentsFromAPI] = useState<CommentDTO[]>([])
-
-// setTopicsFromAPI(topics)
-// setCommentsFromAPI(comments)
-
 class Forum extends BaseAPI {
   getTopics() /*: Promise<unknown> */ {
     // return this.http.get('forum/topic').json()
@@ -89,8 +83,6 @@ class Forum extends BaseAPI {
     id_topic: number,
     data: CommentDTO // нужно заменить на sendCommentDTO
   ) /* : Promise<unknown> */ {
-    // console.log(id_topic)
-    // console.log(data)
     comments.push(data)
     // return this.http
     //   .post(`forum/comment/?id_topic=${id_topic}`, { json: data })
