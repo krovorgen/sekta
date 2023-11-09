@@ -20,7 +20,10 @@
     "http-proxy-middleware": "^2.0.6",
     "jsesc": "^3.0.2",
     "pg": "^8.8.0",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.34.0",
+    "sequelize-typescript": "^2.1.5"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.5",

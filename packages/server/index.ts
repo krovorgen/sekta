@@ -12,12 +12,24 @@ import * as fs from 'fs'
 import * as path from 'path'
 import jsesc from 'jsesc'
 import { loadState } from './preload'
+import { createClientAndConnect } from './db'
+import { topicRouter } from './src/routes/topic-router'
+import { commentsRoutes } from './src/routes/comments-router'
 
+// GET /forum/topic
+// POST /forum/topic (body)
+// GET /forum/topic/:id
+//
+// GET /forum/comment/?id_topic=123
+//   POST /forum/comment (body)
+// GET /forum/comment/:id
 const isDev = () => process.env.NODE_ENV === 'development'
 
 async function startServer() {
+  await createClientAndConnect()
   const app = express()
 
+  app.use(express.json())
   app.use(cookieParser(), cors())
 
   const port = Number(process.env.SERVER_PORT) || 3000
@@ -36,6 +48,9 @@ async function startServer() {
     require.extensions['.css'] = () => undefined
     app.use(vite.middlewares)
   }
+
+  app.use('/api', topicRouter)
+  app.use('/api', commentsRoutes)
 
   app.use(
     '/api/v2',
