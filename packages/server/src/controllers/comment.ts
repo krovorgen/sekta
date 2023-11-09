@@ -16,7 +16,7 @@ export const commentController = {
   async createComment(req: Request, res: Response) {
     try {
       const comment = await Comment.create(req.body)
-      res.status(200).json(comment)
+      res.status(201).json(comment)
     } catch (error) {
       res.status(500).json({ error })
     }

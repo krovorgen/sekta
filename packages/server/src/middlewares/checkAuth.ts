@@ -7,8 +7,7 @@ export const checkAuth = async (
   next: NextFunction
 ) => {
   const authCookie = await req.cookies.authCookie
-  if (authCookie) {
-    return next()
-  }
-  res.redirect('/signin')
+  if (authCookie) return next()
+
+  res.sendStatus(401)
 }

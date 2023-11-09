@@ -19,10 +19,6 @@ export const commentModel: ModelAttributes<Model, CommentType> = {
   id_topic: {
     type: DataType.STRING,
     allowNull: false,
-    references: {
-      model: 'Topic',
-      key: 'id',
-    },
   },
   id_parent: {
     type: DataType.STRING,

@@ -15,7 +15,7 @@ export const topicController = {
     console.log(req.body)
     try {
       const topic = await Topic.create(req.body)
-      res.status(200).json(topic)
+      res.status(201).json(topic)
     } catch (error) {
       res.status(500).json({ error })
     }

@@ -15,6 +15,7 @@ import { loadState } from './preload'
 import { createClientAndConnect } from './db'
 import { topicRouter } from './src/routes/topic-router'
 import { commentsRoutes } from './src/routes/comments-router'
+import { checkAuth } from './src/middlewares/checkAuth'
 
 // GET /forum/topic
 // POST /forum/topic (body)
@@ -30,7 +31,7 @@ async function startServer() {
   const app = express()
 
   app.use(express.json())
-  app.use(cookieParser(), cors())
+  app.use(express.json(), cookieParser(), cors())
 
   const port = Number(process.env.SERVER_PORT) || 3000
 
@@ -49,8 +50,8 @@ async function startServer() {
     app.use(vite.middlewares)
   }
 
-  app.use('/api', topicRouter)
-  app.use('/api', commentsRoutes)
+  app.use('/api', checkAuth, topicRouter)
+  app.use('/api', checkAuth, commentsRoutes)
 
   app.use(
     '/api/v2',
