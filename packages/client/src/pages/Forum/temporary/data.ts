@@ -1,123 +1,93 @@
-export interface ITopic {
-  id: number
-  date: string
-  title: string
-  firstMessage?: string | null
-  lastMessage?: string | null
-  qty?: number | null
-  unrd?: number
-  remove?: boolean
-  edit?: boolean
-  comments?: {
-    id: number
-    author: string
-    date: string
-    text: string
-  }[]
-}
+import { TopicDTO, CommentDTO } from '../../../api/ForumAPI'
 
-const data: ITopic[] = [
+const topics: TopicDTO[] = [
   {
     id: 28,
-    date: '30.06.2022',
+    created_at: '30.06.2022',
+    id_author: 1234567,
     title: 'Мутная тема',
-    firstMessage: 'скинуться по пятихатке, просто так',
-    qty: 1,
-    unrd: undefined,
-    remove: true,
-    edit: true,
-    comments: [
-      {
-        id: 1,
-        author: 'author',
-        date: 'date',
-        text: 'text text text text text text text text text text text',
-      },
-      {
-        id: 2,
-        author: 'author2',
-        date: 'date2',
-        text: 'text2 text text text text text text text text text text',
-      },
-      {
-        id: 3,
-        author: 'author',
-        date: 'date',
-        text: 'text text text text text text text text text text text',
-      },
-    ],
+    content: 'скинуться по пятихатке, просто так',
   },
   {
     id: 12,
-    date: '30.06.2022',
+    created_at: '30.06.2022',
+    id_author: 1234567,
     title: 'баги',
-    firstMessage: 'В этой теме предлагается описывать баги',
-    lastMessage: 'Ваше приложение один сплошной баг, бугагашеньки',
-    qty: 99,
-    unrd: 88,
-    edit: true,
-    comments: [
-      {
-        id: 4,
-        author: 'author',
-        date: 'date',
-        text: 'Ваше приложение один сплошной баг, бугагашеньки 1',
-      },
-      {
-        id: 5,
-        author: 'author2',
-        date: 'date2',
-        text: 'Ваше приложение один сплошной баг, бугагашеньки 2',
-      },
-      {
-        id: 6,
-        author: 'author',
-        date: 'date',
-        text: 'Ваше приложение один сплошной баг, бугагашеньки 3',
-      },
-    ],
+    content: 'В этой теме предлагается описывать баги',
   },
   {
     id: 55,
-    date: '30.06.2022',
+    created_at: '30.06.2022',
+    id_author: 1234567,
     title: 'Нововведения',
-    firstMessage: 'Ввели в действие вот эту вот игру',
-    lastMessage: 'Вся ваша радость, благодаря нововведениям',
-    qty: 130,
-    unrd: 120,
-    remove: true,
-    comments: [
-      {
-        id: 1,
-        author: 'author 1',
-        date: 'date',
-        text: 'Вся ваша радость, благодаря нововведениям 1',
-      },
-      {
-        id: 7,
-        author: 'author2',
-        date: 'date2',
-        text: 'Вся ваша радость, благодаря нововведениям 2',
-      },
-      {
-        id: 9,
-        author: 'author 1',
-        date: 'date',
-        text: 'Вся ваша радость, благодаря нововведениям 3',
-      },
-    ],
+    content: 'Ввели в действие вот эту вот игру',
   },
 ]
 
-Array(100)
-  .fill('')
-  .forEach((_, i) =>
-    data.push({
-      id: (i + 1) * 100,
-      date: '20.10.2021',
-      title: `Топик #${i + 1}`,
-      qty: 1000000 + (i + 1) * 10000,
-    })
-  )
+const comments: CommentDTO[] = [
+  {
+    id: 1,
+    id_topic: 28,
+    id_author: 1347843,
+    created_at: '30.06.2022',
+    content: 'Я согласен - Дмитрий А.',
+  },
+  {
+    id: 2,
+    id_topic: 28,
+    id_author: 1347155,
+    created_at: '30.06.2022',
+    content: 'Я против - George Stark',
+  },
+  {
+    id: 3,
+    id_topic: 28,
+    id_author: 1347385,
+    created_at: '30.06.2022',
+    content: 'Я тоже согласна - levVPaname',
+  },
+  {
+    id: 4,
+    id_topic: 12,
+    id_author: 1347119,
+    created_at: '30.06.2022',
+    content: 'Afsaf Anatolevich',
+  },
+  {
+    id: 5,
+    id_topic: 12,
+    id_author: 1345888,
+    created_at: '30.06.2022',
+    content: 'Pasdf Sekta8',
+  },
+  {
+    id: 6,
+    id_topic: 12,
+    id_author: 1347385,
+    created_at: '30.06.2022',
+    content: 'Ваше приложение один сплошной баг, бугагашеньки 3. levVPaname',
+  },
+  {
+    id: 7,
+    id_topic: 55,
+    id_author: 1347843,
+    created_at: '30.06.2022',
+    content: 'Вся ваша радость, благодаря нововведениям 1. Дмитрий А.',
+  },
+  {
+    id: 8,
+    id_topic: 55,
+    id_author: 1347119,
+    created_at: '30.06.2022',
+    content: 'Вся ваша радость, благодаря нововведениям 2. Afsaf Anatolevich',
+  },
+  {
+    id: 9,
+    id_topic: 55,
+    id_author: 1347155,
+    created_at: '30.06.2022',
+    content: 'Вся ваша радость, благодаря нововведениям 3. George Stark',
+  },
+]
 
-export { data }
+export { topics, comments }

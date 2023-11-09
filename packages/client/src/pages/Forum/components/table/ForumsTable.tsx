@@ -8,20 +8,20 @@ import { Indicator } from '@alfalab/core-components/indicator'
 import { ButtonDesktop } from '@alfalab/core-components/button/desktop'
 
 import { RoutePath } from '../../../../constants/routes'
-import { ITopic } from '../../temporary/data'
+import { TopicDTO } from '../../../../api/ForumAPI'
 import styles from './ForumsTable.module.scss'
 
 export type TableProps = {
-  data: ITopic[]
-  handleOpenModalEditTopic: (e: { stopPropagation: () => void }) => void
-  handleDeleteTopic: (e: { stopPropagation: () => void }) => void
+  data: TopicDTO[]
+  // handleOpenModalEditTopic: (e: { stopPropagation: () => void }) => void
+  // handleDeleteTopic: (e: { stopPropagation: () => void }) => void
 }
 
 export const ForumsTable = ({
   data,
-  handleOpenModalEditTopic,
-  handleDeleteTopic,
-}: TableProps) => {
+}: // handleOpenModalEditTopic,
+// handleDeleteTopic,
+TableProps) => {
   const navigate = useNavigate()
   const [perPage, setPerPage] = useState(5)
   const [page, setPage] = useState(0)
@@ -38,11 +38,7 @@ export const ForumsTable = ({
     return data.slice(page * perPage).slice(0, perPage)
   }, [data, page, perPage])
 
-  const handleRoute = (
-    id: number,
-    element: React.MouseEvent<HTMLTableRowElement, MouseEvent>
-  ) => {
-    console.log(`clicked: ${id}`, element)
+  const handleRoute = (id: number) => {
     navigate(`/${RoutePath.Forum}/${id}`)
   }
 
@@ -61,24 +57,13 @@ export const ForumsTable = ({
       <Table.THead>
         <Table.THeadCell title="Дата">Дата</Table.THeadCell>
         <Table.THeadCell title="Заголовок">Заголовок</Table.THeadCell>
-        <Table.THeadCell
-          title="Сообщений/непрочитанных"
-          textAlign="left"
-          width={150}>
-          Сообщений / непрочитанных
-        </Table.THeadCell>
-        <Table.THeadCell title="Действия" textAlign="left" width={268}>
-          Действия
-        </Table.THeadCell>
       </Table.THead>
       <Table.TBody>
-        {currentPageData.map((row: ITopic) => (
-          <Table.TRow
-            key={row.id}
-            onClick={element => handleRoute(row.id, element)}>
+        {currentPageData.map((row: TopicDTO) => (
+          <Table.TRow key={row.id} onClick={() => handleRoute(row.id)}>
             <Table.TCell>
               <Typography.Text view="primary-small" tag="div">
-                {row.date}
+                {row.created_at}
               </Typography.Text>
             </Table.TCell>
 
@@ -88,60 +73,9 @@ export const ForumsTable = ({
                   {row.title}
                 </Typography.Text>
                 <Typography.Text view="primary-small" color="secondary">
-                  {row.lastMessage}
+                  {row.content}
                 </Typography.Text>
               </Space>
-            </Table.TCell>
-
-            <Table.TCell>
-              <div>
-                <Indicator
-                  height={30}
-                  value={row.qty as number}
-                  backgroundColor="var(--color-light-graphic-positive)"
-                  color="var(--color-static-text-primary-light)"
-                  border={{
-                    width: 4,
-                    color: 'var(--badge-icon-bg-color)',
-                  }}
-                />
-                {'  '}/{'  '}
-                {row.unrd ? (
-                  <Indicator
-                    height={30}
-                    value={row.unrd}
-                    backgroundColor="var(--color-light-bg-accent)"
-                    color="var(--color-static-text-primary-light)"
-                    border={{
-                      width: 4,
-                      color: 'var(--badge-icon-bg-color)',
-                    }}
-                  />
-                ) : (
-                  ''
-                )}
-              </div>
-            </Table.TCell>
-
-            <Table.TCell>
-              {row.edit && (
-                <ButtonDesktop
-                  className={styles.button}
-                  view="accent"
-                  size="xs"
-                  onClick={handleOpenModalEditTopic}>
-                  Редактировать
-                </ButtonDesktop>
-              )}
-              {row.remove && (
-                <ButtonDesktop
-                  className={styles.button}
-                  view="accent"
-                  size="xs"
-                  onClick={handleDeleteTopic}>
-                  Удалить
-                </ButtonDesktop>
-              )}
             </Table.TCell>
           </Table.TRow>
         ))}
