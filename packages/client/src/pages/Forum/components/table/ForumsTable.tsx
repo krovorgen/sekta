@@ -33,10 +33,11 @@ TableProps) => {
   const handlePageChange = (pageIndex: number) => setPage(pageIndex)
 
   const pagesCount = Math.ceil(data.length / perPage)
-
+  console.log(data)
+  const rows = useMemo(() => data, [data])
   const currentPageData = useMemo(() => {
-    return data.slice(page * perPage).slice(0, perPage)
-  }, [data, page, perPage])
+    return rows.slice(page * perPage).slice(0, perPage)
+  }, [rows, page, perPage])
 
   const handleRoute = (id: number) => {
     navigate(`/${RoutePath.Forum}/${id}`)

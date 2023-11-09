@@ -52,14 +52,13 @@ export type sendCommentDTO = {
 class Forum extends BaseAPI {
   getTopics() /*: Promise<unknown> */ {
     // return this.http.get('forum/topic').json()
-    console.log(topics)
-    return topics
+    const tempArr = [...topics] // Костыль, что бы в useMemo попадал гарантированно новый объект, так то при фетче этого быть не должно
+    return tempArr
   }
 
   postTopic(
     data: TopicDTO // поменять на sendTopicDTO
   ) /* : Promise<unknown> */ {
-    console.log(data)
     topics.unshift(data)
     // return this.http.post(`forum/topic`, { json: data }).json()
   }

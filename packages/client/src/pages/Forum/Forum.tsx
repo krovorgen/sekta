@@ -28,8 +28,7 @@ export const ForumPage: FC<PropsWithUser> = () => {
 
   const fetchData = async () => {
     try {
-      await setTopics(await ForumAPI.getTopics())
-      console.log(topics)
+      setTopics(await ForumAPI.getTopics())
     } catch (error) {
       if (error instanceof HTTPError) {
         const responseBody = await error.response.json()
