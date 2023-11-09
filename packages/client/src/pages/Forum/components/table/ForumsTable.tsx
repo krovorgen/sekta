@@ -4,24 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { Table } from '@alfalab/core-components/table'
 import { Typography } from '@alfalab/core-components/typography'
 import { Space } from '@alfalab/core-components/space'
-import { Indicator } from '@alfalab/core-components/indicator'
-import { ButtonDesktop } from '@alfalab/core-components/button/desktop'
 
 import { RoutePath } from '../../../../constants/routes'
 import { TopicDTO } from '../../../../api/ForumAPI'
-import styles from './ForumsTable.module.scss'
 
-export type TableProps = {
-  data: TopicDTO[]
-  // handleOpenModalEditTopic: (e: { stopPropagation: () => void }) => void
-  // handleDeleteTopic: (e: { stopPropagation: () => void }) => void
-}
+export type TableProps = { data: TopicDTO[] }
 
-export const ForumsTable = ({
-  data,
-}: // handleOpenModalEditTopic,
-// handleDeleteTopic,
-TableProps) => {
+export const ForumsTable = ({ data }: TableProps) => {
   const navigate = useNavigate()
   const [perPage, setPerPage] = useState(5)
   const [page, setPage] = useState(0)

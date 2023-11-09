@@ -1,14 +1,12 @@
 import React, { FC, FormEvent, useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { consoleLogger } from '../../../utils/consoleError'
 
 import { withUserCheck } from '../../../HOC/withUserCheck'
 import { PropsWithUser } from '../../../types'
 
-import styles from './ForumTopic.module.scss'
 import { PaperAirplaneLineMIcon } from '@alfalab/icons-glyph/PaperAirplaneLineMIcon'
 import { ArrowBackHeavyMIcon } from '@alfalab/icons-glyph/ArrowBackHeavyMIcon'
-
-// import { data } from '../temporary/data'
 
 import { ActionButton } from '@alfalab/core-components/action-button'
 import { Typography } from '@alfalab/core-components/typography'
@@ -20,11 +18,11 @@ import { useAppSelector } from '../../../redux/store'
 
 import { CommentDTO, ForumAPI, TopicDTO } from '../../../api/ForumAPI'
 
-import { CommentProps, TopicsComment } from './components/Comment/Comment'
-import { HTTPError } from 'ky'
+import { TopicsComment } from './components/Comment/Comment'
+
+import styles from './ForumTopic.module.scss'
 
 export const ForumTopicPage: FC<PropsWithUser> = () => {
-  // export const ForumTopicPage: FC<PropsWithUser>
   const navigate = useNavigate()
   const user = useAppSelector(state => state.auth.user)
   const theme = useAppSelector(state => state.auth.theme)
@@ -37,27 +35,17 @@ export const ForumTopicPage: FC<PropsWithUser> = () => {
   const { topicId } = useParams()
   const fetchData = async () => {
     try {
-      // setAuthor(await ForumAPI.getUserByID(id_author))
       setTopic((await ForumAPI.getTopicById(Number(topicId))) as TopicDTO)
       setComments(
         (await ForumAPI.getCommentsByTopicsId(Number(topicId))) as CommentDTO[]
       )
     } catch (error) {
-      if (error instanceof HTTPError) {
-        const responseBody = await error.response.json()
-        console.log(responseBody.reason)
-      }
+      consoleLogger(error)
     }
   }
   useEffect(() => {
     fetchData()
   }, [])
-
-  // data.forEach((elem: TopicDTO) => {
-  //   if (elem.id === Number(topicId)) {
-  //     topic = elem
-  //   }
-  // })
 
   const toggleVisiblity = () => setIsVisible(prev => !prev)
 
@@ -77,18 +65,9 @@ export const ForumTopicPage: FC<PropsWithUser> = () => {
       setInputValue('')
       toggleVisiblity()
     } catch (error) {
-      if (error instanceof HTTPError) {
-        const responseBody = await error.response.json()
-        console.log(responseBody.reason)
-        setTitle('Что то пошло не так...')
-      }
+      consoleLogger(error)
+      setTitle('Что то пошло не так...')
     }
-    // topic.comments?.push({
-    //   id: Math.floor(Math.random() * 10),
-    //   author: 'string;',
-    //   date: Math.floor(Math.random() * 1000).toString(),
-    //   text: inputValue,
-    // })
   }
 
   const hideNotification = React.useCallback(() => setIsVisible(false), [])

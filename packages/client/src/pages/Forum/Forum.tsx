@@ -1,6 +1,6 @@
 import { FC, useState, FormEvent, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { HTTPError } from 'ky'
+import { consoleLogger } from '../../utils/consoleError'
 
 import { withUserCheck } from '../../HOC/withUserCheck'
 import { PropsWithUser } from '../../types'
@@ -15,7 +15,6 @@ import { ForumsTable } from './components/table/ForumsTable'
 import { ForumsModal } from './components/modal/ForumsModal'
 
 import styles from './Forum.module.scss'
-// const date = new Date()
 
 export const ForumPage: FC<PropsWithUser> = () => {
   const navigate = useNavigate()
@@ -30,10 +29,7 @@ export const ForumPage: FC<PropsWithUser> = () => {
     try {
       setTopics(await ForumAPI.getTopics())
     } catch (error) {
-      if (error instanceof HTTPError) {
-        const responseBody = await error.response.json()
-        console.log(responseBody.reason)
-      }
+      consoleLogger(error)
     }
   }
 
@@ -61,10 +57,7 @@ export const ForumPage: FC<PropsWithUser> = () => {
       setTitleValue('')
       setFirstMessageValue('')
     } catch (error) {
-      if (error instanceof HTTPError) {
-        const responseBody = await error.response.json()
-        console.log(responseBody.reason)
-      }
+      consoleLogger(error)
     }
   }
 
@@ -72,20 +65,6 @@ export const ForumPage: FC<PropsWithUser> = () => {
     setAction('newTopic')
     handleOpen()
   }
-
-  // const handleOpenModalEditTopic = (e: { stopPropagation: () => void }) => {
-  //   e.stopPropagation()
-  //   setAction('editTopic')
-  //   handleOpen()
-  //   // тут нужно заполнить модалку текстом из топика
-  //   setTitleValue('some title')
-  //   setFirstMessageValue('some first message')
-  // }
-
-  // const handleDeleteTopic = (e: { stopPropagation: () => void }) => {
-  //   e.stopPropagation()
-  //   console.log('handleDeleteTopic')
-  // }
 
   const onSubmit = (event: FormEvent<Element>) => {
     console.log(action)
@@ -118,11 +97,7 @@ export const ForumPage: FC<PropsWithUser> = () => {
           view="primary"
         />
       </div>
-      <ForumsTable
-        data={topics}
-        // handleOpenModalEditTopic={handleOpenModalEditTopic}
-        // handleDeleteTopic={handleDeleteTopic}
-      />
+      <ForumsTable data={topics} />
       <ForumsModal
         openModal={openModal}
         handleClose={handleClose}
