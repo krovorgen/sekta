@@ -12,7 +12,6 @@ export const topicController = {
   },
 
   async createTopic(req: Request, res: Response) {
-    console.log(req.body)
     try {
       const topic = await Topic.create(req.body)
       res.status(201).json(topic)
