@@ -28,7 +28,7 @@ export const ForumPage: FC<PropsWithUser> = () => {
 
   const fetchData = async () => {
     try {
-      setTopics(await ForumAPI.getTopics())
+      setTopics((await ForumAPI.getTopics()).reverse())
     } catch (error) {
       consoleLogger(error)
     }
@@ -46,9 +46,9 @@ export const ForumPage: FC<PropsWithUser> = () => {
     e.preventDefault()
     try {
       await ForumAPI.postTopic({
-        id: Math.floor(Math.random() * 10).toString(),
+        // id: Math.floor(Math.random() * 10).toString(),
         id_author: (user?.id as number).toString(),
-        created_at: Math.floor(Math.random() * 1000).toString(),
+        // created_at: Math.floor(Math.random() * 1000).toString(),
         title: titleValue,
         content: firstMessageValue,
       })

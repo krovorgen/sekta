@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { consoleLogger } from '../../../../../utils/consoleError'
-import { ForumAPI } from '../../../../../api/ForumAPI'
+import { UserApi } from '../../../../../api/UserAPI'
 import { User } from '../../../../../types'
 import { CommentProps } from '../../../../../types/forum'
 
@@ -14,7 +14,7 @@ export const TopicsComment = ({ id, text, id_author, date }: CommentProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setAuthor(await ForumAPI.getUserByID(id_author))
+        setAuthor(await UserApi.getUserByID(id_author))
       } catch (error) {
         consoleLogger(error)
       }

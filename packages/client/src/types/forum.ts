@@ -7,7 +7,8 @@ export type CommentProps = {
 
 export type getTopicDTO = {
   id: string
-  created_at: string
+  createdAt: string
+  updatedAt: string
   id_author: string
   title: string
   content: string
@@ -18,7 +19,8 @@ export type getCommentDTO = {
   id_topic: string
   id_parent?: string | null
   id_author: string
-  created_at: string
+  createdAt: string
+  updatedAt: string
   content: string
 }
 

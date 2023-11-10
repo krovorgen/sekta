@@ -10,6 +10,8 @@ import { getTopicDTO } from '../../../../types/forum'
 
 export type TableProps = { data: getTopicDTO[] }
 
+import { formatDate } from '../../../../utils/timeFormatter'
+
 export const ForumsTable = ({ data }: TableProps) => {
   const navigate = useNavigate()
   const [perPage, setPerPage] = useState(5)
@@ -50,9 +52,9 @@ export const ForumsTable = ({ data }: TableProps) => {
       <Table.TBody>
         {currentPageData.map((row: getTopicDTO) => (
           <Table.TRow key={row.id} onClick={() => handleRoute(row.id)}>
-            <Table.TCell>
+            <Table.TCell width={200}>
               <Typography.Text view="primary-small" tag="div">
-                {row.created_at}
+                {formatDate(row.createdAt)}
               </Typography.Text>
             </Table.TCell>
 

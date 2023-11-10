@@ -7,6 +7,8 @@ export const commentController = {
       const comments = await Comment.findAll({
         where: { id_topic: req.query.id_topic },
       })
+      res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:3000')
+      res.setHeader('Access-Control-Allow-Credentials', 'true')
       res.status(200).json(comments)
     } catch (error) {
       res.status(500).json({ error })
@@ -16,6 +18,8 @@ export const commentController = {
   async createComment(req: Request, res: Response) {
     try {
       const comment = await Comment.create(req.body)
+      res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:3000')
+      res.setHeader('Access-Control-Allow-Credentials', 'true')
       res.status(201).json(comment)
     } catch (error) {
       res.status(500).json({ error })

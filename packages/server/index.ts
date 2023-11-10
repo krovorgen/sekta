@@ -15,7 +15,7 @@ import { loadState } from './preload'
 import { createClientAndConnect } from './db'
 import { topicRouter } from './src/routes/topic-router'
 import { commentsRoutes } from './src/routes/comments-router'
-import { checkAuth } from './src/middlewares/checkAuth'
+// import { checkAuth } from './src/middlewares/checkAuth'
 
 const isDev = () => process.env.NODE_ENV === 'development'
 
@@ -23,7 +23,13 @@ async function startServer() {
   await createClientAndConnect()
   const app = express()
 
-  app.use(express.json(), cookieParser(), cors())
+  const corsOptions = {
+    origin: 'http://127.0.0.1:3000',
+    credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  }
+
+  app.use(express.json(), cookieParser(), cors(corsOptions))
 
   const port = Number(process.env.SERVER_PORT) || 3000
 
@@ -42,8 +48,8 @@ async function startServer() {
     app.use(vite.middlewares)
   }
 
-  app.use('/api', checkAuth, topicRouter)
-  app.use('/api', checkAuth, commentsRoutes)
+  app.use('/api', /* checkAuth, */ topicRouter)
+  app.use('/api', /* checkAuth,  */ commentsRoutes)
 
   app.use(
     '/api/v2',

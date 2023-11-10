@@ -20,7 +20,7 @@ import { ForumAPI } from '../../../api/ForumAPI'
 import { getCommentDTO, getTopicDTO } from '../../../types/forum'
 
 import { TopicsComment } from './components/Comment/Comment'
-
+import { formatDate } from '../../../utils/timeFormatter'
 import styles from './ForumTopic.module.scss'
 
 export const ForumTopicPage: FC<PropsWithUser> = () => {
@@ -36,12 +36,16 @@ export const ForumTopicPage: FC<PropsWithUser> = () => {
   const { topicId } = useParams()
   const fetchData = async () => {
     try {
-      setTopic((await ForumAPI.getTopicById(topicId as string)) as getTopicDTO)
-      setComments(
-        (await ForumAPI.getCommentsByTopicsId(
-          topicId as string
-        )) as getCommentDTO[]
-      )
+      const arr = await ForumAPI.getTopics()
+      console.log(arr)
+      console.log(topicId)
+      arr.forEach(elem => {
+        if (elem.id === topicId) {
+          setTopic(elem)
+        }
+      })
+      // setTopic((await ForumAPI.getTopicById(topicId as string)) as getTopicDTO)
+      setComments(await ForumAPI.getCommentsByTopicsId(topicId as string))
     } catch (error) {
       consoleLogger(error)
     }
@@ -56,11 +60,9 @@ export const ForumTopicPage: FC<PropsWithUser> = () => {
     e.preventDefault()
     try {
       await ForumAPI.postCommentsToTopic(topicId as string, {
-        id: Math.floor(Math.random() * 10).toString(),
         id_topic: topicId as string,
         id_parent: null,
         id_author: (user?.id as number).toString(),
-        created_at: Math.floor(Math.random() * 1000).toString(),
         content: inputValue,
       })
       await fetchData()
@@ -103,7 +105,7 @@ export const ForumTopicPage: FC<PropsWithUser> = () => {
           id={comment.id}
           text={comment.content}
           id_author={comment.id_author}
-          date={comment.created_at}
+          date={formatDate(comment.createdAt)}
         />
       ))}
 
