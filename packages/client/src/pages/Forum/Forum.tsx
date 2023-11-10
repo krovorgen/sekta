@@ -5,7 +5,8 @@ import { consoleLogger } from '../../utils/consoleError'
 import { withUserCheck } from '../../HOC/withUserCheck'
 import { PropsWithUser } from '../../types'
 
-import { ForumAPI, TopicDTO } from '../../api/ForumAPI'
+import { ForumAPI } from '../../api/ForumAPI'
+import { getTopicDTO } from '../../types/forum'
 
 import { ActionButton } from '@alfalab/core-components/action-button'
 import { ArrowBackHeavyMIcon } from '@alfalab/icons-glyph/ArrowBackHeavyMIcon'
@@ -20,7 +21,7 @@ export const ForumPage: FC<PropsWithUser> = () => {
   const navigate = useNavigate()
   const user = useAppSelector(state => state.auth.user)
   const [openModal, setOpenModal] = useState(false)
-  const [topics, setTopics] = useState<TopicDTO[]>([])
+  const [topics, setTopics] = useState<getTopicDTO[]>([])
   const [titleValue, setTitleValue] = useState('')
   const [firstMessageValue, setFirstMessageValue] = useState('')
   const [action, setAction] = useState('')

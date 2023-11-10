@@ -1,21 +1,16 @@
 import { useEffect, useState } from 'react'
 import { consoleLogger } from '../../../../../utils/consoleError'
-import { ForumAPI, UserByIdDTO } from '../../../../../api/ForumAPI'
+import { ForumAPI } from '../../../../../api/ForumAPI'
+import { User } from '../../../../../types'
+import { CommentProps } from '../../../../../types/forum'
 
 import { Gap } from '@alfalab/core-components/gap'
 import { Comment } from '@alfalab/core-components/comment'
 
 import styles from './Comment.module.scss'
 
-export type CommentProps = {
-  id: string
-  text: string
-  id_author: string
-  date: string
-}
-
 export const TopicsComment = ({ id, text, id_author, date }: CommentProps) => {
-  const [author, setAuthor] = useState<UserByIdDTO>()
+  const [author, setAuthor] = useState<User>()
   useEffect(() => {
     const fetchData = async () => {
       try {

@@ -1,6 +1,6 @@
-import { TopicDTO, CommentDTO } from '../../../api/ForumAPI'
+import { getTopicDTO, getCommentDTO } from '../../../types/forum'
 
-const topics: TopicDTO[] = [
+const topics: getTopicDTO[] = [
   {
     id: '28',
     created_at: '30.06.2022',
@@ -24,7 +24,7 @@ const topics: TopicDTO[] = [
   },
 ]
 
-const comments: CommentDTO[] = [
+const comments: getCommentDTO[] = [
   {
     id: '1',
     id_topic: '28',

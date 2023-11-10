@@ -6,9 +6,9 @@ import { Typography } from '@alfalab/core-components/typography'
 import { Space } from '@alfalab/core-components/space'
 
 import { RoutePath } from '../../../../constants/routes'
-import { TopicDTO } from '../../../../api/ForumAPI'
+import { getTopicDTO } from '../../../../types/forum'
 
-export type TableProps = { data: TopicDTO[] }
+export type TableProps = { data: getTopicDTO[] }
 
 export const ForumsTable = ({ data }: TableProps) => {
   const navigate = useNavigate()
@@ -48,7 +48,7 @@ export const ForumsTable = ({ data }: TableProps) => {
         <Table.THeadCell title="Заголовок">Заголовок</Table.THeadCell>
       </Table.THead>
       <Table.TBody>
-        {currentPageData.map((row: TopicDTO) => (
+        {currentPageData.map((row: getTopicDTO) => (
           <Table.TRow key={row.id} onClick={() => handleRoute(row.id)}>
             <Table.TCell>
               <Typography.Text view="primary-small" tag="div">

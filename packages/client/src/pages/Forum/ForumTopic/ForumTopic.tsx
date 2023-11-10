@@ -16,7 +16,8 @@ import { IconButton } from '@alfalab/core-components/icon-button'
 import { Toast } from '@alfalab/core-components/toast'
 import { useAppSelector } from '../../../redux/store'
 
-import { CommentDTO, ForumAPI, TopicDTO } from '../../../api/ForumAPI'
+import { ForumAPI } from '../../../api/ForumAPI'
+import { getCommentDTO, getTopicDTO } from '../../../types/forum'
 
 import { TopicsComment } from './components/Comment/Comment'
 
@@ -29,17 +30,17 @@ export const ForumTopicPage: FC<PropsWithUser> = () => {
   const [isVisible, setIsVisible] = React.useState(false)
   const [title, setTitle] = React.useState('')
   const [inputValue, setInputValue] = React.useState('')
-  const [topic, setTopic] = useState<TopicDTO>()
-  const [comments, setComments] = useState<CommentDTO[]>([])
+  const [topic, setTopic] = useState<getTopicDTO>()
+  const [comments, setComments] = useState<getCommentDTO[]>([])
 
   const { topicId } = useParams()
   const fetchData = async () => {
     try {
-      setTopic((await ForumAPI.getTopicById(topicId as string)) as TopicDTO)
+      setTopic((await ForumAPI.getTopicById(topicId as string)) as getTopicDTO)
       setComments(
         (await ForumAPI.getCommentsByTopicsId(
           topicId as string
-        )) as CommentDTO[]
+        )) as getCommentDTO[]
       )
     } catch (error) {
       consoleLogger(error)
@@ -96,7 +97,7 @@ export const ForumTopicPage: FC<PropsWithUser> = () => {
         {topic?.content}
       </Typography.Text>
 
-      {comments.map((comment: CommentDTO) => (
+      {comments.map((comment: getCommentDTO) => (
         <TopicsComment
           key={comment.id}
           id={comment.id}

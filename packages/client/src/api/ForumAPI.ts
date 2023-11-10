@@ -2,46 +2,11 @@ import { topics, comments } from '../pages/Forum/temporary/data'
 
 import { BaseAPI } from './BaseApi'
 
-export type TopicDTO = {
-  id: string
-  created_at: string
-  id_author: string
-  title: string
-  content: string
-}
-
-export type CommentDTO = {
-  id: string
-  id_topic: string
-  id_parent?: string | null
-  id_author: string
-  created_at: string
-  content: string
-}
-
-export type UserByIdDTO = {
-  id: number
-  first_name?: string
-  second_name?: string
-  display_name?: string
-  phone?: string
-  login?: string
-  avatar?: string | null
-  email?: string
-}
-
-export type sendTopicDTO = {
-  id_author: string
-  title: string
-  content: string
-}
-
-export type sendCommentDTO = {
-  id_topic: string
-  id_parent: string | null
-  id_author: string
-  content: string
-}
+import { User } from '../types'
+import {
+  getTopicDTO,
+  getCommentDTO /* sendTopicDTO, sendCommentDTO */,
+} from '../types/forum'
 
 class Forum extends BaseAPI {
   getTopics() /*: Promise<unknown> */ {
@@ -51,7 +16,7 @@ class Forum extends BaseAPI {
   }
 
   postTopic(
-    data: TopicDTO // поменять на sendTopicDTO
+    data: getTopicDTO // поменять на sendTopicDTO
   ) /* : Promise<unknown> */ {
     topics.unshift(data)
     // return this.http.post(`forum/topic`, { json: data }).json()
@@ -69,7 +34,7 @@ class Forum extends BaseAPI {
   }
 
   getCommentsByTopicsId(id_topic: string) /* : Promise<unknown> */ {
-    const temp: CommentDTO[] = []
+    const temp: getCommentDTO[] = []
     comments.map(elem => {
       if (id_topic === elem.id_topic) {
         temp.push(elem)
@@ -81,7 +46,7 @@ class Forum extends BaseAPI {
 
   postCommentsToTopic(
     id_topic: string,
-    data: CommentDTO // нужно заменить на sendCommentDTO
+    data: getCommentDTO // нужно заменить на sendCommentDTO
   ) /* : Promise<unknown> */ {
     comments.push(data)
     // return this.http
@@ -89,7 +54,7 @@ class Forum extends BaseAPI {
     //   .json()
   }
 
-  getUserByID(id_author: string): Promise<UserByIdDTO> {
+  getUserByID(id_author: string): Promise<User> {
     return this.http.get(`user/${id_author}`).json()
   }
 
