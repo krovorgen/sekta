@@ -37,14 +37,11 @@ export const ForumTopicPage: FC<PropsWithUser> = () => {
   const fetchData = async () => {
     try {
       const arr = await ForumAPI.getTopics()
-      console.log(arr)
-      console.log(topicId)
       arr.forEach(elem => {
         if (elem.id === topicId) {
           setTopic(elem)
         }
       })
-      // setTopic((await ForumAPI.getTopicById(topicId as string)) as getTopicDTO)
       setComments(await ForumAPI.getCommentsByTopicsId(topicId as string))
     } catch (error) {
       consoleLogger(error)
