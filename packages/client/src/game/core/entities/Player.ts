@@ -104,15 +104,15 @@ export default class Player extends Entity {
       this.isJump && // длительность прыжка
       Date.now() - this.lastJump < PLAYER_JUMP_DURATION
     ) {
-      this.offset.dy -= GAME_OPTIONS.GRAVITY_VALUE * PLAYER_JUMP_MULTIPLIER
+      this.offset.dy -= GAME_OPTIONS.GRAVITY_VALUE * PLAYER_JUMP_MULTIPLIER * dt
     }
     // гравитация игрока
-    this.offset.dy += GAME_OPTIONS.GRAVITY_VALUE
+    this.offset.dy += GAME_OPTIONS.GRAVITY_VALUE * dt
     // сила трения
     this.offset.dx -= this.offset.dx * GAME_OPTIONS.FRICTION_FORCE
     // движение игрока
     this.position.x += this.offset.dx * dt
-    this.position.y += this.offset.dy * dt
+    this.position.y += this.offset.dy
     // органичение зоны движения игрока
     if (this.position.x + this.size.width > GAME_OPTIONS.CANVAS_WIDTH) {
       this.position.x = GAME_OPTIONS.CANVAS_WIDTH - this.size.width

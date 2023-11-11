@@ -63,11 +63,11 @@ const GamePage: FC<PropsWithUser> = ({ user }) => {
   }, [gameState])
 
   return (
-    <div className="game-wrapper">
+    <div className="gameWrapper">
       {gameState === GameState.startPreview && (
-        <div className="timer-wrapper">
+        <div className="timerWrapper">
           <div className="timer">
-            <div className="timer-body">
+            <div className="timerBody">
               <div className="timer-counter">
                 <span>3</span>
                 <span>2</span>
@@ -81,7 +81,7 @@ const GamePage: FC<PropsWithUser> = ({ user }) => {
       {gameState === GameState.game && (
         <canvas
           ref={canvasRef}
-          className="game-canvas"
+          className="gameCanvas"
           width={GAME_OPTIONS.CANVAS_WIDTH}
           height={GAME_OPTIONS.CANVAS_HEIGHT}
         />

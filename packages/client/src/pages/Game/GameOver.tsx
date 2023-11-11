@@ -16,7 +16,7 @@ type GameOverProps = {
 
 export const GameOver: FC<GameOverProps> = ({ values, onReloadGame }) => {
   return (
-    <div className="game-over-wrapper">
+    <div className="gameOverWrapper">
       <Typography.Title tag="h1" color="negative" view="xlarge">
         {`Time: ${timeFormatter(values.gameTime)}`}
       </Typography.Title>

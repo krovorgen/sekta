@@ -112,6 +112,9 @@ export default class Background extends Entity {
     if (!cmp) return
     cmp!.position.x -= cmp!.speed * dt
     if (cmp!.position.x <= -(2 * cmp!.size.width)) cmp!.position.x = 0
+    // растянуть фон на весь холст игры
+    cmp!.size.width = GAME_OPTIONS.CANVAS_WIDTH
+    cmp!.size.height = GAME_OPTIONS.CANVAS_HEIGHT
   }
   private drawComponent(
     ctx: CanvasRenderingContext2D,
