@@ -22,7 +22,7 @@ async function networkFirst(request) {
 
 this.addEventListener('fetch', event => {
   const { request } = event
-  event.respondWith(networkFirst(request))
+  if (request.method === 'GET') event.respondWith(networkFirst(request))
 })
 
 this.addEventListener('activate', function (event) {
