@@ -16,6 +16,7 @@ import { createClientAndConnect } from './db'
 import { topicRouter } from './src/routes/topic-router'
 import { commentsRoutes } from './src/routes/comments-router'
 import { checkAuth } from './src/middlewares/checkAuth'
+import { themeRoutes } from './src/routes/theme-routes'
 
 const isDev = () => process.env.NODE_ENV === 'development'
 
@@ -61,6 +62,7 @@ async function startServer() {
 
   app.use('/api', checkAuth, topicRouter)
   app.use('/api', checkAuth, commentsRoutes)
+  app.use('/api', themeRoutes)
 
   if (!isDev()) {
     app.use('/assets', express.static(path.resolve(distPath, 'assets')))
