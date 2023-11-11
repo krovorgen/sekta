@@ -23,7 +23,7 @@ async function startServer() {
   await createClientAndConnect()
   const app = express()
 
-  app.use(express.json(), cookieParser(), cors())
+  app.use(cookieParser(), cors())
 
   const port = Number(process.env.SERVER_PORT) || 3000
 
@@ -42,9 +42,6 @@ async function startServer() {
     app.use(vite.middlewares)
   }
 
-  app.use('/api', checkAuth, topicRouter)
-  app.use('/api', checkAuth, commentsRoutes)
-
   app.use(
     '/api/v2',
     createProxyMiddleware({
@@ -59,6 +56,11 @@ async function startServer() {
   app.get('/api', (_, res) => {
     res.json('👋 Howdy from the server :)')
   })
+
+  app.use(express.json())
+
+  app.use('/api', checkAuth, topicRouter)
+  app.use('/api', checkAuth, commentsRoutes)
 
   if (!isDev()) {
     app.use('/assets', express.static(path.resolve(distPath, 'assets')))
@@ -82,7 +84,7 @@ async function startServer() {
         template = await vite!.transformIndexHtml(url, template)
       }
 
-      let render: (url: string) => Promise<string>
+      let render: (url: string, state: unknown) => Promise<string>
 
       if (!isDev()) {
         render = (await import(ssrClientPath)).render
@@ -93,7 +95,7 @@ async function startServer() {
 
       const initialState = await loadState(req)
 
-      const appHtml = await render(url)
+      const appHtml = await render(url, initialState)
 
       const initStateSerialized = jsesc(JSON.stringify(initialState), {
         json: true,

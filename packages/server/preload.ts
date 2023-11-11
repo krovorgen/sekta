@@ -22,6 +22,7 @@ export async function loadState(req: express.Request) {
     auth: {
       user: null,
       loadingStatus: 'idle',
+      theme: 'light',
     },
   }
 
