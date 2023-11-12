@@ -24,6 +24,13 @@ export const getUserTC = createAsyncThunk('auth/getUser', async () => {
   return await AuthApi.read()
 })
 
+export const updateUserTheme = createAsyncThunk(
+  'theme',
+  async (value: { id: number; theme: string }) => {
+    return await AuthApi.updateTheme(value)
+  }
+)
+
 export const logoutTC = createAsyncThunk('auth/logout', async () => {
   await AuthApi.logout()
 })
@@ -38,10 +45,14 @@ const authSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(getUserTC.fulfilled, (state, action: PayloadAction<User>) => {
-        state.user = action.payload
-        state.loadingStatus = 'loaded'
-      })
+      .addCase(
+        getUserTC.fulfilled,
+        (state, action: PayloadAction<{ user: User; theme: string }>) => {
+          state.user = action.payload.user
+          state.theme = action.payload.theme
+          state.loadingStatus = 'loaded'
+        }
+      )
       .addCase(getUserTC.rejected, state => {
         state.loadingStatus = 'error'
       })
@@ -52,7 +63,6 @@ const authSlice = createSlice({
 })
 
 export const authSelector = (state: RootState) => state.auth
-
 
 export const userLoadingStatusSelector = createSelector(
   authSelector,

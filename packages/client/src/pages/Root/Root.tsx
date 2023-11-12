@@ -18,7 +18,7 @@ const RootPage: FC<PropsWithUser> = () => {
     <div className={styles.root}>
       <div className={styles.content}>
         <Typography.Title tag="h1" color="negative" view="xlarge">
-          FIER RUNNER
+          FIRE RUNNER
         </Typography.Title>
         <Gap size="xs" />
         <Typography.Title tag="h2" view="small">

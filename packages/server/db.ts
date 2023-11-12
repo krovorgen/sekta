@@ -3,6 +3,7 @@ import { SequelizeOptions } from 'sequelize-typescript'
 import { Sequelize } from 'sequelize'
 import { topicModel } from './src/models/topic'
 import { commentModel } from './src/models/comment'
+import { themeModel } from './src/models/theme'
 
 const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
   process.env
@@ -20,6 +21,7 @@ const sequelize = new Sequelize(sequelizeOptions)
 
 export const Topic = sequelize.define('Topic', topicModel)
 export const Comment = sequelize.define('Comment', commentModel)
+export const Theme = sequelize.define('Theme', themeModel)
 
 Comment.hasMany(Comment, { foreignKey: 'id_parent' })
 Comment.belongsTo(Comment, { foreignKey: 'id_parent', targetKey: 'id' })

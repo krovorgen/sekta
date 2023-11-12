@@ -3,7 +3,10 @@ import { BsMoonFill, BsSun } from 'react-icons/bs'
 import styles from './Navbar.module.scss'
 import { useAppDispatch, useAppSelector } from '../../../redux/store'
 
-import { setTheme } from '../../../redux/features/auth/authSlice'
+import {
+  setTheme,
+  updateUserTheme,
+} from '../../../redux/features/auth/authSlice'
 interface NavbarProps {
   children: ReactNode
 }
@@ -38,7 +41,9 @@ const Navbar = ({ children }: NavbarProps) => {
   const user = useAppSelector(state => state.auth.user)
 
   const toggleTheme = () => {
-    dispatch(setTheme(theme === 'light' ? 'dark' : 'light'))
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    dispatch(setTheme(newTheme))
+    if (user) dispatch(updateUserTheme({ id: user.id, theme: newTheme }))
   }
 
   useEffect(() => {
