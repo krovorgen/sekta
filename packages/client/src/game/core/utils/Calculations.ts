@@ -13,6 +13,12 @@ export type TOffset = {
   dy: number
 }
 
+export type TTriangle = {
+  a: TPoint
+  b: TPoint
+  c: TPoint
+}
+
 function collides(
   x: number,
   y: number,
@@ -79,4 +85,15 @@ export function rangeArray(start: number, end: number): number[] {
 // получить расстояние между двумя точками
 export function distance(src: TPoint, dest: TPoint) {
   return Math.sqrt(Math.pow(dest.x - src.x, 2) + Math.pow(dest.y - src.x, 2))
+}
+
+// определить принадлежность точки треугольнику
+export function triangleContains({ a, b, c }: TTriangle, pos: TPoint) {
+  // проверяет на какой стороне полуплоскости, созданной ребрами, находится точка
+  const det = (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y)
+  return (
+    det * ((b.x - a.x) * (pos.y - a.y) - (b.y - a.y) * (pos.x - a.x)) > 0 &&
+    det * ((c.x - b.x) * (pos.y - b.y) - (c.y - b.y) * (pos.x - b.x)) > 0 &&
+    det * ((a.x - c.x) * (pos.y - c.y) - (a.y - c.y) * (pos.x - c.x)) > 0
+  )
 }
