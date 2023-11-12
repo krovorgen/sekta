@@ -20,6 +20,10 @@ export type YandexSignUpDTO = {
   redirect_uri: string
 }
 
+export type ThemeResponse = {
+  theme: string
+}
+
 class Auth extends BaseAPI {
   signIn(data: SignInDTO): Promise<unknown> {
     return this.http.post('auth/signin', { json: data })
@@ -40,8 +44,25 @@ class Auth extends BaseAPI {
     return this.http.post(`oauth/yandex`, { json: params })
   }
 
-  read(): Promise<User> {
-    return this.http.get('auth/user').json()
+  async read(): Promise<{ user: User; theme: string }> {
+    const user: User = await this.http.get('auth/user').json()
+
+    const theme: ThemeResponse = await this.http
+      .extend({
+        prefixUrl: `http://localhost:${__SERVER_PORT__}/api`,
+        throwHttpErrors: false,
+      })
+      .post('theme', { json: { id: user.id } })
+      .json()
+
+    return { user, theme: theme?.theme || 'light' }
+  }
+
+  updateTheme(params: { id: number; theme: string }): Promise<ThemeResponse> {
+    return this.http
+      .extend({ prefixUrl: `http://localhost:${__SERVER_PORT__}/api` })
+      .post('theme/update', { json: params })
+      .json()
   }
 
   logout(): Promise<unknown> {

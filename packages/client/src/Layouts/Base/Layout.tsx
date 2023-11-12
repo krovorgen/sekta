@@ -18,6 +18,7 @@ const Layout: FC = () => {
   const theme = useAppSelector(state => state.auth.theme)
   const loadingStatus = useAppSelector(userLoadingStatusSelector)
   const [isLoading, setIsLoading] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
 
   const isRequested = loadingStatus !== 'idle'
 
@@ -46,7 +47,11 @@ const Layout: FC = () => {
     }
 
     fetchServerData()
+
+    setIsMounted(true)
   }, [])
+  // to fix hydration error stackoverflow.com/questions/71706064
+  if (!isMounted) return null
 
   return isLoading || !isRequested ? (
     <GlobalLoader />

@@ -25,7 +25,7 @@ export const withUserCheck = <P extends WithUserType>(
     const user = useAppSelector(state => state.auth.user)
     const navigate = useNavigate()
     const location = useLocation()
-    const isOnline = window.navigator.onLine
+    const isOnline = typeof window !== 'undefined' && window.navigator.onLine
     const searchStr = location.search
     const code = searchStr.match(/\d+/)
 

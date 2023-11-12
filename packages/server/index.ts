@@ -16,6 +16,7 @@ import { createClientAndConnect } from './db'
 import { topicRouter } from './src/routes/topic-router'
 import { commentsRoutes } from './src/routes/comments-router'
 // import { checkAuth } from './src/middlewares/checkAuth'
+import { themeRoutes } from './src/routes/theme-routes'
 
 const isDev = () => process.env.NODE_ENV === 'development'
 
@@ -66,6 +67,12 @@ async function startServer() {
     res.json('👋 Howdy from the server :)')
   })
 
+  app.use(express.json())
+
+  app.use('/api', checkAuth, topicRouter)
+  app.use('/api', checkAuth, commentsRoutes)
+  app.use('/api', themeRoutes)
+
   if (!isDev()) {
     app.use('/assets', express.static(path.resolve(distPath, 'assets')))
     app.use(express.static(path.resolve(srcPath, 'ssr-dist')))
@@ -88,7 +95,7 @@ async function startServer() {
         template = await vite!.transformIndexHtml(url, template)
       }
 
-      let render: (url: string) => Promise<string>
+      let render: (url: string, state: unknown) => Promise<string>
 
       if (!isDev()) {
         render = (await import(ssrClientPath)).render
@@ -99,7 +106,7 @@ async function startServer() {
 
       const initialState = await loadState(req)
 
-      const appHtml = await render(url)
+      const appHtml = await render(url, initialState)
 
       const initStateSerialized = jsesc(JSON.stringify(initialState), {
         json: true,

@@ -10,6 +10,8 @@ import Resources, { TResource, getResourceUrls } from './core/utils/Resources'
 
 import { timeFormatter } from '../utils/timeFormatter'
 import Sound from './core/utils/Sound'
+import TouchControls, { TOUCH_AREA } from './core/utils/TouchControls'
+import GamepadControls, { GAMEPAD_ACT } from './core/utils/GamepadControls'
 
 export enum GameState {
   // готовность к игре
@@ -77,7 +79,28 @@ export default class GameEngine {
   public init = (): void => {
     this.reset()
     KeyControls.setControls()
+    TouchControls.setControls()
+    GamepadControls.setControls()
+    // рассчитать пропорцию размера холста по умолчанию
+    this.canvasRatio = GAME_OPTIONS.CANVAS_HEIGHT / GAME_OPTIONS.CANVAS_WIDTH
+    this.resizeCanvas()
     this.mainLoop()
+  }
+  private canvasRatio?: number
+  public resizeCanvas() {
+    const canvasOffsetPercent = GAME_OPTIONS.CANVAS_OFFSET // размер меню на экране в процентах
+    const pageWidth = document.documentElement.clientWidth
+    const pageHeight = document.documentElement.clientHeight
+    // рассчитать максимально возможные ширину и высоту холста
+    let canvasWidth = Math.round(pageWidth)
+    let canvasHeight = Math.round(canvasWidth * this.canvasRatio!)
+    if (canvasHeight > pageHeight - pageHeight * canvasOffsetPercent) {
+      canvasHeight = Math.round(pageHeight - pageHeight * canvasOffsetPercent)
+      canvasWidth = Math.round(canvasHeight / this.canvasRatio!)
+    }
+    // растянуть холст на весь экран с учетом пропорции и смещения
+    this.canvas.width = GAME_OPTIONS.CANVAS_WIDTH = canvasWidth
+    this.canvas.height = GAME_OPTIONS.CANVAS_HEIGHT = canvasHeight
   }
   public reset(): void {
     this.gameState = GameState.READY
@@ -142,20 +165,38 @@ export default class GameEngine {
   }
 
   private handleInput(): void {
+    GamepadControls.updateControls()
     if (
       KeyControls.isKeyDown(KEYS.UP) ||
       KeyControls.isKeyDown(KEYS.W) ||
-      KeyControls.isKeyDown(KEYS.SPACE)
+      KeyControls.isKeyDown(KEYS.SPACE) ||
+      GamepadControls.isAct(GAMEPAD_ACT.UP) ||
+      TouchControls.isTouched(TOUCH_AREA.TOP)
     ) {
       this.player!.jump()
     }
-    if (KeyControls.isKeyDown(KEYS.DOWN) || KeyControls.isKeyDown(KEYS.S)) {
+    if (
+      KeyControls.isKeyDown(KEYS.DOWN) ||
+      KeyControls.isKeyDown(KEYS.S) ||
+      GamepadControls.isAct(GAMEPAD_ACT.DOWN) ||
+      TouchControls.isTouched(TOUCH_AREA.BOTTOM)
+    ) {
       this.player!.down()
     }
-    if (KeyControls.isKeyDown(KEYS.LEFT) || KeyControls.isKeyDown(KEYS.A)) {
+    if (
+      KeyControls.isKeyDown(KEYS.LEFT) ||
+      KeyControls.isKeyDown(KEYS.A) ||
+      GamepadControls.isAct(GAMEPAD_ACT.LEFT) ||
+      TouchControls.isTouched(TOUCH_AREA.LEFT)
+    ) {
       this.player!.left()
     }
-    if (KeyControls.isKeyDown(KEYS.RIGHT) || KeyControls.isKeyDown(KEYS.D)) {
+    if (
+      KeyControls.isKeyDown(KEYS.RIGHT) ||
+      KeyControls.isKeyDown(KEYS.D) ||
+      GamepadControls.isAct(GAMEPAD_ACT.RIGHT) ||
+      TouchControls.isTouched(TOUCH_AREA.RIGHT)
+    ) {
       this.player!.right()
     }
   }
@@ -280,6 +321,8 @@ export default class GameEngine {
     // остановка звукового сопровождения
     this.stopSounds()
     // очистка обработчиков событий
+    GamepadControls.clearControls()
+    TouchControls.clearControls()
     KeyControls.clearControls()
   }
 }
