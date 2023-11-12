@@ -24,10 +24,9 @@ export const ForumsTable = ({ data }: TableProps) => {
   const handlePageChange = (pageIndex: number) => setPage(pageIndex)
 
   const pagesCount = Math.ceil(data.length / perPage)
-  const rows = useMemo(() => data, [data])
   const currentPageData = useMemo(() => {
-    return rows.slice(page * perPage).slice(0, perPage)
-  }, [rows, page, perPage])
+    return data.slice(page * perPage).slice(0, perPage)
+  }, [data, page, perPage])
 
   const handleRoute = (id: string) => {
     navigate(`/${RoutePath.Forum}/${id}`)

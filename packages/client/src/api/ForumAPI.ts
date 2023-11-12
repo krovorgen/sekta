@@ -26,10 +26,6 @@ class Forum {
     return this.http
       .post(`forum/topic`, {
         json: data,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'http://127.0.0.1:3000',
-        },
       })
       .json()
   }
@@ -45,10 +41,6 @@ class Forum {
     return this.http
       .post(`forum/comment/?id_topic=${id_topic}`, {
         json: data,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'http://127.0.0.1:3000',
-        },
       })
       .json()
   }
