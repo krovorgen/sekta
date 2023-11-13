@@ -15,7 +15,7 @@ import { loadState } from './preload'
 import { createClientAndConnect } from './db'
 import { topicRouter } from './src/routes/topic-router'
 import { commentsRoutes } from './src/routes/comments-router'
-// import { checkAuth } from './src/middlewares/checkAuth'
+import { checkAuth } from './src/middlewares/checkAuth'
 import { themeRoutes } from './src/routes/theme-routes'
 
 const isDev = () => process.env.NODE_ENV === 'development'
@@ -24,15 +24,9 @@ async function startServer() {
   await createClientAndConnect()
   const app = express()
 
-  const corsOptions = {
-    origin: 'http://127.0.0.1:3000',
-    credentials: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  }
+  app.use(cookieParser(), cors())
 
-  app.use(cookieParser(), cors(corsOptions))
-
-  const port = Number(process.env.SERVER_PORT) || 3000
+  const port = Number(process.env.SERVER_PORT) || 3001
 
   let vite: ViteDevServer | undefined
   const distPath = path.dirname(require.resolve('client/dist/index.html'))
@@ -66,9 +60,9 @@ async function startServer() {
 
   app.use(express.json())
 
-  app.use('/api', /* checkAuth, */ topicRouter)
-  app.use('/api', /* checkAuth, */ commentsRoutes)
-  app.use('/api', /* checkAuth, */ themeRoutes)
+  app.use('/api', checkAuth, topicRouter)
+  app.use('/api', checkAuth, commentsRoutes)
+  app.use('/api', checkAuth, themeRoutes)
 
   if (!isDev()) {
     app.use('/assets', express.static(path.resolve(distPath, 'assets')))
@@ -125,6 +119,17 @@ async function startServer() {
 
   app.listen(port, () => {
     console.log(`  ➜ 🎸 Server is listening on port: ${port}`)
+  })
+
+  const app2 = express()
+  // запускаем второй сервер для редиректа
+  // так как у нас oauth.yandex.ru настроен с redirect_uri=http://localhost:3000
+  app2.use('*', (req, res) => {
+    res.redirect(`http://localhost:3001${req.originalUrl}`)
+  })
+
+  app2.listen(3000, () => {
+    console.log(`Server 2 is listening on port: 3000`)
   })
 }
 

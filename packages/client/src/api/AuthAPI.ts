@@ -44,23 +44,34 @@ class Auth extends BaseAPI {
     return this.http.post(`oauth/yandex`, { json: params })
   }
 
-  async read(): Promise<{ user: User; theme: string }> {
+  async getTheme(id: number, currentTheme: string): Promise<string> {
+    try {
+      const theme: ThemeResponse = await this.http
+        .extend({
+          prefixUrl: `http://localhost:${__SERVER_PORT__}/api`,
+        })
+        .post('theme', { json: { id } })
+        .json()
+
+      return theme?.theme ?? currentTheme
+    } catch (e) {
+      return currentTheme
+    }
+  }
+
+  async read(currentTheme: string): Promise<{ user: User; theme: string }> {
     const user: User = await this.http.get('auth/user').json()
 
-    const theme: ThemeResponse = await this.http
-      .extend({
-        prefixUrl: `http://localhost:${__SERVER_PORT__}/api`,
-        throwHttpErrors: false,
-      })
-      .post('theme', { json: { id: user.id } })
-      .json()
+    const theme: string = await this.getTheme(user.id, currentTheme)
 
-    return { user, theme: theme?.theme || 'light' }
+    return { user, theme }
   }
 
   updateTheme(params: { id: number; theme: string }): Promise<ThemeResponse> {
     return this.http
-      .extend({ prefixUrl: `http://localhost:${__SERVER_PORT__}/api` })
+      .extend({
+        prefixUrl: `http://localhost:${__SERVER_PORT__}/api`,
+      })
       .post('theme/update', { json: params })
       .json()
   }

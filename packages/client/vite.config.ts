@@ -10,10 +10,7 @@ export default defineConfig({
     port: Number(process.env.CLIENT_PORT) || 3000,
   },
   define: {
-    // у нас oauth.yandex.ru настроен с redirect_uri=http://localhost:3000
-    // для того чтоб oauth.yandex.ru работал на другом порте нужно его добавить в настройках яндекса
-    // пока временно меняем порт
-    __SERVER_PORT__: process.env.SERVER_PORT || 3000,
+    __SERVER_PORT__: process.env.SERVER_PORT || 3001,
   },
   plugins: [react(), EnvironmentPlugin(['VITE_DIRECT_URL'])],
   build: {
