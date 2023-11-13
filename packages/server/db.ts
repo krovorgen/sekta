@@ -5,15 +5,14 @@ import { topicModel } from './src/models/topic'
 import { commentModel } from './src/models/comment'
 import { themeModel } from './src/models/theme'
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
-  process.env
+const { POSTGRES_PORT } = process.env
 
 const sequelizeOptions: SequelizeOptions = {
   host: 'localhost',
   port: Number(POSTGRES_PORT || 5432),
-  username: POSTGRES_USER,
-  password: POSTGRES_PASSWORD,
-  database: POSTGRES_DB,
+  username: 'postgres',
+  password: 'postgres',
+  database: 'postgres',
   dialect: 'postgres',
 }
 

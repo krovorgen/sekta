@@ -20,8 +20,15 @@ const initialState: AuthState = {
   theme: 'light',
 }
 
-export const getUserTC = createAsyncThunk('auth/getUser', async () => {
-  return await AuthApi.read()
+type GetUserResponse = { user: User; theme: string }
+
+export const getUserTC = createAsyncThunk<
+  GetUserResponse,
+  void,
+  { state: RootState }
+>('auth/getUser', async (_, { getState }) => {
+  const { auth } = getState()
+  return await AuthApi.read(auth.theme)
 })
 
 export const updateUserTheme = createAsyncThunk(
@@ -47,7 +54,7 @@ const authSlice = createSlice({
     builder
       .addCase(
         getUserTC.fulfilled,
-        (state, action: PayloadAction<{ user: User; theme: string }>) => {
+        (state, action: PayloadAction<GetUserResponse>) => {
           state.user = action.payload.user
           state.theme = action.payload.theme
           state.loadingStatus = 'loaded'

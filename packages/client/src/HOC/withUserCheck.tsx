@@ -8,13 +8,14 @@ import { AuthApi } from '../api/AuthAPI'
 
 type WithUserType = { user: User }
 
+const isDirect = process.env.VITE_DIRECT_URL
+
 const fetchServerData = async (code: string): Promise<void> => {
   await AuthApi.getYandexAccount({
     code,
     redirect_uri: 'http://localhost:3000/signin',
   })
-  window.location.href = '/'
-  window.location.reload()
+  window.location.href = isDirect === 'true' ? '/' : 'http://localhost:3001'
 }
 
 export const withUserCheck = <P extends WithUserType>(

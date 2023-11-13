@@ -1,6 +1,6 @@
 import ky from 'ky'
 
-export let apiUrl = 'http://localhost:3000/api/v2'
+export let apiUrl = 'http://localhost:3001/api/v2'
 
 const isDirect = process.env.VITE_DIRECT_URL
 
