@@ -30,7 +30,7 @@ async function startServer() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   }
 
-  app.use(express.json(), cookieParser(), cors(corsOptions))
+  app.use(cookieParser(), cors(corsOptions))
 
   const port = Number(process.env.SERVER_PORT) || 3000
 
@@ -49,9 +49,6 @@ async function startServer() {
     app.use(vite.middlewares)
   }
 
-  app.use('/api', /* checkAuth, */ topicRouter)
-  app.use('/api', /* checkAuth,  */ commentsRoutes)
-
   app.use(
     '/api/v2',
     createProxyMiddleware({
@@ -69,9 +66,9 @@ async function startServer() {
 
   app.use(express.json())
 
-  app.use('/api', checkAuth, topicRouter)
-  app.use('/api', checkAuth, commentsRoutes)
-  app.use('/api', themeRoutes)
+  app.use('/api', /* checkAuth, */ topicRouter)
+  app.use('/api', /* checkAuth, */ commentsRoutes)
+  app.use('/api', /* checkAuth, */ themeRoutes)
 
   if (!isDev()) {
     app.use('/assets', express.static(path.resolve(distPath, 'assets')))
