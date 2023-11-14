@@ -68,7 +68,7 @@ const GamePage: FC<PropsWithUser> = ({ user }) => {
         <div className="timerWrapper">
           <div className="timer">
             <div className="timerBody">
-              <div className="timer-counter">
+              <div className="timerCounter">
                 <span>3</span>
                 <span>2</span>
                 <span>1</span>
