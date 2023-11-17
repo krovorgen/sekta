@@ -3,7 +3,7 @@ import cors from 'cors'
 import { createServer as createViteServer } from 'vite'
 import type { ViteDevServer } from 'vite'
 
-dotenv.config()
+dotenv.config({ path: '../../.env' })
 
 import cookieParser from 'cookie-parser'
 import { createProxyMiddleware } from 'http-proxy-middleware'
@@ -23,6 +23,8 @@ const isDev = () => process.env.NODE_ENV === 'development'
 async function startServer() {
   await createClientAndConnect()
   const app = express()
+
+  process.env.SERVER_RUNNING = 'true'
 
   app.use(cookieParser(), cors())
 
