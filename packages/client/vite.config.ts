@@ -12,7 +12,6 @@ export default defineConfig({
   },
   define: {
     __SERVER_PORT__: process.env.SERVER_PORT || 3001,
-    SERVER_RUNNING: false,
   },
   plugins: [react(), EnvironmentPlugin(['SERVER_RUNNING'])],
   build: {
