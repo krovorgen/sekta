@@ -94,7 +94,7 @@ const LeaderboardsPage: FC = () => {
               </Table.TCell>
 
               <Table.TCell>
-                <div>{timeFormatter(row.time)}</div>
+                <div>{timeFormatter(row.time / 1000)}</div>
               </Table.TCell>
             </Table.TRow>
           ))}
