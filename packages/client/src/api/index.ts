@@ -1,6 +1,6 @@
 import ky from 'ky'
 
-export let apiUrl = 'http://localhost:3001/api/v2'
+export let apiUrl = 'http://130.193.42.147:3001/api/v2'
 
 export const isDirect =
   process.env.SERVER_RUNNING === 'false' &&
