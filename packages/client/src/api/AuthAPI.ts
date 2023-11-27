@@ -48,7 +48,7 @@ class Auth extends BaseAPI {
     try {
       const theme: ThemeResponse = await this.http
         .extend({
-          prefixUrl: `http://130.193.42.147:${__SERVER_PORT__}/api`,
+          prefixUrl: `https://130.193.42.147:${__SERVER_PORT__}/api`,
         })
         .post('theme', { json: { id } })
         .json()
@@ -70,7 +70,7 @@ class Auth extends BaseAPI {
   updateTheme(params: { id: number; theme: string }): Promise<ThemeResponse> {
     return this.http
       .extend({
-        prefixUrl: `http://130.193.42.147:${__SERVER_PORT__}/api`,
+        prefixUrl: `https://130.193.42.147:${__SERVER_PORT__}/api`,
       })
       .post('theme/update', { json: params })
       .json()
