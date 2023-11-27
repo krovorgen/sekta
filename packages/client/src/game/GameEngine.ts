@@ -12,6 +12,7 @@ import { timeFormatter } from '../utils/timeFormatter'
 import Sound from './core/utils/Sound'
 import TouchControls, { TOUCH_AREA } from './core/utils/TouchControls'
 import GamepadControls, { GAMEPAD_ACT } from './core/utils/GamepadControls'
+import { ScopeResultDTO } from '../api/LeaderboardAPI'
 
 export enum GameState {
   // готовность к игре
@@ -22,8 +23,8 @@ export enum GameState {
   END = 2,
 }
 export type GameStateProps = {
-  gameScore: number
   gameTime: number
+  maxGameTime: number
 }
 export default class GameEngine {
   canvas: HTMLCanvasElement
@@ -33,7 +34,6 @@ export default class GameEngine {
 
   gameStateEndCallback: (props: GameStateProps) => void
   gameState: GameState = GameState.READY // состояние игры
-  gameScore = 0 // кол-во очков
   gameTime = 0 // продолжительность игры
   gameSpeed = 1 // множитель скорости игры
 
@@ -54,6 +54,7 @@ export default class GameEngine {
 
   lastBackground = 0 // время последнего изменения фона
   lastBrick = 0 // время последнего препятствия
+  maxGameTime = 0 // максимальное время игры
 
   backgroundSound?: Sound
 
@@ -61,10 +62,12 @@ export default class GameEngine {
     canvas: HTMLCanvasElement
     disableResources?: boolean
     gameStateEndCallback: (props: GameStateProps) => void
+    lastScope: ScopeResultDTO | null
   }) {
     this.canvas = props.canvas
     this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D
     this.gameStateEndCallback = props.gameStateEndCallback
+    this.maxGameTime = (props.lastScope?.time ?? 0) / 1000
     if (props.disableResources) {
       this.init()
       return
@@ -104,7 +107,6 @@ export default class GameEngine {
   }
   public reset(): void {
     this.gameState = GameState.READY
-    this.gameScore = 0
     this.gameTime = 0
     this.gameSpeed = 1
 
@@ -148,8 +150,10 @@ export default class GameEngine {
       this.render()
     }
 
-    this.lastLoopTime = currentTime
-    window.requestAnimationFrame(this.mainLoop)
+    this.lastLoopTime = performance.now()
+    setTimeout(() => {
+      window.requestAnimationFrame(this.mainLoop)
+    }, 1000 / GAME_OPTIONS.GAME_MAIN_FPS)
   }
 
   private update(dt: number): void {
@@ -260,7 +264,6 @@ export default class GameEngine {
     // удалить камни вышедшие за пределы экрана
     const newBricks = this.bricks!.filter(brick => !Entity.isOutside(brick))
     const delBricksCount = this.bricks!.length - newBricks.length
-    this.gameScore += delBricksCount
     this.bricks = newBricks
     // удалить огненный дождь вышедший за пределы экрана
     this.fireballs = this.fireballs!.filter(
@@ -276,13 +279,14 @@ export default class GameEngine {
   private gameOver(): void {
     if (this.gameState == GameState.END) return
     this.gameState = GameState.END
+    if (this.gameTime > this.maxGameTime) this.maxGameTime = this.gameTime
     this.stopSounds()
 
     setTimeout(
       () =>
         this.gameStateEndCallback({
-          gameScore: this.gameScore,
           gameTime: this.gameTime,
+          maxGameTime: this.maxGameTime,
         }),
       500
     )
@@ -302,7 +306,9 @@ export default class GameEngine {
     for (const brick of this.bricks!) brick.draw(this.context)
     for (const fireballs of this.fireballs!) fireballs.draw(this.context)
     // вывод текущего времени игры
-    const timeText = `Time: ${timeFormatter(this.gameTime)}`
+    const timeText = `Time: ${timeFormatter(
+      this.gameTime
+    )} \n\n MaxTime: ${timeFormatter(this.maxGameTime)}`
     this.context.font = '30px Verdana'
     this.context.fillStyle = 'gray'
     this.context.textAlign = 'center'

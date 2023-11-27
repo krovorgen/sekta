@@ -11,11 +11,13 @@ export default class Entity {
   position: TPoint
   offset: TOffset
   size: TSize
+  deleted: boolean
 
   constructor(props: EntityProps) {
     this.position = props.position
     this.offset = props.offset
     this.size = props.size
+    this.deleted = false
   }
 
   // проверка пересечения двух сущностей
