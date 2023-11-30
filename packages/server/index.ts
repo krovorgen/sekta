@@ -26,7 +26,7 @@ async function startServer() {
 
   process.env.SERVER_RUNNING = 'true'
 
-  app.use(cookieParser(), cors())
+  app.use(cookieParser(), cors({ origin: [/fire-runner\.ya-praktikum\.tech/] }))
 
   const port = Number(process.env.SERVER_PORT) || 3001
 
