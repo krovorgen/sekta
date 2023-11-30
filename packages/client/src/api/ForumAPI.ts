@@ -8,7 +8,7 @@ import {
   sendCommentDTO,
 } from '../types/forum'
 
-export const sektaUrl = 'http://130.193.42.147:3001/api/'
+export const sektaUrl = 'http://fire-runner.ya-praktikum.tech/api/'
 
 export const sektaApiInstance = ky.create({
   prefixUrl: sektaUrl,
