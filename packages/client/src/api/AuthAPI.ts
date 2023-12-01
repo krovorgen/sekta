@@ -48,7 +48,7 @@ class Auth extends BaseAPI {
     try {
       const theme: ThemeResponse = await this.http
         .extend({
-          prefixUrl: `http://fire-runner.ya-praktikum.tech/api`,
+          prefixUrl: `https://fire-runner.ya-praktikum.tech/api`,
         })
         .post('theme', { json: { id } })
         .json()
@@ -70,7 +70,7 @@ class Auth extends BaseAPI {
   updateTheme(params: { id: number; theme: string }): Promise<ThemeResponse> {
     return this.http
       .extend({
-        prefixUrl: `http://fire-runner.ya-praktikum.tech/api`,
+        prefixUrl: `https://fire-runner.ya-praktikum.tech/api`,
       })
       .post('theme/update', { json: params })
       .json()
