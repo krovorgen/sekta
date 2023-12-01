@@ -40,7 +40,7 @@ const Layout: FC = () => {
 
   useEffect(() => {
     const fetchServerData = async () => {
-      const url = `http://localhost:${__SERVER_PORT__}/api`
+      const url = `http://fire-runner.ya-praktikum.tech/api`
       const response = await fetch(url)
       const data = await response.json()
       console.log(data)
