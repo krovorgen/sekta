@@ -27,7 +27,6 @@ export type ThemeResponse = {
 
 class Auth extends BaseAPI {
   signIn(data: SignInDTO): Promise<unknown> {
-    console.log(data)
     return this.http.post(`${proxyRoutePrefix}/auth/signin`, { json: data })
   }
 
