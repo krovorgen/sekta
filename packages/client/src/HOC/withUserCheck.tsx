@@ -5,16 +5,16 @@ import { RoutePath } from '../constants/routes'
 
 import { User } from '../types'
 import { AuthApi } from '../api/AuthAPI'
-import { isDirect } from '../api'
+import { redirect_uri } from '../api'
 
 type WithUserType = { user: User }
 
 const fetchServerData = async (code: string): Promise<void> => {
   await AuthApi.getYandexAccount({
     code,
-    redirect_uri: 'http://localhost:3000/signin',
+    redirect_uri,
   })
-  window.location.href = isDirect ? '/' : 'http://localhost:3001'
+  window.location.href = '/'
 }
 
 export const withUserCheck = <P extends WithUserType>(

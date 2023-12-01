@@ -1,23 +1,12 @@
-import ky from 'ky'
-import { KyInstance } from 'ky/distribution/types/ky'
-
 import {
   getTopicDTO,
   getCommentDTO,
   sendTopicDTO,
   sendCommentDTO,
 } from '../types/forum'
+import { BaseAPI } from './BaseApi'
 
-export const sektaUrl = 'https://fire-runner.ya-praktikum.tech/api/'
-
-export const sektaApiInstance = ky.create({
-  prefixUrl: sektaUrl,
-  credentials: 'include',
-})
-
-class Forum {
-  protected http: KyInstance = sektaApiInstance
-
+class Forum extends BaseAPI {
   getTopics(): Promise<getTopicDTO[]> {
     return this.http.get('forum/topic').json()
   }

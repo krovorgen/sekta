@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import dotenv from 'dotenv'
-import EnvironmentPlugin from 'vite-plugin-environment'
 
 dotenv.config({ path: '../../.env' })
 
@@ -13,7 +12,7 @@ export default defineConfig({
   define: {
     __SERVER_PORT__: process.env.SERVER_PORT || 3001,
   },
-  plugins: [react(), EnvironmentPlugin(['SERVER_RUNNING'])],
+  plugins: [react()],
   build: {
     commonjsOptions: {
       transformMixedEsModules: true,
