@@ -1,6 +1,6 @@
 import ky from 'ky'
 
-export let apiUrl = 'http://localhost:3001/api/v2'
+export let apiUrl = 'http://fire-runner.ya-praktikum.tech/api/v2'
 
 export const isDirect =
   process.env.SERVER_RUNNING === 'false' &&
