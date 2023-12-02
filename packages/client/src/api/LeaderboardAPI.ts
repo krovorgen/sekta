@@ -1,5 +1,6 @@
 import { BaseAPI } from './BaseApi'
 import { TEAM_NAME } from '../constants/leaderboard'
+import { proxyRoutePrefix } from './index'
 
 export type AddToBoardDTO = {
   data: object
@@ -15,11 +16,15 @@ export type ExtractFromBoardDTO = {
 
 class Leaderboard extends BaseAPI {
   addResult(data: AddToBoardDTO): Promise<unknown> {
-    return this.http.post('leaderboard', { json: data }).json()
+    return this.http
+      .post(`${proxyRoutePrefix}/leaderboard`, { json: data })
+      .json()
   }
 
   getResults(data: ExtractFromBoardDTO): Promise<unknown> {
-    return this.http.post(`leaderboard/${TEAM_NAME}`, { json: data }).json()
+    return this.http
+      .post(`${proxyRoutePrefix}/leaderboard/${TEAM_NAME}`, { json: data })
+      .json()
   }
 
   create = undefined

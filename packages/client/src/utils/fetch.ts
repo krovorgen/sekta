@@ -1,4 +1,4 @@
-import { apiUrl } from '../api'
+import { apiUrl, proxyRoutePrefix } from '../api'
 
 export enum FetchMethods {
   GET = 'GET',
@@ -13,7 +13,7 @@ export const fetchSekta = async (
   body?: unknown
 ) => {
   try {
-    const response = await fetch(`${apiUrl}${url}`, {
+    const response = await fetch(`${apiUrl}${proxyRoutePrefix}${url}`, {
       method: method,
       ...(body ? { body: JSON.stringify(body) } : {}),
       credentials: 'include',

@@ -14,6 +14,7 @@ import { HTTPError } from 'ky'
 import { withUserCheck } from '../../HOC/withUserCheck'
 import { useAppDispatch } from '../../redux/store'
 import { getUserTC } from '../../redux/features/auth/authSlice'
+import { redirect_uri } from '../../api'
 
 const LoginPage: FC = () => {
   const { handleSubmit, control } = useForm<SignInDTO>()
@@ -44,7 +45,7 @@ const LoginPage: FC = () => {
 
   const onYandexSignIn = useCallback(async () => {
     try {
-      await AuthApi.getYandexServiceId('http://localhost:3000/signin')
+      await AuthApi.getYandexServiceId(redirect_uri)
     } catch (error) {
       if (error instanceof HTTPError) {
         const responseBody = await error.response.json()
