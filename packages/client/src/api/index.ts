@@ -1,14 +1,10 @@
 import ky from 'ky'
 
-export let apiUrl = 'http://localhost:3001/api/v2'
+export const apiUrl = 'https://fire-runner.ya-praktikum.tech/api/'
 
-export const isDirect =
-  process.env.SERVER_RUNNING === 'false' &&
-  process.env.NODE_ENV !== 'production'
+export const proxyRoutePrefix = 'v2'
 
-if (isDirect) {
-  apiUrl = 'https://ya-praktikum.tech/api/v2'
-}
+export const redirect_uri = 'https://fire-runner.ya-praktikum.tech'
 
 export const apiInstance = ky.create({
   prefixUrl: apiUrl,

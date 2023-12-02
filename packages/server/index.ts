@@ -24,8 +24,6 @@ async function startServer() {
   await createClientAndConnect()
   const app = express()
 
-  process.env.SERVER_RUNNING = 'true'
-
   app.use(cookieParser(), cors())
 
   const port = Number(process.env.SERVER_PORT) || 3001
@@ -124,17 +122,6 @@ async function startServer() {
 
   app.listen(port, () => {
     console.log(`  ➜ 🎸 Server is listening on port: ${port}`)
-  })
-
-  const app2 = express()
-  // запускаем второй сервер для редиректа
-  // так как у нас oauth.yandex.ru настроен с redirect_uri=http://localhost:3000
-  app2.use('*', (req, res) => {
-    res.redirect(`http://localhost:3001${req.originalUrl}`)
-  })
-
-  app2.listen(3000, () => {
-    console.log(`Server 2 is listening on port: 3000`)
   })
 }
 

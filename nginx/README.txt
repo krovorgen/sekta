@@ -1,0 +1,1 @@
+В папке nginx должны быть файлы nginx.conf, cert.pem и privkey.pem
