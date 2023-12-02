@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react'
-
 import { Outlet } from 'react-router-dom'
 
 import { useAppDispatch, useAppSelector } from '../../redux/store'
@@ -12,6 +11,7 @@ import { Header } from './Header/Header'
 import cn from 'classnames'
 import styles from './Layout.module.scss'
 import { FullscreenButton } from '../../components/FullscreenButton/FullscreenButton'
+import { apiUrl } from '../../api'
 
 const Layout: FC = () => {
   const dispatch = useAppDispatch()
@@ -40,7 +40,7 @@ const Layout: FC = () => {
 
   useEffect(() => {
     const fetchServerData = async () => {
-      const url = `https://fire-runner.ya-praktikum.tech/api`
+      const url = apiUrl
       const response = await fetch(url)
       const data = await response.json()
       console.log(data)
