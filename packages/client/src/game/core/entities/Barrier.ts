@@ -1,22 +1,22 @@
-import { GAME_OPTIONS, GAME_RESOURCES } from '../../../constants/game'
+import { GAME_OPTIONS } from '../../../constants/game'
+import { GAME_RESOURCES } from '../../../constants/resources'
 import Entity from '../Entity'
 import AnimatedSprite from '../utils/AnimatedSprite'
 import Resources from '../utils/Resources'
 
-const { BRICK_WIDTH, BRICK_HEIGHT, BRICK_SPEED } = GAME_OPTIONS
+const { TRAP_WIDTH, TRAP_HEIGHT, TRAP_SPEED } = GAME_OPTIONS
 
-export default class Brick extends Entity {
+export default class Trap extends Entity {
   sprite?: AnimatedSprite
 
   constructor(resources?: Resources) {
     super({
       position: {
         x: GAME_OPTIONS.CANVAS_WIDTH,
-        y:
-          GAME_OPTIONS.CANVAS_HEIGHT - GAME_OPTIONS.FLOOR_HEIGHT - BRICK_HEIGHT,
+        y: GAME_OPTIONS.CANVAS_HEIGHT - GAME_OPTIONS.FLOOR_HEIGHT - TRAP_HEIGHT,
       },
-      offset: { dx: -BRICK_SPEED, dy: 0 },
-      size: { width: BRICK_WIDTH, height: BRICK_HEIGHT },
+      offset: { dx: -TRAP_SPEED, dy: 0 },
+      size: { width: TRAP_WIDTH, height: TRAP_HEIGHT },
     })
     if (!resources) return
     this.sprite = new AnimatedSprite({

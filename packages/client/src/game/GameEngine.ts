@@ -1,7 +1,8 @@
-import { GAME_OPTIONS, GAME_RESOURCES } from '../constants/game'
+import { GAME_OPTIONS } from '../constants/game'
+import { GAME_RESOURCES } from '../constants/resources'
 import Entity from './core/Entity'
 import Background, { BACKGROUND_TYPE } from './core/entities/Background'
-import Brick from './core/entities/Brick'
+import Trap from './core/entities/Trap'
 import Fireball from './core/entities/Fireball'
 import Floor from './core/entities/Floor'
 import Player from './core/entities/Player'
@@ -39,7 +40,7 @@ export default class GameEngine {
 
   floor?: Floor
   player?: Player
-  bricks?: Brick[]
+  traps?: Trap[]
   fireballs?: Fireball[]
 
   backgroundIndex = 0
@@ -53,7 +54,7 @@ export default class GameEngine {
   prevBackground?: Background
 
   lastBackground = 0 // время последнего изменения фона
-  lastBrick = 0 // время последнего препятствия
+  lastTrap = 0 // время последней ловушки
   maxGameTime = 0 // максимальное время игры
 
   backgroundSound?: Sound
@@ -118,11 +119,11 @@ export default class GameEngine {
     this.prevBackground = undefined
     this.floor = new Floor()
     this.player = new Player(this.resources)
-    this.bricks = []
+    this.traps = []
     this.fireballs = []
 
     this.lastBackground = 0
-    this.lastBrick = 0
+    this.lastTrap = 0
 
     this.backgroundSound = new Sound({
       resource: this.resources?.get(
@@ -229,24 +230,24 @@ export default class GameEngine {
       this.fireballs!.push(new Fireball(this.resources))
       this.gameSpeed += GAME_OPTIONS.SPEED_STEP
     }
-    // появление препятствия с заданной периодичностью
-    if (this.gameTime - this.lastBrick > GAME_OPTIONS.BRICK_TIME / 1000) {
-      this.bricks!.push(new Brick(this.resources))
-      this.lastBrick = this.gameTime
+    // появление ловушек с заданной периодичностью
+    if (this.gameTime - this.lastTrap > GAME_OPTIONS.TRAP_TIME / 1000) {
+      this.traps!.push(new Trap(this.resources))
+      this.lastTrap = this.gameTime
     }
     // движение игрока
     this.player!.update(dt)
-    // движение препятствий
-    for (const brick of this.bricks!) brick.update(dt * this.gameSpeed)
+    // движение ловушек
+    for (const trap of this.traps!) trap.update(dt * this.gameSpeed)
     // движение огненного дождя
     for (const fireball of this.fireballs!) fireball.update(dt * this.gameSpeed)
   }
 
   private checkCollisions(): void {
-    // появление/удаление препятствий
-    for (const brick of this.bricks!) {
+    // появление/удаление ловушек
+    for (const trap of this.traps!) {
       // проверка на столкновение игрока с камнями
-      if (Entity.isCollide(this.player!, brick)) {
+      if (Entity.isCollide(this.player!, trap)) {
         this.player!.isDead = true
         this.gameOver()
         break
@@ -261,10 +262,10 @@ export default class GameEngine {
         break
       }
     }
-    // удалить камни вышедшие за пределы экрана
-    const newBricks = this.bricks!.filter(brick => !Entity.isOutside(brick))
-    const delBricksCount = this.bricks!.length - newBricks.length
-    this.bricks = newBricks
+    // удалить ловушки вышедшие за пределы экрана
+    const newTraps = this.traps!.filter(trap => !Entity.isOutside(trap))
+    const delTrapsCount = this.traps!.length - newTraps.length
+    this.traps = newTraps
     // удалить огненный дождь вышедший за пределы экрана
     this.fireballs = this.fireballs!.filter(
       fireball => !Entity.isOutside(fireball)
@@ -303,20 +304,20 @@ export default class GameEngine {
     this.currentBackground!.draw(this.context)
     this.prevBackground?.draw(this.context)
     this.player!.draw(this.context)
-    for (const brick of this.bricks!) brick.draw(this.context)
+    for (const trap of this.traps!) trap.draw(this.context)
     for (const fireballs of this.fireballs!) fireballs.draw(this.context)
     // вывод текущего времени игры
-    const timeText = `Time: ${timeFormatter(
+    const timeText = `Current Time: ${timeFormatter(
       this.gameTime
-    )} \n\n MaxTime: ${timeFormatter(this.maxGameTime)}`
+    )}          Max Time: ${timeFormatter(this.maxGameTime)}`
     this.context.font = '30px Verdana'
     this.context.fillStyle = 'gray'
     this.context.textAlign = 'center'
     this.context.textBaseline = 'top'
     this.context.strokeStyle = 'white'
     this.context.lineWidth = 0.75
-    this.context.strokeText(timeText, this.canvas.width / 2, 150)
-    this.context.fillText(timeText, this.canvas.width / 2, 150)
+    this.context.strokeText(timeText, this.canvas.width / 2, 15)
+    this.context.fillText(timeText, this.canvas.width / 2, 15)
   }
 
   public destroy(): void {

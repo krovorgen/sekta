@@ -9,7 +9,7 @@
 - [Классы игровых объектов](#классы-игровых-объектов)
   - [Player](#player)
   - [Floor](#floor)
-  - [Brick](#brick)
+  - [Trap](#trap)
   - [Fireball](#fireball)
   - [Background](#background)
 - [Вспомогательные классы](#вспомогательные-классы)
@@ -84,7 +84,7 @@ classDiagram
     draw(ctx: CanvasRenderingContext2D) : void
   }
 
-  class Brick {
+  class Trap {
     +sprite? : AnimatedSprite
 
     +update(dt: number) : void
@@ -131,7 +131,7 @@ classDiagram
 
     +floor? : Floor
     +player? : Player
-    +bricks? : Brick[]
+    +traps? : Trap[]
     +fireballs? : Fireball[]
 
     +backgroundIndex : number
@@ -140,7 +140,7 @@ classDiagram
     +prevBackground? : Background
 
     +lastBackground : number
-    +lastBrick : number
+    +lastTrap : number
 
     +init() : void
     +reset() : void
@@ -157,19 +157,19 @@ classDiagram
   GameEngine o-- "1" Player
   GameEngine o-- "1" Floor
   GameEngine o-- "1..2" Background
-  GameEngine o-- "0..*" Brick
+  GameEngine o-- "0..*" Trap
   GameEngine o-- "0..*" Fireball
   Entity <|-- Player
   Entity <|-- Floor
   Entity <|-- Background
-  Entity <|-- Brick
+  Entity <|-- Trap
   Entity <|-- Fireball
   Entity o-- TPoint
   Entity o-- TOffset
   Entity o-- TSize
   Player o-- AnimatedSprite
   Background o-- AnimatedSprite
-  Brick o-- AnimatedSprite
+  Trap o-- AnimatedSprite
   Fireball o-- AnimatedSprite
 ```
 
@@ -407,24 +407,24 @@ this.sprite.render(ctx)
 }
 ```
 
-### Brick
+### Trap
 
-Описывает логику работы с объектом препятствия, наследуется от класса `Entity`, расширяет его следующими методами:
+Описывает логику работы с объектом ловушки, наследуется от класса `Entity`, расширяет его следующими методами:
 
 | Метод      | Описание                                                   |
 | :--------- | :--------------------------------------------------------- |
-| **update(dt: number)**  | метод для обновления координат препятствия              |
-| **draw(ctx: CanvasRenderingContext2D)**  | производит отрисовку препятствия              |
+| **update(dt: number)**  | метод для обновления координат ловушки              |
+| **draw(ctx: CanvasRenderingContext2D)**  | производит отрисовку ловушки              |
 
-Начальные значения координат, размеры и движение препятствия:
+Начальные значения координат, размеры и движение ловушки:
 ```javascript
 {
   position: {
     x: GAME_OPTIONS.CANVAS_WIDTH,
-    y: GAME_OPTIONS.CANVAS_HEIGHT - GAME_OPTIONS.FLOOR_HEIGHT - BRICK_HEIGHT,
+    y: GAME_OPTIONS.CANVAS_HEIGHT - GAME_OPTIONS.FLOOR_HEIGHT - TRAP_HEIGHT,
   },
-  offset: { dx: -BRICK_SPEED, dy: 0 },
-  size: { width: BRICK_WIDTH, height: BRICK_HEIGHT }
+  offset: { dx: -TRAP_SPEED, dy: 0 },
+  size: { width: TRAP_WIDTH, height: TRAP_HEIGHT }
 }
 ```
 
@@ -434,8 +434,8 @@ this.sprite.render(ctx)
 
 | Метод      | Описание                                                   |
 | :--------- | :--------------------------------------------------------- |
-| **update(dt: number)**  | метод для обновления координат препятствия              |
-| **draw(ctx: CanvasRenderingContext2D)**  | производит отрисовку препятствия              |
+| **update(dt: number)**  | метод для обновления координат              |
+| **draw(ctx: CanvasRenderingContext2D)**  | производит отрисовку              |
 
 Начальные значения координат, размеры и движение огненного дождя:
 ```javascript

@@ -1,4 +1,5 @@
-import { GAME_OPTIONS, GAME_RESOURCES } from '../../../constants/game'
+import { GAME_OPTIONS } from '../../../constants/game'
+import { GAME_RESOURCES } from '../../../constants/resources'
 import Entity from '../Entity'
 import AnimatedSprite from '../utils/AnimatedSprite'
 import Resources from '../utils/Resources'

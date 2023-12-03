@@ -1,7 +1,7 @@
 import 'jest-canvas-mock'
 import { GAME_OPTIONS } from '../constants/game'
 import GameEngine, { GameState } from './GameEngine'
-import Brick from './core/entities/Brick'
+import Trap from './core/entities/Trap'
 
 describe('GameEngine', () => {
   let canvas: HTMLCanvasElement | null
@@ -20,6 +20,7 @@ describe('GameEngine', () => {
       canvas,
       gameStateEndCallback,
       disableResources: true,
+      lastScope: null,
     })
   })
 
@@ -42,16 +43,16 @@ describe('GameEngine', () => {
   it('should update game entities', () => {
     const initialFireballsCount: number | bigint = gameEngine?.fireballs
       ?.length as number | bigint
-    const initialBricksCount: number | bigint = gameEngine?.bricks?.length as
+    const initialTrapsCount: number | bigint = gameEngine?.traps?.length as
       | number
       | bigint
     gameEngine.gameTime = 9000
-    gameEngine.lastBrick = 3000
+    gameEngine.lastTrap = 3000
 
     gameEngine['updateEntities'](0.9)
     // Проверяем, что количество огненных шаров и камней увеличилось
     expect(gameEngine?.fireballs?.length).toBeGreaterThan(initialFireballsCount)
-    expect(gameEngine?.bricks?.length).toBeGreaterThan(initialBricksCount)
+    expect(gameEngine?.traps?.length).toBeGreaterThan(initialTrapsCount)
   })
 
   it('should check collisions correctly', () => {
@@ -60,13 +61,13 @@ describe('GameEngine', () => {
     const player = gameEngine.player
     if (!player) fail('player is undefined')
 
-    // Создаем Brick, который находится в точке, где должно произойти столкновение
-    const brick = new Brick()
-    brick.position.x = player.position.x // Устанавливаем координаты так, чтобы было столкновение
-    brick.position.y = player.position.y
+    // Создаем Trap, который находится в точке, где должно произойти столкновение
+    const trap = new Trap()
+    trap.position.x = player.position.x // Устанавливаем координаты так, чтобы было столкновение
+    trap.position.y = player.position.y
 
-    // Добавляем Brick и игрока в игровой движок
-    gameEngine.bricks?.push(brick)
+    // Добавляем Trap и игрока в игровой движок
+    gameEngine.traps?.push(trap)
     gameEngine.player = player
 
     // Проверяем, что в начале игры gameState равен READY
@@ -106,7 +107,7 @@ describe('GameEngine', () => {
     if (!gameEngine.floor) fail('floor is undefined')
     gameEngine.floor.draw = jest.fn()
     gameEngine.player.draw = jest.fn()
-    gameEngine.bricks?.forEach(brick => (brick.draw = jest.fn()))
+    gameEngine.traps?.forEach(trap => (trap.draw = jest.fn()))
     if (gameEngine)
       gameEngine.fireballs?.forEach(fireball => (fireball.draw = jest.fn()))
 
@@ -121,8 +122,8 @@ describe('GameEngine', () => {
     )
     expect(gameEngine?.floor?.draw).toHaveBeenCalledWith(context)
     expect(gameEngine?.player?.draw).toHaveBeenCalledWith(context)
-    gameEngine?.bricks?.forEach(brick => {
-      expect(brick.draw).toHaveBeenCalledWith(context)
+    gameEngine?.traps?.forEach(trap => {
+      expect(trap.draw).toHaveBeenCalledWith(context)
     })
     gameEngine?.fireballs?.forEach(fireball => {
       expect(fireball.draw).toHaveBeenCalledWith(context)
