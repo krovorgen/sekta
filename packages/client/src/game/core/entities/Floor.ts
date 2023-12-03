@@ -17,15 +17,24 @@ export default class Floor extends Entity {
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
-    ctx.beginPath()
-    ctx.rect(
+    // ctx.beginPath()
+    // ctx.rect(
+    //   this.position.x,
+    //   this.position.y,
+    //   this.size.width,
+    //   this.size.height
+    // )
+    // ctx.fillStyle = 'green'
+    // ctx.stroke()
+    // ctx.closePath()
+
+    ctx.lineWidth = 3
+    ctx.strokeStyle = 'red'
+    ctx.strokeRect(
       this.position.x,
       this.position.y,
       this.size.width,
       this.size.height
     )
-    ctx.fillStyle = 'lightgray'
-    ctx.fill()
-    ctx.closePath()
   }
 }

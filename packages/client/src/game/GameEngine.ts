@@ -300,12 +300,13 @@ export default class GameEngine {
       GAME_OPTIONS.CANVAS_WIDTH,
       GAME_OPTIONS.CANVAS_HEIGHT
     )
-    this.floor!.draw(this.context)
     this.currentBackground!.draw(this.context)
     this.prevBackground?.draw(this.context)
+    this.floor!.draw(this.context)
     this.player!.draw(this.context)
     for (const trap of this.traps!) trap.draw(this.context)
     for (const fireballs of this.fireballs!) fireballs.draw(this.context)
+
     // вывод текущего времени игры
     const timeText = `Current Time: ${timeFormatter(
       this.gameTime
