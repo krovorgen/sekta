@@ -70,3 +70,40 @@
 
 Если вам понадобится только один сервис, просто уточните какой в команде
 `docker compose up {sevice_name}`, например `docker compose up server`
+
+## Размещение проекта на облачных сервисах Yandex Cloud
+Генерация/установка сертификата SSL вручную через certbot:
+Локально:
+
+`certbot certonly --authenticator manual`
+`fire-runner.ya-praktikum.tech` (указать нужный домен)
+
+`ssh -i sekta sekta@VPS_IP`
+
+На ВМ через SSH:
+
+`docker ps`
+`docker exec -it ***** bash` (приатачиться к контейнеру)
+
+(записать файл рукопожатия certbot)
+`cd /app/client/ssr-dist`
+`mkdir .well-known .well-known/acme-challenge`
+`cd .well-known/acme-challenge`
+`echo *****.***** > *****`
+`exit`
+
+Обновление контейнеров в облаке (предварительно установить Yandex CLI):
+Локально:
+
+`docker tag prackicum-server cr.yandex/*****/sekta:server`
+`docker tag nginx cr.yandex/*****/sekta:nginx`
+
+`docker push cr.yandex/*****/sekta:server`
+`docker push cr.yandex/*****/sekta:nginx`
+
+На ВМ через SSH:
+`docker pull cr.yandex/*****/sekta:nginx`
+`docker pull cr.yandex/*****/sekta:server`
+
+Загрузка папки с локальной машины на ВМ в облаке
+`scp -i sekta -r nginx sekta@VPS_IP:nginx`
