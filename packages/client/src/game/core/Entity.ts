@@ -41,4 +41,19 @@ export default class Entity {
       entity.size
     )
   }
+  // трассировка объектов на сцене
+  public debugDraw(
+    ctx: CanvasRenderingContext2D,
+    color = 'red',
+    lineWidth = 3
+  ) {
+    ctx.lineWidth = lineWidth
+    ctx.strokeStyle = color
+    ctx.strokeRect(
+      this.position.x,
+      this.position.y,
+      this.size.width,
+      this.size.height
+    )
+  }
 }

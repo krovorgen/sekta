@@ -69,6 +69,7 @@ export const GAME_RESOURCES = {
   PLAYER_RUN_SOUND: '',
   PLAYER_JUMP_SOUND: '',
   PLAYER_SLIDE_SOUND: '',
+  PLAYER_DEATH_SOUND: '',
 }
 // настройки ресурсов
 export function GameResourcesInit() {
@@ -138,6 +139,7 @@ export function GameResourcesInit() {
   GAME_RESOURCES.PLAYER_RUN_SOUND = PLAYER_RUN_SOUND_PATH
   GAME_RESOURCES.PLAYER_JUMP_SOUND = PLAYER_JUMP_SOUND_PATH
   GAME_RESOURCES.PLAYER_SLIDE_SOUND = PLAYER_SLIDE_SOUND_PATH
+  GAME_RESOURCES.PLAYER_DEATH_SOUND = PLAYER_DEATH_SOUND_PATH
 }
 /*
  * Изображения
@@ -205,3 +207,4 @@ import BACKGROUND_SOUND_PATH from '../assets/sounds/background.mp3'
 import PLAYER_RUN_SOUND_PATH from '../assets/sounds/run.mp3'
 import PLAYER_JUMP_SOUND_PATH from '../assets/sounds/jump.mp3'
 import PLAYER_SLIDE_SOUND_PATH from '../assets/sounds/slide.mp3'
+import PLAYER_DEATH_SOUND_PATH from '../assets/sounds/death.mp3'

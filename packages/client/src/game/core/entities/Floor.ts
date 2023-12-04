@@ -1,7 +1,7 @@
 import { GAME_OPTIONS } from '../../../constants/game'
-import Entity from '../Entity'
+import Block from '../Block'
 
-export default class Floor extends Entity {
+export default class Floor extends Block {
   constructor() {
     super({
       position: {
@@ -17,24 +17,8 @@ export default class Floor extends Entity {
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
-    // ctx.beginPath()
-    // ctx.rect(
-    //   this.position.x,
-    //   this.position.y,
-    //   this.size.width,
-    //   this.size.height
-    // )
-    // ctx.fillStyle = 'green'
-    // ctx.stroke()
-    // ctx.closePath()
-
-    ctx.lineWidth = 3
-    ctx.strokeStyle = 'red'
-    ctx.strokeRect(
-      this.position.x,
-      this.position.y,
-      this.size.width,
-      this.size.height
-    )
+    if (GAME_OPTIONS.GAME_DEBUG) {
+      this.debugDraw(ctx)
+    }
   }
 }

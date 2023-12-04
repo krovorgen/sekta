@@ -19,7 +19,7 @@ export default class Fireball extends Entity {
     super({
       position: {
         x: randomRange(0, GAME_OPTIONS.CANVAS_WIDTH),
-        y: -FIREBALL_HEIGHT,
+        y: -FIREBALL_HEIGHT - 2 * GAME_OPTIONS.CANVAS_HEIGHT,
       },
       offset: {
         dx: randomRange(-1, 1),
@@ -38,6 +38,10 @@ export default class Fireball extends Entity {
     })
   }
 
+  public isOutside() {
+    return this.position.y > GAME_OPTIONS.CANVAS_HEIGHT
+  }
+
   public update(dt: number) {
     this.position.x += this.offset.dx * dt
     this.position.y += this.offset.dy * dt
@@ -47,19 +51,9 @@ export default class Fireball extends Entity {
   }
 
   public draw(ctx: CanvasRenderingContext2D) {
-    if (this.sprite) {
-      this.sprite.render(ctx, this)
-    } else {
-      ctx.beginPath()
-      ctx.rect(
-        this.position.x,
-        this.position.y,
-        this.size.width,
-        this.size.height
-      )
-      ctx.fillStyle = 'red'
-      ctx.fill()
-      ctx.closePath()
+    this.sprite?.render(ctx, this)
+    if (GAME_OPTIONS.GAME_DEBUG) {
+      this.debugDraw(ctx)
     }
   }
 }

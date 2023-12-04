@@ -14,6 +14,7 @@ import Sound from './core/utils/Sound'
 import TouchControls, { TOUCH_AREA } from './core/utils/TouchControls'
 import GamepadControls, { GAMEPAD_ACT } from './core/utils/GamepadControls'
 import { ScopeResultDTO } from '../api/LeaderboardAPI'
+import Particle from './core/Particle'
 
 export enum GameState {
   // готовность к игре
@@ -35,6 +36,7 @@ export default class GameEngine {
 
   gameStateEndCallback: (props: GameStateProps) => void
   gameState: GameState = GameState.READY // состояние игры
+  gameFPS = 0 // текущая частота кадров
   gameTime = 0 // продолжительность игры
   gameSpeed = 1 // множитель скорости игры
 
@@ -52,6 +54,7 @@ export default class GameEngine {
   ]
   currentBackground?: Background
   prevBackground?: Background
+  particles?: Particle[]
 
   lastBackground = 0 // время последнего изменения фона
   lastTrap = 0 // время последней ловушки
@@ -117,6 +120,7 @@ export default class GameEngine {
       this.resources
     )
     this.prevBackground = undefined
+    this.particles = []
     this.floor = new Floor()
     this.player = new Player(this.resources)
     this.traps = []
@@ -152,6 +156,7 @@ export default class GameEngine {
     }
 
     this.lastLoopTime = performance.now()
+    this.gameFPS = Math.floor(1000 / deltaTime)
     setTimeout(() => {
       window.requestAnimationFrame(this.mainLoop)
     }, 1000 / GAME_OPTIONS.GAME_MAIN_FPS)
@@ -186,7 +191,31 @@ export default class GameEngine {
       GamepadControls.isAct(GAMEPAD_ACT.DOWN) ||
       TouchControls.isTouched(TOUCH_AREA.BOTTOM)
     ) {
-      this.player!.down()
+      this.player!.slide(player => {
+        // эффект частиц при быстром падении
+        const particleSrcX = player.position.x + player.size.width / 2
+        const particleSrcY = player.position.y + player.size.height
+        for (let i = 0; i < 25; i++) {
+          this.particles!.push(
+            new Particle({
+              color: 'red',
+              position: { x: particleSrcX, y: particleSrcY },
+            })
+          )
+          this.particles!.push(
+            new Particle({
+              color: 'orange',
+              position: { x: particleSrcX, y: particleSrcY },
+            })
+          )
+          this.particles!.push(
+            new Particle({
+              color: 'yellow',
+              position: { x: particleSrcX, y: particleSrcY },
+            })
+          )
+        }
+      })
     }
     if (
       KeyControls.isKeyDown(KEYS.LEFT) ||
@@ -208,8 +237,8 @@ export default class GameEngine {
 
   private updateEntities(dt: number): void {
     // обновить движение/переход бесшовного фона
-    this.currentBackground!.update(dt)
-    this.prevBackground?.update(dt)
+    this.currentBackground!.update(dt * this.gameSpeed)
+    this.prevBackground?.update(dt * this.gameSpeed)
     // изменение фона с заданной периодичностью
     if (
       this.gameTime - this.lastBackground >
@@ -227,7 +256,15 @@ export default class GameEngine {
     // с увеличением времени игры увеличиваетя кол-во попаданий в условие ниже
     // формула: 1 - 0.999^gameTime
     if (Math.random() < 1 - Math.pow(0.999, this.gameTime)) {
-      this.fireballs!.push(new Fireball(this.resources))
+      const newFireball = new Fireball(this.resources)
+      if (
+        this.fireballs!.every(
+          fb =>
+            newFireball.position.x > fb.position.x + fb.size.width ||
+            newFireball.position.x < fb.position.x - fb.size.width
+        )
+      )
+        this.fireballs!.push(newFireball)
       this.gameSpeed += GAME_OPTIONS.SPEED_STEP
     }
     // появление ловушек с заданной периодичностью
@@ -237,10 +274,12 @@ export default class GameEngine {
     }
     // движение игрока
     this.player!.update(dt)
+    // движение частиц (эффекты)
+    for (const particle of this.particles!) particle.update(dt)
     // движение ловушек
     for (const trap of this.traps!) trap.update(dt * this.gameSpeed)
     // движение огненного дождя
-    for (const fireball of this.fireballs!) fireball.update(dt * this.gameSpeed)
+    for (const fireball of this.fireballs!) fireball.update(dt)
   }
 
   private checkCollisions(): void {
@@ -248,7 +287,7 @@ export default class GameEngine {
     for (const trap of this.traps!) {
       // проверка на столкновение игрока с камнями
       if (Entity.isCollide(this.player!, trap)) {
-        this.player!.isDead = true
+        this.player!.death()
         this.gameOver()
         break
       }
@@ -257,19 +296,17 @@ export default class GameEngine {
     for (const fireball of this.fireballs!) {
       // проверка на столкновение игрока с огненным дождем
       if (Entity.isCollide(this.player!, fireball)) {
-        this.player!.isDead = true
+        this.player!.death()
         this.gameOver()
         break
       }
     }
+    // удалить частицы с истекшим временем жизни
+    this.particles = this.particles!.filter(particle => particle.life > 0)
     // удалить ловушки вышедшие за пределы экрана
-    const newTraps = this.traps!.filter(trap => !Entity.isOutside(trap))
-    const delTrapsCount = this.traps!.length - newTraps.length
-    this.traps = newTraps
+    this.traps = this.traps!.filter(trap => !trap.isOutside())
     // удалить огненный дождь вышедший за пределы экрана
-    this.fireballs = this.fireballs!.filter(
-      fireball => !Entity.isOutside(fireball)
-    )
+    this.fireballs = this.fireballs!.filter(fireball => !fireball.isOutside())
   }
 
   private stopSounds(): void {
@@ -303,22 +340,66 @@ export default class GameEngine {
     this.currentBackground!.draw(this.context)
     this.prevBackground?.draw(this.context)
     this.floor!.draw(this.context)
-    this.player!.draw(this.context)
     for (const trap of this.traps!) trap.draw(this.context)
-    for (const fireballs of this.fireballs!) fireballs.draw(this.context)
-
-    // вывод текущего времени игры
-    const timeText = `Current Time: ${timeFormatter(
+    this.player!.draw(this.context)
+    for (const particle of this.particles!) particle.draw(this.context)
+    for (const fireball of this.fireballs!) fireball.draw(this.context)
+    this.renderUI(this.context)
+  }
+  private renderUI(ctx: CanvasRenderingContext2D): void {
+    ctx.save()
+    // игровая информация
+    ctx.fillStyle = 'gray'
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)'
+    ctx.lineJoin = 'round'
+    ctx.font = '20px Arial'
+    const maxTimeText =
+      `Max Time: ${timeFormatter(this.maxGameTime)}` +
+      (GAME_OPTIONS.GAME_DEBUG ? `    FPS: ${this.gameFPS}` : ``)
+    ctx.strokeText(maxTimeText, 10, 55)
+    ctx.fillText(maxTimeText, 10, 55)
+    const gameTimePercent = (this.gameTime / this.maxGameTime) * 100
+    const gameTimeText = `Current Time: ${timeFormatter(
       this.gameTime
-    )}          Max Time: ${timeFormatter(this.maxGameTime)}`
-    this.context.font = '30px Verdana'
-    this.context.fillStyle = 'gray'
-    this.context.textAlign = 'center'
-    this.context.textBaseline = 'top'
-    this.context.strokeStyle = 'white'
-    this.context.lineWidth = 0.75
-    this.context.strokeText(timeText, this.canvas.width / 2, 15)
-    this.context.fillText(timeText, this.canvas.width / 2, 15)
+    )} (${gameTimePercent.toFixed(0)}%)`
+    ctx.strokeText(gameTimeText, 10, 85)
+    ctx.fillText(gameTimeText, 10, 85)
+    const gameSpeed = 'Speed: ' + this.gameSpeed.toFixed(1) + 'x'
+    ctx.strokeText(gameSpeed, GAME_OPTIONS.CANVAS_WIDTH / 2, 55)
+    ctx.fillText(gameSpeed, GAME_OPTIONS.CANVAS_WIDTH / 2, 55)
+    // индикатор возможности прыжка
+    const jumpReadyRatio = Math.min(
+      this.player!.jumpDeltaTime() / GAME_OPTIONS.PLAYER_JUMP_BLOCKTIME,
+      1.0
+    )
+    ctx.fillStyle = 'yellow'
+    ctx.fillRect(0, 0, jumpReadyRatio * GAME_OPTIONS.CANVAS_WIDTH, 5)
+    // индикатор возможности проскальзывания
+    const slideReadyRatio = Math.min(
+      this.player!.slideDeltaTime() / GAME_OPTIONS.PLAYER_SLIDE_BLOCKTIME,
+      1.0
+    )
+    ctx.fillStyle = 'gold'
+    ctx.fillRect(0, 5, slideReadyRatio * GAME_OPTIONS.CANVAS_WIDTH, 5)
+    // подсказки по огненному дождю
+    for (const fireball of this.fireballs!) {
+      if (fireball.position.y < -fireball.size.height) {
+        ctx.fillStyle = 'red'
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)'
+        ctx.font = '15px Arial'
+        ctx.strokeText(
+          Math.abs(fireball.position.y + fireball.size.height).toFixed(0) + 'm',
+          fireball.position.x,
+          25
+        )
+        ctx.fillText(
+          Math.abs(fireball.position.y + fireball.size.height).toFixed(0) + 'm',
+          fireball.position.x,
+          25
+        )
+      }
+    }
+    ctx.restore()
   }
 
   public destroy(): void {
