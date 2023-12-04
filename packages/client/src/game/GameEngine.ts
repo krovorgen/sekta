@@ -84,13 +84,16 @@ export default class GameEngine {
 
   // инициализация и запуск игрового цикла
   public init = (): void => {
-    this.reset()
-    KeyControls.setControls()
-    TouchControls.setControls()
-    GamepadControls.setControls()
     // рассчитать пропорцию размера холста по умолчанию
     this.canvasRatio = GAME_OPTIONS.CANVAS_HEIGHT / GAME_OPTIONS.CANVAS_WIDTH
     this.resizeCanvas()
+    // сбросить игровые настройки
+    this.reset()
+    // подключить события управления
+    KeyControls.setControls()
+    TouchControls.setControls()
+    GamepadControls.setControls()
+    // запустить игровой цикл
     this.mainLoop()
   }
   private canvasRatio?: number
@@ -157,9 +160,7 @@ export default class GameEngine {
 
     this.lastLoopTime = performance.now()
     this.gameFPS = Math.floor(1000 / deltaTime)
-    setTimeout(() => {
-      window.requestAnimationFrame(this.mainLoop)
-    }, 1000 / GAME_OPTIONS.GAME_MAIN_FPS)
+    window.requestAnimationFrame(this.mainLoop)
   }
 
   private update(dt: number): void {
@@ -195,7 +196,7 @@ export default class GameEngine {
         // эффект частиц при быстром падении
         const particleSrcX = player.position.x + player.size.width / 2
         const particleSrcY = player.position.y + player.size.height
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 5; i++) {
           this.particles!.push(
             new Particle({
               color: 'red',
@@ -349,7 +350,7 @@ export default class GameEngine {
   private renderUI(ctx: CanvasRenderingContext2D): void {
     ctx.save()
     // игровая информация
-    ctx.fillStyle = 'gray'
+    ctx.fillStyle = 'black'
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)'
     ctx.lineJoin = 'round'
     ctx.font = '20px Arial'
