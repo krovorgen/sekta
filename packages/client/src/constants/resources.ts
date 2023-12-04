@@ -21,30 +21,6 @@ export const GAME_RESOURCES = {
   SPEARS_4: '',
   TRAP: '',
   TRAP_2: '',
-  // препятствия
-  WALL: '',
-  CLIFF: '',
-  BARRICADE: '',
-  BARRICADE_2: '',
-  PILLAR: '',
-  RUIN: '',
-  STONE: '',
-  TIMBER: '',
-  CAR_SUV: '',
-  CAR_TOPLESS: '',
-  ICE_CREAM_VAN: '',
-  SWAT_VAN: '',
-  DOG_VAN: '',
-  HAMMER: '',
-  MUSTANG: '',
-  SCHOOL_BUS: '',
-  // эффекты
-  BONFIRE: '',
-  VAPOR: '',
-  // декорации
-  FENCE: '',
-  RUINS: '',
-  RUINS_SET: '',
   // бонусы
   BONUS_SLOWDOWN: '',
   BONUS_IMMUNITY: '',
@@ -91,30 +67,6 @@ export function GameResourcesInit() {
   GAME_RESOURCES.SPEARS_4 = SPEARS_4_PATH
   GAME_RESOURCES.TRAP = TRAP_PATH
   GAME_RESOURCES.TRAP_2 = TRAP_2_PATH
-  // препятствия
-  GAME_RESOURCES.WALL = WALL_PATH
-  GAME_RESOURCES.CLIFF = CLIFF_PATH
-  GAME_RESOURCES.BARRICADE = BARRICADE_PATH
-  GAME_RESOURCES.BARRICADE_2 = BARRICADE_2_PATH
-  GAME_RESOURCES.PILLAR = PILLAR_PATH
-  GAME_RESOURCES.RUIN = RUIN_PATH
-  GAME_RESOURCES.STONE = STONE_PATH
-  GAME_RESOURCES.TIMBER = TIMBER_PATH
-  GAME_RESOURCES.CAR_SUV = CAR_SUV_PATH
-  GAME_RESOURCES.CAR_TOPLESS = CAR_TOPLESS_PATH
-  GAME_RESOURCES.ICE_CREAM_VAN = ICE_CREAM_VAN_PATH
-  GAME_RESOURCES.SWAT_VAN = SWAT_VAN_PATH
-  GAME_RESOURCES.DOG_VAN = DOG_VAN_PATH
-  GAME_RESOURCES.HAMMER = HAMMER_PATH
-  GAME_RESOURCES.MUSTANG = MUSTANG_PATH
-  GAME_RESOURCES.SCHOOL_BUS = SCHOOL_BUS_PATH
-  // эффекты
-  GAME_RESOURCES.BONFIRE = BONFIRE_PATH
-  GAME_RESOURCES.VAPOR = VAPOR_PATH
-  // декорации
-  GAME_RESOURCES.FENCE = FENCE_PATH
-  GAME_RESOURCES.RUINS = RUINS_PATH
-  GAME_RESOURCES.RUINS_SET = RUINS_SET_PATH
   // бонусы
   GAME_RESOURCES.BONUS_SLOWDOWN = BONUS_SLOWDOWN_PATH
   GAME_RESOURCES.BONUS_IMMUNITY = BONUS_IMMUNITY_PATH
@@ -159,30 +111,6 @@ import SPEARS_3_PATH from '../assets/sprites/entities/traps/spears_3.png'
 import SPEARS_4_PATH from '../assets/sprites/entities/traps/spears_4.png'
 import TRAP_PATH from '../assets/sprites/entities/traps/trap.png'
 import TRAP_2_PATH from '../assets/sprites/entities/traps/trap_2.png'
-// препятствия
-import WALL_PATH from '../assets/sprites/entities/barriers/wall.png'
-import CLIFF_PATH from '../assets/sprites/entities/barriers/cliff.png'
-import BARRICADE_PATH from '../assets/sprites/entities/barriers/barricade.png'
-import BARRICADE_2_PATH from '../assets/sprites/entities/barriers/barricade_2.png'
-import PILLAR_PATH from '../assets/sprites/entities/barriers/pillar.png'
-import RUIN_PATH from '../assets/sprites/entities/barriers/ruin.png'
-import STONE_PATH from '../assets/sprites/entities/barriers/stone.png'
-import TIMBER_PATH from '../assets/sprites/entities/barriers/timber.png'
-import CAR_SUV_PATH from '../assets/sprites/entities/barriers/cars/car-suv.png'
-import CAR_TOPLESS_PATH from '../assets/sprites/entities/barriers/cars/car-topless.png'
-import ICE_CREAM_VAN_PATH from '../assets/sprites/entities/barriers/cars/ice-cream-van.png'
-import SWAT_VAN_PATH from '../assets/sprites/entities/barriers/cars/swat-van.png'
-import DOG_VAN_PATH from '../assets/sprites/entities/barriers/cars/dog-van.png'
-import HAMMER_PATH from '../assets/sprites/entities/barriers/cars/hammer.png'
-import MUSTANG_PATH from '../assets/sprites/entities/barriers/cars/mustang.png'
-import SCHOOL_BUS_PATH from '../assets/sprites/entities/barriers/cars/school-bus.png'
-// эффекты
-import BONFIRE_PATH from '../assets/sprites/entities/effects/bonfire.png'
-import VAPOR_PATH from '../assets/sprites/entities/effects/vapor.png'
-// декорации
-import FENCE_PATH from '../assets/sprites/entities/decorations/fence.png'
-import RUINS_PATH from '../assets/sprites/entities/decorations/ruins.png'
-import RUINS_SET_PATH from '../assets/sprites/entities/decorations/ruins_set.png'
 // бонусы
 import BONUS_SLOWDOWN_PATH from '../assets/sprites/entities/gems/gem_yellow.png'
 import BONUS_IMMUNITY_PATH from '../assets/sprites/entities/gems/gem_blue.png'
