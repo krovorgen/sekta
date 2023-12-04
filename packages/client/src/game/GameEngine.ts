@@ -275,7 +275,7 @@ export default class GameEngine {
     // движение игрока
     this.player!.update(dt)
     // движение частиц (эффекты)
-    for (const particle of this.particles!) particle.update(dt)
+    for (const particle of this.particles!) particle.update()
     // движение ловушек
     for (const trap of this.traps!) trap.update(dt * this.gameSpeed)
     // движение огненного дождя
