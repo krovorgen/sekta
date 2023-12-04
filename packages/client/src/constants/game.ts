@@ -1,6 +1,6 @@
 export const GAME_OPTIONS = {
   // настройки отображения
-  GAME_DEBUG: true,
+  GAME_DEBUG: false,
   GAME_MIN_FPS: 25,
   GAME_MAIN_FPS: 60,
   CANVAS_WIDTH: 1280,
