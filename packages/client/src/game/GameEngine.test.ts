@@ -50,7 +50,7 @@ describe('GameEngine', () => {
     gameEngine.lastTrap = 3000
 
     gameEngine['updateEntities'](0.9)
-    // Проверяем, что количество огненных шаров и камней увеличилось
+    // Проверяем, что количество огненных шаров и ловушек увеличилось
     expect(gameEngine?.fireballs?.length).toBeGreaterThan(initialFireballsCount)
     expect(gameEngine?.traps?.length).toBeGreaterThan(initialTrapsCount)
   })

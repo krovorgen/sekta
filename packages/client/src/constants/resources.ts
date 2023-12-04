@@ -46,7 +46,7 @@ export const GAME_RESOURCES = {
   RUINS: '',
   RUINS_SET: '',
   // бонусы
-  BONUS_SLOWING: '',
+  BONUS_SLOWDOWN: '',
   BONUS_IMMUNITY: '',
   BONUS_SCORE: '',
   // фон
@@ -116,7 +116,7 @@ export function GameResourcesInit() {
   GAME_RESOURCES.RUINS = RUINS_PATH
   GAME_RESOURCES.RUINS_SET = RUINS_SET_PATH
   // бонусы
-  GAME_RESOURCES.BONUS_SLOWING = BONUS_SLOWING_PATH
+  GAME_RESOURCES.BONUS_SLOWDOWN = BONUS_SLOWDOWN_PATH
   GAME_RESOURCES.BONUS_IMMUNITY = BONUS_IMMUNITY_PATH
   GAME_RESOURCES.BONUS_SCORE = BONUS_SCORE_PATH
   // фон
@@ -184,8 +184,8 @@ import FENCE_PATH from '../assets/sprites/entities/decorations/fence.png'
 import RUINS_PATH from '../assets/sprites/entities/decorations/ruins.png'
 import RUINS_SET_PATH from '../assets/sprites/entities/decorations/ruins_set.png'
 // бонусы
-import BONUS_SLOWING_PATH from '../assets/sprites/entities/gems/gem_blue.png'
-import BONUS_IMMUNITY_PATH from '../assets/sprites/entities/gems/gem_red.png'
+import BONUS_SLOWDOWN_PATH from '../assets/sprites/entities/gems/gem_red.png'
+import BONUS_IMMUNITY_PATH from '../assets/sprites/entities/gems/gem_blue.png'
 import BONUS_SCORE_PATH from '../assets/sprites/entities/gems/coin_gold.png'
 // фон
 import BACKGROUND_0_LANDSCAPE_PATH from '../assets/sprites/background/city_day/landscape.png'

@@ -10,6 +10,7 @@ export const GAME_OPTIONS = {
   // настройки физики игры
   GRAVITY_VALUE: 30,
   FRICTION_FORCE: 0.05,
+  SPEED_INIT: 1.0,
   SPEED_STEP: 0.025,
   // настройки персонажа
   PLAYER_WIDTH: 50,
@@ -27,6 +28,13 @@ export const GAME_OPTIONS = {
   TRAP_HEIGHT: 20,
   TRAP_SPEED: 100,
   TRAP_TIME: 3000,
+  // настройки бонусов
+  BONUS_WIDTH: 20,
+  BONUS_HEIGHT: 20,
+  BONUS_SPEED: 100,
+  BONUS_TIME: 10000,
+  FIRE_IMMUNITY_DURATION: 10000,
+  SPEED_SLOWDOWN_DURATION: 3000,
   // настройки огненного дождя
   FIREBALL_WIDTH: 20,
   FIREBALL_HEIGHT: 20,

@@ -15,6 +15,8 @@ import TouchControls, { TOUCH_AREA } from './core/utils/TouchControls'
 import GamepadControls, { GAMEPAD_ACT } from './core/utils/GamepadControls'
 import { ScopeResultDTO } from '../api/LeaderboardAPI'
 import Particle from './core/Particle'
+import Bonus, { BonusType } from './core/entities/Bonus'
+import { randomElem } from './core/utils/Calculations'
 
 export enum GameState {
   // готовность к игре
@@ -38,11 +40,17 @@ export default class GameEngine {
   gameState: GameState = GameState.READY // состояние игры
   gameFPS = 0 // текущая частота кадров
   gameTime = 0 // продолжительность игры
-  gameSpeed = 1 // множитель скорости игры
+  gameSpeed = GAME_OPTIONS.SPEED_INIT // множитель скорости игры
+
+  fireImmunity = false // бонус иммунитета от огненного дождя
+  lastFireImmunity = 0 // время последнего иммунитета
+  speedSlowdown = false // бонус замедления скорости игры
+  lastSpeedSlowdown = 0 // время последнего замедления
 
   floor?: Floor
   player?: Player
   traps?: Trap[]
+  bonuses?: Bonus[]
   fireballs?: Fireball[]
 
   backgroundIndex = 0
@@ -58,6 +66,7 @@ export default class GameEngine {
 
   lastBackground = 0 // время последнего изменения фона
   lastTrap = 0 // время последней ловушки
+  lastBonus = 0 // время последнего бонуса
   maxGameTime = 0 // максимальное время игры
 
   backgroundSound?: Sound
@@ -115,7 +124,7 @@ export default class GameEngine {
   public reset(): void {
     this.gameState = GameState.READY
     this.gameTime = 0
-    this.gameSpeed = 1
+    this.gameSpeed = GAME_OPTIONS.SPEED_INIT
 
     this.backgroundIndex = 0
     this.currentBackground = new Background(
@@ -127,6 +136,7 @@ export default class GameEngine {
     this.floor = new Floor()
     this.player = new Player(this.resources)
     this.traps = []
+    this.bonuses = []
     this.fireballs = []
 
     this.lastBackground = 0
@@ -273,30 +283,74 @@ export default class GameEngine {
       this.traps!.push(new Trap(this.resources))
       this.lastTrap = this.gameTime
     }
+    // появление бонусов с заданной периодичностью
+    if (this.gameTime - this.lastBonus > GAME_OPTIONS.BONUS_TIME / 1000) {
+      if (randomElem([true, false]) as boolean)
+        this.bonuses!.push(new Bonus(this.resources))
+      this.lastBonus = this.gameTime
+    }
     // движение игрока
     this.player!.update(dt)
     // движение частиц (эффекты)
     for (const particle of this.particles!) particle.update()
     // движение ловушек
     for (const trap of this.traps!) trap.update(dt * this.gameSpeed)
+    // движение бонусов
+    for (const bonus of this.bonuses!) bonus.update(dt * this.gameSpeed)
     // движение огненного дождя
     for (const fireball of this.fireballs!) fireball.update(dt)
+    // действие/сброс бонусов
+    if (this.fireImmunity) {
+      // иммунитет от огненного дождя
+      // TODO: включить дождь...
+      if (
+        this.gameTime - this.lastFireImmunity >
+        GAME_OPTIONS.FIRE_IMMUNITY_DURATION / 1000
+      ) {
+        this.fireImmunity = false
+      }
+    }
+    if (this.speedSlowdown) {
+      // замедление скорости игры
+      if (this.gameSpeed > 1.0) this.gameSpeed -= GAME_OPTIONS.SPEED_STEP * 0.5
+      if (
+        this.gameTime - this.lastSpeedSlowdown >
+        GAME_OPTIONS.SPEED_SLOWDOWN_DURATION / 1000
+      ) {
+        this.speedSlowdown = false
+      }
+    }
   }
 
   private checkCollisions(): void {
-    // появление/удаление ловушек
+    // анализ столкновений ловушек
     for (const trap of this.traps!) {
-      // проверка на столкновение игрока с камнями
+      // проверка на столкновение игрока с ловушками
       if (Entity.isCollide(this.player!, trap)) {
         this.player!.death()
         this.gameOver()
         break
       }
     }
-    // появление/удаление огненного дождя
+    // анализ столкновений бонусов
+    for (const bonus of this.bonuses!) {
+      // проверка на столкновение игрока с бонусом
+      if (Entity.isCollide(this.player!, bonus)) {
+        if (bonus.bonusType == BonusType.IMMUNITY) {
+          this.fireImmunity = true // включить иммунитет
+          this.lastFireImmunity = this.gameTime
+        } else if (bonus.bonusType == BonusType.SLOWDOWN) {
+          this.speedSlowdown = true // включить замедление
+          this.lastSpeedSlowdown = this.gameTime
+        }
+        bonus.deleted = true // исчезновение бонуса
+        break
+      }
+    }
+    // анализ столкновений огненного дождя
     for (const fireball of this.fireballs!) {
       // проверка на столкновение игрока с огненным дождем
-      if (Entity.isCollide(this.player!, fireball)) {
+      if (!this.fireImmunity && Entity.isCollide(this.player!, fireball)) {
         this.player!.death()
         this.gameOver()
         break
@@ -305,9 +359,15 @@ export default class GameEngine {
     // удалить частицы с истекшим временем жизни
     this.particles = this.particles!.filter(particle => particle.life > 0)
     // удалить ловушки вышедшие за пределы экрана
-    this.traps = this.traps!.filter(trap => !trap.isOutside())
+    this.traps = this.traps!.filter(trap => !trap.isOutside() && !trap.deleted)
+    // удалить бонусы вышедшие за пределы экрана
+    this.bonuses = this.bonuses!.filter(
+      bonus => !bonus.isOutside() && !bonus.deleted
+    )
     // удалить огненный дождь вышедший за пределы экрана
-    this.fireballs = this.fireballs!.filter(fireball => !fireball.isOutside())
+    this.fireballs = this.fireballs!.filter(
+      fireball => !fireball.isOutside() && !fireball.deleted
+    )
   }
 
   private stopSounds(): void {
@@ -342,14 +402,16 @@ export default class GameEngine {
     this.prevBackground?.draw(this.context)
     this.floor!.draw(this.context)
     for (const trap of this.traps!) trap.draw(this.context)
+    for (const bonus of this.bonuses!) bonus.draw(this.context)
     this.player!.draw(this.context)
     for (const particle of this.particles!) particle.draw(this.context)
-    for (const fireball of this.fireballs!) fireball.draw(this.context)
+    for (const fireball of this.fireballs!)
+      fireball.draw(this.context, this.fireImmunity ? 0.35 : 1.0)
     this.renderUI(this.context)
   }
   private renderUI(ctx: CanvasRenderingContext2D): void {
     ctx.save()
-    // игровая информация
+    // общая игровая информация
     ctx.fillStyle = 'black'
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)'
     ctx.lineJoin = 'round'
@@ -368,6 +430,22 @@ export default class GameEngine {
     const gameSpeed = 'Speed: ' + this.gameSpeed.toFixed(1) + 'x'
     ctx.strokeText(gameSpeed, GAME_OPTIONS.CANVAS_WIDTH / 2, 55)
     ctx.fillText(gameSpeed, GAME_OPTIONS.CANVAS_WIDTH / 2, 55)
+    // информация по текущим бонусам
+    let bonusText = ''
+    if (this.fireImmunity) {
+      const bonusTimeLeft =
+        GAME_OPTIONS.FIRE_IMMUNITY_DURATION / 1000 -
+        (this.gameTime - this.lastFireImmunity)
+      bonusText += 'Immunity: ' + timeFormatter(bonusTimeLeft) + '  '
+    }
+    if (this.speedSlowdown) {
+      const bonusTimeLeft =
+        GAME_OPTIONS.SPEED_SLOWDOWN_DURATION / 1000 -
+        (this.gameTime - this.lastSpeedSlowdown)
+      bonusText += 'Slowdown: ' + timeFormatter(bonusTimeLeft)
+    }
+    ctx.strokeText(bonusText, GAME_OPTIONS.CANVAS_WIDTH / 2, 85)
+    ctx.fillText(bonusText, GAME_OPTIONS.CANVAS_WIDTH / 2, 85)
     // индикатор возможности прыжка
     const jumpReadyRatio = Math.min(
       this.player!.jumpDeltaTime() / GAME_OPTIONS.PLAYER_JUMP_BLOCKTIME,
@@ -385,7 +463,7 @@ export default class GameEngine {
     // подсказки по огненному дождю
     for (const fireball of this.fireballs!) {
       if (fireball.position.y < -fireball.size.height) {
-        ctx.fillStyle = 'red'
+        ctx.fillStyle = this.fireImmunity ? 'blue' : 'red'
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)'
         ctx.font = '15px Arial'
         ctx.strokeText(

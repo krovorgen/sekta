@@ -50,8 +50,8 @@ export default class Fireball extends Entity {
     this.sprite?.update(dt)
   }
 
-  public draw(ctx: CanvasRenderingContext2D) {
-    this.sprite?.render(ctx, this)
+  public draw(ctx: CanvasRenderingContext2D, opacity = 1.0) {
+    this.sprite?.render(ctx, this, opacity)
     if (GAME_OPTIONS.GAME_DEBUG) {
       this.debugDraw(ctx)
     }

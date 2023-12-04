@@ -6,6 +6,7 @@ interface BlockProps {
   size: TSize
 }
 
+// TODO: на перспективу препятствия (состоящие из блоков) мешающие движению игрока
 export default class Block {
   position: TPoint
   offset: TOffset
