@@ -120,7 +120,11 @@ export default class AnimatedSprite {
     }
   }
 
-  public render(ctx: CanvasRenderingContext2D, entity: Entity): void {
+  public render(
+    ctx: CanvasRenderingContext2D,
+    entity: Entity,
+    opacity = 1.0
+  ): void {
     let frame = 0
 
     if (this.speed !== undefined && this.frames !== undefined) {
@@ -157,6 +161,7 @@ export default class AnimatedSprite {
     ctx.translate(-centerOffset.x, -centerOffset.y) // вернуть в исходную точку
 
     // размещение спрайта в центре объекта
+    ctx.globalAlpha = opacity // прозрачность спрайта
     ctx.drawImage(
       this.resource as CanvasImageSource,
       x,

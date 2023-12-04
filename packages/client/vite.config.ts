@@ -14,6 +14,7 @@ export default defineConfig({
   },
   plugins: [react()],
   build: {
+    assetsInlineLimit: 0,
     commonjsOptions: {
       transformMixedEsModules: true,
     },

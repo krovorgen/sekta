@@ -8,3 +8,4 @@ tmp
 ssr-dist
 nginx/cert.pem
 nginx/privkey.pem
+*.mjs

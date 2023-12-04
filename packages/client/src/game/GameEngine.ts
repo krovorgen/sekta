@@ -1,7 +1,8 @@
-import { GAME_OPTIONS, GAME_RESOURCES } from '../constants/game'
+import { GAME_OPTIONS } from '../constants/game'
+import { GAME_RESOURCES } from '../constants/resources'
 import Entity from './core/Entity'
 import Background, { BACKGROUND_TYPE } from './core/entities/Background'
-import Brick from './core/entities/Brick'
+import Trap from './core/entities/Trap'
 import Fireball from './core/entities/Fireball'
 import Floor from './core/entities/Floor'
 import Player from './core/entities/Player'
@@ -12,6 +13,10 @@ import { timeFormatter } from '../utils/timeFormatter'
 import Sound from './core/utils/Sound'
 import TouchControls, { TOUCH_AREA } from './core/utils/TouchControls'
 import GamepadControls, { GAMEPAD_ACT } from './core/utils/GamepadControls'
+import { ScopeResultDTO } from '../api/LeaderboardAPI'
+import Particle from './core/Particle'
+import Bonus, { BonusType } from './core/entities/Bonus'
+import { randomElem, randomRange } from './core/utils/Calculations'
 
 export enum GameState {
   // готовность к игре
@@ -22,8 +27,8 @@ export enum GameState {
   END = 2,
 }
 export type GameStateProps = {
-  gameScore: number
   gameTime: number
+  maxGameTime: number
 }
 export default class GameEngine {
   canvas: HTMLCanvasElement
@@ -33,13 +38,19 @@ export default class GameEngine {
 
   gameStateEndCallback: (props: GameStateProps) => void
   gameState: GameState = GameState.READY // состояние игры
-  gameScore = 0 // кол-во очков
+  gameFPS = 0 // текущая частота кадров
   gameTime = 0 // продолжительность игры
-  gameSpeed = 1 // множитель скорости игры
+  gameSpeed = GAME_OPTIONS.SPEED_INIT // множитель скорости игры
+
+  fireImmunity = false // бонус иммунитета от огненного дождя
+  lastFireImmunity = 0 // время последнего иммунитета
+  speedSlowdown = false // бонус замедления скорости игры
+  lastSpeedSlowdown = 0 // время последнего замедления
 
   floor?: Floor
   player?: Player
-  bricks?: Brick[]
+  traps?: Trap[]
+  bonuses?: Bonus[]
   fireballs?: Fireball[]
 
   backgroundIndex = 0
@@ -51,9 +62,12 @@ export default class GameEngine {
   ]
   currentBackground?: Background
   prevBackground?: Background
+  particles?: Particle[]
 
   lastBackground = 0 // время последнего изменения фона
-  lastBrick = 0 // время последнего препятствия
+  lastTrap = 0 // время последней ловушки
+  lastBonus = 0 // время последнего бонуса
+  maxGameTime = 0 // максимальное время игры
 
   backgroundSound?: Sound
 
@@ -61,10 +75,12 @@ export default class GameEngine {
     canvas: HTMLCanvasElement
     disableResources?: boolean
     gameStateEndCallback: (props: GameStateProps) => void
+    lastScope: ScopeResultDTO | null
   }) {
     this.canvas = props.canvas
     this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D
     this.gameStateEndCallback = props.gameStateEndCallback
+    this.maxGameTime = (props.lastScope?.time ?? 0) / 1000
     if (props.disableResources) {
       this.init()
       return
@@ -77,13 +93,16 @@ export default class GameEngine {
 
   // инициализация и запуск игрового цикла
   public init = (): void => {
-    this.reset()
-    KeyControls.setControls()
-    TouchControls.setControls()
-    GamepadControls.setControls()
     // рассчитать пропорцию размера холста по умолчанию
     this.canvasRatio = GAME_OPTIONS.CANVAS_HEIGHT / GAME_OPTIONS.CANVAS_WIDTH
     this.resizeCanvas()
+    // сбросить игровые настройки
+    this.reset()
+    // подключить события управления
+    KeyControls.setControls()
+    TouchControls.setControls()
+    GamepadControls.setControls()
+    // запустить игровой цикл
     this.mainLoop()
   }
   private canvasRatio?: number
@@ -104,9 +123,8 @@ export default class GameEngine {
   }
   public reset(): void {
     this.gameState = GameState.READY
-    this.gameScore = 0
     this.gameTime = 0
-    this.gameSpeed = 1
+    this.gameSpeed = GAME_OPTIONS.SPEED_INIT
 
     this.backgroundIndex = 0
     this.currentBackground = new Background(
@@ -114,13 +132,15 @@ export default class GameEngine {
       this.resources
     )
     this.prevBackground = undefined
+    this.particles = []
     this.floor = new Floor()
     this.player = new Player(this.resources)
-    this.bricks = []
+    this.traps = []
+    this.bonuses = []
     this.fireballs = []
 
     this.lastBackground = 0
-    this.lastBrick = 0
+    this.lastTrap = 0
 
     this.backgroundSound = new Sound({
       resource: this.resources?.get(
@@ -148,7 +168,8 @@ export default class GameEngine {
       this.render()
     }
 
-    this.lastLoopTime = currentTime
+    this.lastLoopTime = performance.now()
+    this.gameFPS = Math.floor(1000 / deltaTime)
     window.requestAnimationFrame(this.mainLoop)
   }
 
@@ -181,7 +202,31 @@ export default class GameEngine {
       GamepadControls.isAct(GAMEPAD_ACT.DOWN) ||
       TouchControls.isTouched(TOUCH_AREA.BOTTOM)
     ) {
-      this.player!.down()
+      this.player!.slide(player => {
+        // эффект частиц при быстром падении
+        const particleSrcX = player.position.x + player.size.width / 2
+        const particleSrcY = player.position.y + player.size.height
+        for (let i = 0; i < 5; i++) {
+          this.particles!.push(
+            new Particle({
+              color: 'red',
+              position: { x: particleSrcX, y: particleSrcY },
+            })
+          )
+          this.particles!.push(
+            new Particle({
+              color: 'orange',
+              position: { x: particleSrcX, y: particleSrcY },
+            })
+          )
+          this.particles!.push(
+            new Particle({
+              color: 'yellow',
+              position: { x: particleSrcX, y: particleSrcY },
+            })
+          )
+        }
+      })
     }
     if (
       KeyControls.isKeyDown(KEYS.LEFT) ||
@@ -203,8 +248,8 @@ export default class GameEngine {
 
   private updateEntities(dt: number): void {
     // обновить движение/переход бесшовного фона
-    this.currentBackground!.update(dt)
-    this.prevBackground?.update(dt)
+    this.currentBackground!.update(dt * this.gameSpeed)
+    this.prevBackground?.update(dt * this.gameSpeed)
     // изменение фона с заданной периодичностью
     if (
       this.gameTime - this.lastBackground >
@@ -222,49 +267,116 @@ export default class GameEngine {
     // с увеличением времени игры увеличиваетя кол-во попаданий в условие ниже
     // формула: 1 - 0.999^gameTime
     if (Math.random() < 1 - Math.pow(0.999, this.gameTime)) {
-      this.fireballs!.push(new Fireball(this.resources))
+      const newFireball = new Fireball(this.resources)
+      if (
+        this.fireballs!.every(
+          fb =>
+            newFireball.position.x > fb.position.x + fb.size.width ||
+            newFireball.position.x < fb.position.x - fb.size.width
+        )
+      )
+        this.fireballs!.push(newFireball)
       this.gameSpeed += GAME_OPTIONS.SPEED_STEP
     }
-    // появление препятствия с заданной периодичностью
-    if (this.gameTime - this.lastBrick > GAME_OPTIONS.BRICK_TIME / 1000) {
-      this.bricks!.push(new Brick(this.resources))
-      this.lastBrick = this.gameTime
+    // появление ловушек с заданной периодичностью
+    if (this.gameTime - this.lastTrap > GAME_OPTIONS.TRAP_TIME / 1000) {
+      this.traps!.push(new Trap(this.resources))
+      this.lastTrap = this.gameTime
+    }
+    // появление бонусов с заданной периодичностью
+    if (this.gameTime - this.lastBonus > GAME_OPTIONS.BONUS_TIME / 1000) {
+      if (randomElem([true, false]) as boolean)
+        this.bonuses!.push(new Bonus(this.resources))
+      this.lastBonus = this.gameTime
     }
     // движение игрока
     this.player!.update(dt)
-    // движение препятствий
-    for (const brick of this.bricks!) brick.update(dt * this.gameSpeed)
+    // движение частиц (эффекты)
+    for (const particle of this.particles!) particle.update(dt)
+    // движение ловушек
+    for (const trap of this.traps!) trap.update(dt * this.gameSpeed)
+    // движение бонусов
+    for (const bonus of this.bonuses!) bonus.update(dt * this.gameSpeed)
     // движение огненного дождя
-    for (const fireball of this.fireballs!) fireball.update(dt * this.gameSpeed)
+    for (const fireball of this.fireballs!) fireball.update(dt)
+    // действие/сброс бонусов
+    if (this.fireImmunity) {
+      // иммунитет от огненного дождя
+      const fireImmunityTimeLeft =
+        GAME_OPTIONS.FIRE_IMMUNITY_DURATION / 1000 -
+        (this.gameTime - this.lastFireImmunity)
+      if (fireImmunityTimeLeft <= 0) {
+        this.fireImmunity = false
+      } else if (fireImmunityTimeLeft > 1) {
+        this.particles!.push(
+          // эффект дождя (заканчивается чуть раньше бонуса)
+          new Particle({
+            color: 'blue',
+            position: { x: randomRange(0, GAME_OPTIONS.CANVAS_WIDTH), y: -10 },
+            offset: { dx: 0, dy: randomRange(500, 700) },
+            size: { width: 2, height: 7.5 },
+            life: 99999,
+          })
+        )
+      }
+    }
+    if (this.speedSlowdown) {
+      // замедление скорости игры
+      if (this.gameSpeed > 1.0) this.gameSpeed -= GAME_OPTIONS.SPEED_STEP * 0.5
+      if (
+        this.gameTime - this.lastSpeedSlowdown >
+        GAME_OPTIONS.SPEED_SLOWDOWN_DURATION / 1000
+      ) {
+        this.speedSlowdown = false
+      }
+    }
   }
 
   private checkCollisions(): void {
-    // появление/удаление препятствий
-    for (const brick of this.bricks!) {
-      // проверка на столкновение игрока с камнями
-      if (Entity.isCollide(this.player!, brick)) {
-        this.player!.isDead = true
+    // анализ столкновений ловушек
+    for (const trap of this.traps!) {
+      // проверка на столкновение игрока с ловушками
+      if (Entity.isCollide(this.player!, trap)) {
+        this.player!.death()
         this.gameOver()
         break
       }
     }
-    // появление/удаление огненного дождя
+    // анализ столкновений бонусов
+    for (const bonus of this.bonuses!) {
+      // проверка на столкновение игрока с бонусом
+      if (Entity.isCollide(this.player!, bonus)) {
+        if (bonus.bonusType == BonusType.IMMUNITY) {
+          this.fireImmunity = true // включить иммунитет
+          this.lastFireImmunity = this.gameTime
+        } else if (bonus.bonusType == BonusType.SLOWDOWN) {
+          this.speedSlowdown = true // включить замедление
+          this.lastSpeedSlowdown = this.gameTime
+        }
+        bonus.deleted = true // исчезновение бонуса
+        break
+      }
+    }
+    // анализ столкновений огненного дождя
     for (const fireball of this.fireballs!) {
       // проверка на столкновение игрока с огненным дождем
-      if (Entity.isCollide(this.player!, fireball)) {
-        this.player!.isDead = true
+      if (!this.fireImmunity && Entity.isCollide(this.player!, fireball)) {
+        this.player!.death()
         this.gameOver()
         break
       }
     }
-    // удалить камни вышедшие за пределы экрана
-    const newBricks = this.bricks!.filter(brick => !Entity.isOutside(brick))
-    const delBricksCount = this.bricks!.length - newBricks.length
-    this.gameScore += delBricksCount
-    this.bricks = newBricks
+    // удалить частицы с истекшим временем жизни
+    this.particles = this.particles!.filter(particle => particle.life > 0)
+    // удалить ловушки вышедшие за пределы экрана
+    this.traps = this.traps!.filter(trap => !trap.isOutside() && !trap.deleted)
+    // удалить бонусы вышедшие за пределы экрана
+    this.bonuses = this.bonuses!.filter(
+      bonus => !bonus.isOutside() && !bonus.deleted
+    )
     // удалить огненный дождь вышедший за пределы экрана
     this.fireballs = this.fireballs!.filter(
-      fireball => !Entity.isOutside(fireball)
+      fireball => !fireball.isOutside() && !fireball.deleted
     )
   }
 
@@ -276,13 +388,14 @@ export default class GameEngine {
   private gameOver(): void {
     if (this.gameState == GameState.END) return
     this.gameState = GameState.END
+    if (this.gameTime > this.maxGameTime) this.maxGameTime = this.gameTime
     this.stopSounds()
 
     setTimeout(
       () =>
         this.gameStateEndCallback({
-          gameScore: this.gameScore,
           gameTime: this.gameTime,
+          maxGameTime: this.maxGameTime,
         }),
       500
     )
@@ -295,22 +408,87 @@ export default class GameEngine {
       GAME_OPTIONS.CANVAS_WIDTH,
       GAME_OPTIONS.CANVAS_HEIGHT
     )
-    this.floor!.draw(this.context)
     this.currentBackground!.draw(this.context)
     this.prevBackground?.draw(this.context)
+    this.floor!.draw(this.context)
+    for (const trap of this.traps!) trap.draw(this.context)
+    for (const bonus of this.bonuses!) bonus.draw(this.context)
     this.player!.draw(this.context)
-    for (const brick of this.bricks!) brick.draw(this.context)
-    for (const fireballs of this.fireballs!) fireballs.draw(this.context)
-    // вывод текущего времени игры
-    const timeText = `Time: ${timeFormatter(this.gameTime)}`
-    this.context.font = '30px Verdana'
-    this.context.fillStyle = 'gray'
-    this.context.textAlign = 'center'
-    this.context.textBaseline = 'top'
-    this.context.strokeStyle = 'white'
-    this.context.lineWidth = 0.75
-    this.context.strokeText(timeText, this.canvas.width / 2, 150)
-    this.context.fillText(timeText, this.canvas.width / 2, 150)
+    for (const particle of this.particles!) particle.draw(this.context)
+    for (const fireball of this.fireballs!)
+      fireball.draw(this.context, this.fireImmunity ? 0.35 : 1.0)
+    this.renderUI(this.context)
+  }
+  private renderUI(ctx: CanvasRenderingContext2D): void {
+    ctx.save()
+    // общая игровая информация
+    ctx.fillStyle = 'black'
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)'
+    ctx.lineJoin = 'round'
+    ctx.font = '20px Arial'
+    const maxTimeText =
+      `Max Time: ${timeFormatter(this.maxGameTime)}` +
+      (GAME_OPTIONS.GAME_DEBUG ? `    FPS: ${this.gameFPS}` : ``)
+    ctx.strokeText(maxTimeText, 10, 55)
+    ctx.fillText(maxTimeText, 10, 55)
+    const gameTimePercent = (this.gameTime / this.maxGameTime) * 100
+    const gameTimeText = `Current Time: ${timeFormatter(
+      this.gameTime
+    )} (${gameTimePercent.toFixed(0)}%)`
+    ctx.strokeText(gameTimeText, 10, 85)
+    ctx.fillText(gameTimeText, 10, 85)
+    const gameSpeed = 'Speed: ' + this.gameSpeed.toFixed(1) + 'x'
+    ctx.strokeText(gameSpeed, GAME_OPTIONS.CANVAS_WIDTH / 2, 55)
+    ctx.fillText(gameSpeed, GAME_OPTIONS.CANVAS_WIDTH / 2, 55)
+    // информация по текущим бонусам
+    let bonusText = ''
+    if (this.fireImmunity) {
+      const bonusTimeLeft =
+        GAME_OPTIONS.FIRE_IMMUNITY_DURATION / 1000 -
+        (this.gameTime - this.lastFireImmunity)
+      bonusText += 'Immunity: ' + timeFormatter(bonusTimeLeft) + '  '
+    }
+    if (this.speedSlowdown) {
+      const bonusTimeLeft =
+        GAME_OPTIONS.SPEED_SLOWDOWN_DURATION / 1000 -
+        (this.gameTime - this.lastSpeedSlowdown)
+      bonusText += 'Slowdown: ' + timeFormatter(bonusTimeLeft)
+    }
+    ctx.strokeText(bonusText, GAME_OPTIONS.CANVAS_WIDTH / 2, 85)
+    ctx.fillText(bonusText, GAME_OPTIONS.CANVAS_WIDTH / 2, 85)
+    // индикатор возможности прыжка
+    const jumpReadyRatio = Math.min(
+      this.player!.jumpDeltaTime() / GAME_OPTIONS.PLAYER_JUMP_BLOCKTIME,
+      1.0
+    )
+    ctx.fillStyle = 'yellow'
+    ctx.fillRect(0, 0, jumpReadyRatio * GAME_OPTIONS.CANVAS_WIDTH, 5)
+    // индикатор возможности проскальзывания
+    const slideReadyRatio = Math.min(
+      this.player!.slideDeltaTime() / GAME_OPTIONS.PLAYER_SLIDE_BLOCKTIME,
+      1.0
+    )
+    ctx.fillStyle = 'gold'
+    ctx.fillRect(0, 5, slideReadyRatio * GAME_OPTIONS.CANVAS_WIDTH, 5)
+    // подсказки по огненному дождю
+    for (const fireball of this.fireballs!) {
+      if (fireball.position.y < -fireball.size.height) {
+        ctx.fillStyle = this.fireImmunity ? 'blue' : 'red'
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)'
+        ctx.font = '15px Arial'
+        ctx.strokeText(
+          Math.abs(fireball.position.y + fireball.size.height).toFixed(0) + 'm',
+          fireball.position.x,
+          25
+        )
+        ctx.fillText(
+          Math.abs(fireball.position.y + fireball.size.height).toFixed(0) + 'm',
+          fireball.position.x,
+          25
+        )
+      }
+    }
+    ctx.restore()
   }
 
   public destroy(): void {

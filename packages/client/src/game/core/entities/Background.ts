@@ -1,4 +1,5 @@
-import { GAME_OPTIONS, GAME_RESOURCES } from '../../../constants/game'
+import { GAME_OPTIONS } from '../../../constants/game'
+import { GAME_RESOURCES } from '../../../constants/resources'
 import Entity from '../Entity'
 import { TPoint, TSize } from '../utils/Calculations'
 import Resources, { TResource } from '../utils/Resources'

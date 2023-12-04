@@ -1,8 +1,8 @@
 import {
   GAME_RESOURCES,
-  GameResourcesInit,
   REGEX_FILE_EXT,
-} from '../../../constants/game'
+  GameResourcesInit,
+} from '../../../constants/resources'
 
 export type TResource = HTMLImageElement | HTMLAudioElement | boolean
 
