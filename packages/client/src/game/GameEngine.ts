@@ -16,7 +16,7 @@ import GamepadControls, { GAMEPAD_ACT } from './core/utils/GamepadControls'
 import { ScopeResultDTO } from '../api/LeaderboardAPI'
 import Particle from './core/Particle'
 import Bonus, { BonusType } from './core/entities/Bonus'
-import { randomElem } from './core/utils/Calculations'
+import { randomElem, randomRange } from './core/utils/Calculations'
 
 export enum GameState {
   // готовность к игре
@@ -292,7 +292,7 @@ export default class GameEngine {
     // движение игрока
     this.player!.update(dt)
     // движение частиц (эффекты)
-    for (const particle of this.particles!) particle.update()
+    for (const particle of this.particles!) particle.update(dt)
     // движение ловушек
     for (const trap of this.traps!) trap.update(dt * this.gameSpeed)
     // движение бонусов
@@ -302,12 +302,22 @@ export default class GameEngine {
     // действие/сброс бонусов
     if (this.fireImmunity) {
       // иммунитет от огненного дождя
-      // TODO: включить дождь...
-      if (
-        this.gameTime - this.lastFireImmunity >
-        GAME_OPTIONS.FIRE_IMMUNITY_DURATION / 1000
-      ) {
+      const fireImmunityTimeLeft =
+        GAME_OPTIONS.FIRE_IMMUNITY_DURATION / 1000 -
+        (this.gameTime - this.lastFireImmunity)
+      if (fireImmunityTimeLeft <= 0) {
         this.fireImmunity = false
+      } else if (fireImmunityTimeLeft > 1) {
+        this.particles!.push(
+          // эффект дождя (заканчивается чуть раньше бонуса)
+          new Particle({
+            color: 'blue',
+            position: { x: randomRange(0, GAME_OPTIONS.CANVAS_WIDTH), y: -10 },
+            offset: { dx: 0, dy: randomRange(500, 700) },
+            size: { width: 2, height: 7.5 },
+            life: 99999,
+          })
+        )
       }
     }
     if (this.speedSlowdown) {

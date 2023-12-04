@@ -132,7 +132,7 @@ export default class Player extends Entity {
   public slide(fastDownCallback: (player: Player) => void) {
     if (this.isJumping) {
       // быстрое падение на землю с прыжка
-      this.offset.dy += this.moveSpeed
+      this.offset.dy += this.moveSpeed * 0.1
       fastDownCallback(this)
     } else if (
       // блокировка проскальзывания при прыжке
@@ -159,10 +159,10 @@ export default class Player extends Entity {
     }
   }
   public left() {
-    this.offset.dx -= this.moveSpeed * 2
+    this.offset.dx -= this.moveSpeed
   }
   public right() {
-    this.offset.dx += this.moveSpeed
+    if (!this.isSliding) this.offset.dx += this.moveSpeed * 0.75
   }
   public death() {
     this.isDead = true

@@ -184,7 +184,7 @@ import FENCE_PATH from '../assets/sprites/entities/decorations/fence.png'
 import RUINS_PATH from '../assets/sprites/entities/decorations/ruins.png'
 import RUINS_SET_PATH from '../assets/sprites/entities/decorations/ruins_set.png'
 // бонусы
-import BONUS_SLOWDOWN_PATH from '../assets/sprites/entities/gems/gem_red.png'
+import BONUS_SLOWDOWN_PATH from '../assets/sprites/entities/gems/gem_yellow.png'
 import BONUS_IMMUNITY_PATH from '../assets/sprites/entities/gems/gem_blue.png'
 import BONUS_SCORE_PATH from '../assets/sprites/entities/gems/coin_gold.png'
 // фон

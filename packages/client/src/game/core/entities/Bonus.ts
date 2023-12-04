@@ -16,7 +16,7 @@ export default class Bonus extends Entity {
   sprite?: AnimatedSprite
 
   constructor(resources?: Resources) {
-    const bonusRange = randomRange(BONUS_HEIGHT, PLAYER_HEIGHT * 1.5)
+    const bonusRange = randomRange(PLAYER_HEIGHT * 0.5, PLAYER_HEIGHT * 1.5)
     super({
       position: {
         x: GAME_OPTIONS.CANVAS_WIDTH,
@@ -39,10 +39,13 @@ export default class Bonus extends Entity {
         resourceSrc = GAME_RESOURCES.BONUS_SLOWDOWN
         break
     }
+    const spriteImg = resources.get(resourceSrc) as HTMLImageElement
     this.sprite = new AnimatedSprite({
-      resource: resources.get(resourceSrc),
+      resource: spriteImg,
       mapPoint: { x: 0, y: 0 },
+      frameSize: { height: spriteImg.height, width: spriteImg.height },
       resultSize: { height: BONUS_HEIGHT, width: BONUS_WIDTH },
+      speed: 5,
     })
   }
 
@@ -54,6 +57,8 @@ export default class Bonus extends Entity {
   public update(dt: number) {
     this.position.x += this.offset.dx * dt
     this.position.y += this.offset.dy * dt
+    // воспроизведение анимации
+    this.sprite?.update(dt)
   }
 
   public draw(ctx: CanvasRenderingContext2D) {

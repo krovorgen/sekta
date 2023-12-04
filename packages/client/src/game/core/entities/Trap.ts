@@ -22,11 +22,11 @@ export default class Trap extends Entity {
     if (!resources) return
     const trapResources: Array<{ resource: string; size: number }> = [
       { resource: GAME_RESOURCES.SPEARS, size: 50 },
-      { resource: GAME_RESOURCES.SPEARS_2, size: 50 },
+      { resource: GAME_RESOURCES.SPEARS_2, size: 75 },
       { resource: GAME_RESOURCES.SPEARS_3, size: 75 },
       { resource: GAME_RESOURCES.SPEARS_4, size: 75 },
-      { resource: GAME_RESOURCES.TRAP, size: 50 },
-      { resource: GAME_RESOURCES.TRAP_2, size: 75 },
+      { resource: GAME_RESOURCES.TRAP, size: 75 },
+      { resource: GAME_RESOURCES.TRAP_2, size: 100 },
     ]
     // случайный выбор вида следующей ловушки
     const trapResource = randomElem(trapResources) as {
