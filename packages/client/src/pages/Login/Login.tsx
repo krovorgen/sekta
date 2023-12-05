@@ -14,6 +14,7 @@ import { HTTPError } from 'ky'
 import { withUserCheck } from '../../HOC/withUserCheck'
 import { useAppDispatch } from '../../redux/store'
 import { getUserTC } from '../../redux/features/auth/authSlice'
+import { redirect_uri } from '../../api'
 
 const LoginPage: FC = () => {
   const { handleSubmit, control } = useForm<SignInDTO>()
@@ -31,6 +32,20 @@ const LoginPage: FC = () => {
     try {
       await AuthApi.signIn(data)
       dispatch(getUserTC())
+    } catch (error) {
+      if (error instanceof HTTPError) {
+        const responseBody = await error.response.json()
+        // на моменте валидаций сделай красивый вывод ошибок
+        console.log(responseBody.reason)
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
+  const onYandexSignIn = useCallback(async () => {
+    try {
+      await AuthApi.getYandexServiceId(redirect_uri)
     } catch (error) {
       if (error instanceof HTTPError) {
         const responseBody = await error.response.json()
@@ -80,6 +95,11 @@ const LoginPage: FC = () => {
         <Gap size="s" />
         <Button view="accent" type="submit" block size="s" disabled={isLoading}>
           Continue
+        </Button>
+        <Gap size="s" />
+
+        <Button onClick={onYandexSignIn} view="accent" block size="s">
+          Sign in with Yandex ID
         </Button>
       </form>
     </AuthLayout>

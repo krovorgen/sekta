@@ -4,4 +4,8 @@ node_modules/
 .vscode
 dist
 tmp
-.log
+*.log
+ssr-dist
+nginx/cert.pem
+nginx/privkey.pem
+*.mjs

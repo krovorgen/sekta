@@ -5,12 +5,12 @@ import classNames from 'classnames/bind'
 
 import styles from '../Settings.module.scss'
 import { AvatarFormProps } from '../types'
-import { baseUrl, resourcesUrl } from '../../../constants/urls'
+import { apiUrl, proxyRoutePrefix } from '../../../api'
 import { FetchMethods } from '../../../utils/fetch'
 
 const cn = classNames.bind(styles)
 
-export const Avatar = ({ avatar, initials, setUser }: AvatarFormProps) => {
+export const Avatar = ({ avatar, initials, getUser }: AvatarFormProps) => {
   const handleUpload = async (
     _e: ChangeEvent<HTMLInputElement>,
     payload: { files: File[] }
@@ -19,14 +19,15 @@ export const Avatar = ({ avatar, initials, setUser }: AvatarFormProps) => {
 
     formData.append('avatar', payload.files[0])
 
-    const response = await fetch(`${baseUrl}/user/profile/avatar`, {
-      method: FetchMethods.PUT,
-      body: formData,
-      credentials: 'include',
-    })
-    const result = await response.json()
-
-    setUser(result)
+    const response = await fetch(
+      `${apiUrl}${proxyRoutePrefix}/user/profile/avatar`,
+      {
+        method: FetchMethods.PUT,
+        body: formData,
+        credentials: 'include',
+      }
+    )
+    if (response.ok) getUser()
   }
 
   const avatarSectionClass = cn(styles.box, styles.avatar)
@@ -37,7 +38,7 @@ export const Avatar = ({ avatar, initials, setUser }: AvatarFormProps) => {
 
       {avatar ? (
         <img
-          src={`${resourcesUrl}${avatar}`}
+          src={`${apiUrl}${proxyRoutePrefix}/resources${avatar}`}
           className={styles.avatarImg}
           alt="user avatar"
         />

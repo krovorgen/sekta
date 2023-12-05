@@ -1,65 +1,62 @@
-import { FC, useState, FormEvent } from 'react'
+import { FC, useState, FormEvent, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { consoleLogger } from '../../utils/consoleError'
 
 import { withUserCheck } from '../../HOC/withUserCheck'
 import { PropsWithUser } from '../../types'
 
-import { data } from './temporary/data'
+import { ForumAPI } from '../../api/ForumAPI'
+import { getTopicDTO } from '../../types/forum'
 
 import { ActionButton } from '@alfalab/core-components/action-button'
-
 import { ArrowBackHeavyMIcon } from '@alfalab/icons-glyph/ArrowBackHeavyMIcon'
 import { CommentPlusMIcon } from '@alfalab/icons-glyph/CommentPlusMIcon'
-
-import styles from './Forum.module.scss'
-
+import { useAppSelector } from '../../redux/store'
 import { ForumsTable } from './components/table/ForumsTable'
 import { ForumsModal } from './components/modal/ForumsModal'
 
-const date = new Date()
+import styles from './Forum.module.scss'
 
 export const ForumPage: FC<PropsWithUser> = () => {
   const navigate = useNavigate()
+  const user = useAppSelector(state => state.auth.user)
   const [openModal, setOpenModal] = useState(false)
-  const [topics, setTopics] = useState(data)
+  const [topics, setTopics] = useState<getTopicDTO[]>([])
   const [titleValue, setTitleValue] = useState('')
   const [firstMessageValue, setFirstMessageValue] = useState('')
   const [action, setAction] = useState('')
+
+  const fetchData = async () => {
+    try {
+      setTopics((await ForumAPI.getTopics()).reverse())
+    } catch (error) {
+      consoleLogger(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   const handleOpen = () => setOpenModal(true)
 
   const handleClose = () => setOpenModal(false)
 
-  const handleSendNewTopic = (e: FormEvent) => {
+  const handleSendNewTopic = async (e: FormEvent) => {
     e.preventDefault()
-    console.log(titleValue, firstMessageValue)
-    const topicArr = [
-      {
-        id: Math.floor(Math.random() * 10),
-        date: `${date.getDay()}.${date.getMonth()}.${date.getFullYear()}`,
+    try {
+      await ForumAPI.postTopic({
+        id_author: (user?.id as number).toString(),
         title: titleValue,
-        firstMessage: firstMessageValue,
-        qty: 1,
-        unrd: undefined,
-        remove: true,
-        edit: true,
-      },
-      ...topics,
-    ]
-    setTopics(topicArr)
-    data.unshift({
-      id: Math.floor(Math.random() * 10),
-      date: `${date.getDay()}.${date.getMonth()}.${date.getFullYear()}`,
-      title: titleValue,
-      firstMessage: firstMessageValue,
-      qty: 1,
-      unrd: undefined,
-      remove: true,
-      edit: true,
-    })
-    handleClose()
-    setTitleValue('')
-    setFirstMessageValue('')
+        content: firstMessageValue,
+      })
+      await fetchData()
+      handleClose()
+      setTitleValue('')
+      setFirstMessageValue('')
+    } catch (error) {
+      consoleLogger(error)
+    }
   }
 
   const handleOpenModalNewTopic = () => {
@@ -67,26 +64,10 @@ export const ForumPage: FC<PropsWithUser> = () => {
     handleOpen()
   }
 
-  const handleOpenModalEditTopic = (e: { stopPropagation: () => void }) => {
-    e.stopPropagation()
-    setAction('editTopic')
-    handleOpen()
-    // тут нужно заполнить модалку текстом из топика
-    setTitleValue('some title')
-    setFirstMessageValue('some first message')
-  }
-
-  const handleDeleteTopic = (e: { stopPropagation: () => void }) => {
-    e.stopPropagation()
-    console.log('handleDeleteTopic')
-  }
-
   const onSubmit = (event: FormEvent<Element>) => {
-    console.log(action)
     if (action === 'newTopic') {
       handleSendNewTopic(event)
     } else if (action === 'editTopic') {
-      console.log('handleEditTopic')
       handleClose()
       setTitleValue('')
       setFirstMessageValue('')
@@ -112,11 +93,7 @@ export const ForumPage: FC<PropsWithUser> = () => {
           view="primary"
         />
       </div>
-      <ForumsTable
-        data={topics}
-        handleOpenModalEditTopic={handleOpenModalEditTopic}
-        handleDeleteTopic={handleDeleteTopic}
-      />
+      <ForumsTable data={topics} />
       <ForumsModal
         openModal={openModal}
         handleClose={handleClose}

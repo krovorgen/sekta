@@ -1,21 +1,24 @@
 import React from 'react'
-import { createRoot } from 'react-dom/client'
-import { App } from './App'
+import ReactDOM from 'react-dom/client'
 import './scss/index.scss'
-import { store } from './redux/store'
+import { App } from './App'
 import { Provider } from 'react-redux'
+import { createStore } from './redux/store'
 
-const container = document.getElementById('root') as HTMLElement
-const root = createRoot(container)
+const initialState = window.initialState
 
-root.render(
+delete window.initialState
+
+const store = createStore(JSON.parse(initialState ?? '{}'))
+
+ReactDOM.hydrateRoot(
+  document.getElementById('root') as HTMLElement,
   <React.StrictMode>
     <Provider store={store}>
       <App />
     </Provider>
   </React.StrictMode>
 )
-
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker

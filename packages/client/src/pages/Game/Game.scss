@@ -1,17 +1,16 @@
-@import "../../scss/helpers/variables";
+@import '../../scss/helpers/variables';
 
-.game-wrapper {
+.gameWrapper {
   width: auto;
 }
 
-.game-canvas {
+.gameCanvas {
   background: #eee;
   display: block;
   margin: 0 auto;
-  cursor: none;
 }
 
-.timer-wrapper {
+.timerWrapper {
   min-height: 100vh;
   padding: 50px;
   display: flex;
@@ -19,7 +18,7 @@
   align-items: center;
 }
 
-.game-over-wrapper {
+.gameOverWrapper {
   min-height: 100vh;
   padding: 50px;
   display: flex;
@@ -38,14 +37,14 @@
   position: relative;
 }
 
-.timer-body {
+.timerBody {
   width: 400px;
   height: 400px;
   text-align: center;
   overflow: hidden;
 }
 
-.timer-counter span {
+.timerCounter span {
   font-size: 60px;
   color: red;
   display: flex;
@@ -57,7 +56,8 @@
 }
 
 @keyframes counter {
-  0% {}
+  0% {
+  }
 
   50% {
     transform: translate(0, -1200px);

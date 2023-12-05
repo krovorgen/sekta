@@ -6,22 +6,22 @@
   align-items: center;
   padding: 0 24px;
   transition: all 0.3s;
-  color: black;
   background-color: transparent;
   border: none;
   text-decoration: none;
   margin: 0 0.5px;
+  color: var(--colors-text);
 
   &:hover,
   &:focus {
-    background: var(--color-light-text-primary);
-    color: #fff;
+    background: var(--color-link-hover);
+    color: var(--color-link-text);
   }
 }
 
 .active {
-  background: var(--color-light-text-primary);
-  color: #fff;
+  background: var(--color-link-hover);
+  color: var(--color-link-text);
 }
 
 .icon {

@@ -1,4 +1,5 @@
-import { GAME_OPTIONS, GAME_RESOURCES } from '../../../constants/game'
+import { GAME_OPTIONS } from '../../../constants/game'
+import { GAME_RESOURCES } from '../../../constants/resources'
 import Entity from '../Entity'
 import { TPoint, TSize } from '../utils/Calculations'
 import Resources, { TResource } from '../utils/Resources'
@@ -112,6 +113,9 @@ export default class Background extends Entity {
     if (!cmp) return
     cmp!.position.x -= cmp!.speed * dt
     if (cmp!.position.x <= -(2 * cmp!.size.width)) cmp!.position.x = 0
+    // растянуть фон на весь холст игры
+    cmp!.size.width = GAME_OPTIONS.CANVAS_WIDTH
+    cmp!.size.height = GAME_OPTIONS.CANVAS_HEIGHT
   }
   private drawComponent(
     ctx: CanvasRenderingContext2D,

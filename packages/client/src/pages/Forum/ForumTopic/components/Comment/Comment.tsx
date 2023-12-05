@@ -1,26 +1,36 @@
-import styles from './Comment.module.scss'
+import { useEffect, useState } from 'react'
+import { consoleLogger } from '../../../../../utils/consoleError'
+import { UserApi } from '../../../../../api/UserAPI'
+import { User } from '../../../../../types'
+import { CommentProps } from '../../../../../types/forum'
 
 import { Gap } from '@alfalab/core-components/gap'
 import { Comment } from '@alfalab/core-components/comment'
-import { ButtonDesktop } from '@alfalab/core-components/button/desktop'
 
-export type CommentProps = {
-  id: number
-  text: string
-  author: string
-  date: string
-}
+import styles from './Comment.module.scss'
 
-export const TopicsComment = ({ id, text, author, date }: CommentProps) => {
+export const TopicsComment = ({ id, text, id_author, date }: CommentProps) => {
+  const [author, setAuthor] = useState<User>()
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setAuthor(await UserApi.getUserByID(id_author))
+      } catch (error) {
+        consoleLogger(error)
+      }
+    }
+    fetchData()
+  }, [])
   return (
     <div key={id}>
       <Comment className={styles.text}>{text}</Comment>
-      <div className={styles.info}>
-        <ButtonDesktop className={styles.reply} view="ghost">
-          Ответить
-        </ButtonDesktop>
-        <div>
-          <span className={styles.author}>{author}</span>
+      <div>
+        <div className={styles.info}>
+          <span className={styles.author}>
+            {author?.display_name
+              ? author.display_name
+              : `${author?.first_name} ${author?.second_name}`}
+          </span>
           <span className={styles.author}>{date}</span>
         </div>
       </div>

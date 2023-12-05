@@ -11,11 +11,13 @@ export default class Entity {
   position: TPoint
   offset: TOffset
   size: TSize
+  deleted: boolean
 
   constructor(props: EntityProps) {
     this.position = props.position
     this.offset = props.offset
     this.size = props.size
+    this.deleted = false
   }
 
   // проверка пересечения двух сущностей
@@ -37,6 +39,21 @@ export default class Entity {
       },
       entity.position,
       entity.size
+    )
+  }
+  // трассировка объектов на сцене
+  public debugDraw(
+    ctx: CanvasRenderingContext2D,
+    color = 'red',
+    lineWidth = 3
+  ) {
+    ctx.lineWidth = lineWidth
+    ctx.strokeStyle = color
+    ctx.strokeRect(
+      this.position.x,
+      this.position.y,
+      this.size.width,
+      this.size.height
     )
   }
 }

@@ -1,6 +1,10 @@
-import { GAME_RESOURCES, GameResourcesInit } from '../../../constants/game'
+import {
+  GAME_RESOURCES,
+  REGEX_FILE_EXT,
+  GameResourcesInit,
+} from '../../../constants/resources'
 
-export type TResource = HTMLImageElement | boolean
+export type TResource = HTMLImageElement | HTMLAudioElement | boolean
 
 export default class Resources {
   resourceCache: Record<string, TResource>
@@ -12,22 +16,48 @@ export default class Resources {
     GameResourcesInit()
   }
 
+  private _isImage(url: string): boolean {
+    return new RegExp(`.(${REGEX_FILE_EXT.IMAGE})$`).test(url)
+  }
+  private _isSound(url: string): boolean {
+    return new RegExp(`.(${REGEX_FILE_EXT.SOUND})$`).test(url)
+  }
+
+  private _onLoadHandler(res: TResource, url: string): void {
+    if (this.resourceCache[url]) return
+    this.resourceCache[url] = res
+
+    if (this.isReady()) {
+      this.readyCallbacks.forEach(func => func())
+    }
+  }
+
   private _load(url: string): void {
     if (this.resourceCache[url]) return
-
-    const img = new Image()
-    img.onload = () => {
-      this.resourceCache[url] = img
-
-      if (this.isReady()) {
-        this.readyCallbacks.forEach(func => func())
+    // загрузка изображения
+    if (this._isImage(url)) {
+      const img = new Image()
+      img.onload = () => {
+        this._onLoadHandler(img, url)
       }
+      img.onerror = () => {
+        console.error(`Не удалось загрузить изображение ${url}`)
+      }
+      this.resourceCache[url] = false
+      img.src = url
     }
-    img.onerror = () => {
-      console.error(`Не удалось загрузить ${url}`)
+    // загрузка звуковых файлов
+    else if (this._isSound(url)) {
+      const sound = new Audio()
+      sound.oncanplaythrough = () => {
+        this._onLoadHandler(sound, url)
+      }
+      sound.onerror = () => {
+        console.error(`Не удалось загрузить звуковой файл ${url}`)
+      }
+      this.resourceCache[url] = false
+      sound.src = url
     }
-    this.resourceCache[url] = false
-    img.src = url
   }
 
   // поставить в очередь на загрузку один или несколько ресурсов

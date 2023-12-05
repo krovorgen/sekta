@@ -1,5 +1,6 @@
 import Entity from '../Entity'
-import { GAME_OPTIONS, GAME_RESOURCES } from '../../../constants/game'
+import { GAME_OPTIONS } from '../../../constants/game'
+import { GAME_RESOURCES } from '../../../constants/resources'
 import { randomRange } from '../utils/Calculations'
 import AnimatedSprite from '../utils/AnimatedSprite'
 import Resources from '../utils/Resources'
@@ -18,7 +19,7 @@ export default class Fireball extends Entity {
     super({
       position: {
         x: randomRange(0, GAME_OPTIONS.CANVAS_WIDTH),
-        y: -FIREBALL_HEIGHT,
+        y: -FIREBALL_HEIGHT - 2 * GAME_OPTIONS.CANVAS_HEIGHT,
       },
       offset: {
         dx: randomRange(-1, 1),
@@ -37,6 +38,10 @@ export default class Fireball extends Entity {
     })
   }
 
+  public isOutside() {
+    return this.position.y > GAME_OPTIONS.CANVAS_HEIGHT
+  }
+
   public update(dt: number) {
     this.position.x += this.offset.dx * dt
     this.position.y += this.offset.dy * dt
@@ -45,20 +50,10 @@ export default class Fireball extends Entity {
     this.sprite?.update(dt)
   }
 
-  public draw(ctx: CanvasRenderingContext2D) {
-    if (this.sprite) {
-      this.sprite.render(ctx, this)
-    } else {
-      ctx.beginPath()
-      ctx.rect(
-        this.position.x,
-        this.position.y,
-        this.size.width,
-        this.size.height
-      )
-      ctx.fillStyle = 'red'
-      ctx.fill()
-      ctx.closePath()
+  public draw(ctx: CanvasRenderingContext2D, opacity = 1.0) {
+    this.sprite?.render(ctx, this, opacity)
+    if (GAME_OPTIONS.GAME_DEBUG) {
+      this.debugDraw(ctx)
     }
   }
 }

@@ -1,5 +1,5 @@
 export enum RoutePath {
-  Login = 'sign-in',
+  Login = 'signin',
   Registration = 'sign-up',
   Settings = 'settings',
   Game = 'game',

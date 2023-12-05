@@ -9,24 +9,24 @@ import styles from './Root.module.scss'
 import { withUserCheck } from '../../HOC/withUserCheck'
 import { PropsWithUser } from '../../types'
 
-const RootPage: FC<PropsWithUser> = ({ user }) => {
+const RootPage: FC<PropsWithUser> = () => {
   const navigate = useNavigate()
+
   const onStartGameBtnClick = () => navigate(RoutePath.Game)
 
   return (
     <div className={styles.root}>
       <div className={styles.content}>
         <Typography.Title tag="h1" color="negative" view="xlarge">
-          FIER RUNNER
+          FIRE RUNNER
         </Typography.Title>
         <Gap size="xs" />
-        <Typography.Title tag="h2" color="static-primary-dark" view="small">
-          Описание игры Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Etiam at sapien risus. Nulla blandit ullamcorper turpis ut rhoncus.
-          Cras gravida nibh id mauris rutrum ornare. Mauris efficitur arcu
-          ipsum, et imperdiet justo dignissim in. Duis et elementum purus, et
-          suscipit magna. Maecenas et tempus nulla. Sed rhoncus erat sit amet
-          lorem accumsan tempor
+        <Typography.Title tag="h2" view="small">
+          «Огненный бегун» — это захватывающая аркада, где игроку предстоит
+          управлять бегущим персонажем, который уворачивается от огненного дождя
+          и преодолевает разнообразные препятствия на пути для сохранения своей
+          жизни. Управление осуществляется с помощью кнопок клавиатуры
+          W/Space/↑, A/←, S/↓, D/→, поддерживается геймпад или сенсорный ввод.
         </Typography.Title>
         <Gap size="s" />
 

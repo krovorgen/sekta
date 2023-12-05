@@ -1,13 +1,28 @@
 import React from 'react'
 import '@testing-library/jest-dom'
 import { render, screen, fireEvent } from '@testing-library/react'
+import { createStore } from '../../redux/store'
+
 import {
   MemoryRouter,
   isRouteErrorResponse,
   useNavigate,
   useRouteError,
 } from 'react-router-dom'
-import { ErrorPage } from './ErrorPage'
+import { ErrorPage as $ErrorPage } from './ErrorPage'
+const initialState = window.initialState
+
+delete window.initialState
+
+const store = createStore(JSON.parse(initialState ?? '{}'))
+
+import { Provider } from 'react-redux'
+
+const ErrorPage = () => (
+  <Provider store={store}>
+    <$ErrorPage />
+  </Provider>
+)
 
 // Mock the useNavigate hook
 jest.mock('react-router-dom', () => ({
